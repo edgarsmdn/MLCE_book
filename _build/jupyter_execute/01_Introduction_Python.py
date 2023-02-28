@@ -615,7 +615,7 @@ plt.show()
 
 # We continue with a rudimentary scatter plot example. This example displays samples from the [iris dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html) using the first two features. Colors indicate class membership (there are 3 classes).
 
-# In[ ]:
+# In[52]:
 
 
 from sklearn.datasets import load_iris
@@ -650,7 +650,7 @@ plt.show()
 
 # **Exercise 2.** Repeat the same scatter plot but using the [digits dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html) instead.
 
-# In[ ]:
+# In[53]:
 
 
 from sklearn.datasets import load_digits
