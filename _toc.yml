@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: 00_intro
+root: intro
 chapters:
-- file: 01_Introduction
-- file: 02_Introduction_Python
+- file: 00_Overview
+- file: 01_Introduction_Python

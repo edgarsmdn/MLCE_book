@@ -3,7 +3,7 @@
 
 # # Introduction to Python 🐍
 # 
-# <a href="https://githubtocolab.com/giswqs/geemap/blob/master/examples/notebooks/35_geemap_colab.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a>
+# <a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/02_Introduction_Python.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a>
 
 # This Notebook was originally prepared by [Mathieu Blondel](https://mblondel.org/) and few modifications have been made by us.
 
@@ -597,7 +597,7 @@ X, y = load_iris(return_X_y=True)
 
 # We start with a rudimentary plotting example.
 
-# In[53]:
+# In[51]:
 
 
 from matplotlib import pyplot as plt

@@ -1,55 +1,90 @@
-# What is this course about?
+# An overview of the course 🔭
 
-Whether you write your book's content in Jupyter Notebooks (`.ipynb`) or
-in regular markdown files (`.md`), you'll write in the same flavor of markdown
-called **MyST Markdown**.
-This is a simple file to help you get started and show off some syntax.
+This course covers the foundations of machine learning and shows some of the common
+applications to chemical engineering systems. Machine learning can be broadly classified into **supervised learning**, **unsupervised learning** 
+and **reinforcement learning**. Additionally, it covers **hybrid modeling**, a very important aspect that deals with the 
+combination of mechanistic knowledge with data-driven tools.
 
-## What is MyST?
+## Machine learning
 
-MyST stands for "Markedly Structured Text". It
-is a slight variation on a flavor of markdown called "CommonMark" markdown,
-with small syntax extensions to allow you to write **roles** and **directives**
-in the Sphinx ecosystem.
+Machine learning (ML) is the field of study that gives computers the ability to learn without being explicitly programmed {cite}`samuel1959some`. 
+This is in contrast to the "traditional" computer science on which exact instructions need to be specified in order to do a specific task.
+ML heavily relies on linear algebra, statistics and optimization. Therefore, expect to encounter such topics while studying this course. 
+As mentioned before, ML can be broadly classified into 3 areas: supervised, unsupervised and reinforcement learning.
 
-For more about MyST, see [the MyST Markdown Overview](https://jupyterbook.org/content/myst.html).
+### 1. Supervised learning
 
-## Sample Roles and Directives
+This refers to obtaining an **input-output mapping** where the learning agent is fed with examples in order to generalize to new instances.
+For instance, assume there exist an unkown fuction $f(\textbf{x})$ from which you only have a collection of input values 
+$\textbf{X}$ with their respective output values $\textbf{y}$.
+Then, the objective of supervised learning is to get an approximation $h(\textbf{x})$ that minimizes the difference with respect to the true function $f(\textbf{x})$.
+The function $h$ is refer to as hypothesis function.
 
-Roles and directives are two of the most powerful tools in Jupyter Book. They
-are kind of like functions, but written in a markup language. They both
-serve a similar purpose, but **roles are written in one line**, whereas
-**directives span many lines**. They both accept different kinds of inputs,
-and what they do with those inputs depends on the specific role or directive
-that is being called.
+Depending on the form of the output $\textbf{y}$ the problem can either be a:
 
-Here is a "note" directive:
+* Classification: when $\textbf{y}$ is categorical (e.g., a molecule is toxic or not).
+* Regression: when $\textbf{y}$ is continuous (e.g., the temperature profile of a reactor).
 
 ```{note}
-Here is a note
+In supervised learning we are not particularly interested in fitting the observed data very well, but rather in generalizing well to unseen data! Therefore, the 
+concepts of **overfitting** and **underfitting** become really important.
 ```
 
-It will be rendered in a special box when you build your book.
+```{figure} media/overview/supervised_learning.png
+:alt: supervised_learning
+:width: 75%
+:align: center
 
-Here is an inline directive to refer to a document: {doc}`markdown-notebooks`.
+A collection of hypothesis functions (in blue) that could be fitted to the observed data (in red). Which hypothesis is the best? How can we determined the 
+best hypothesis function?
+```
+
+### 2. Unsupervised learning
+
+In the case of unsupervised learning the output values are not available, only the input data $\textbf{X}$. Therefore, the goal of unsupervised learning is to **identify 
+patterns** in the data. For instance, finding clusters or reducing the dimensionality of the data.
+
+```{figure} media/overview/unsupervised_learning.png
+:alt: unsupervised_learning
+:width: 50%
+:align: center
+
+Clustering of data. How can we detect groups of data that are similar to each other? Why is this useful?
+```
 
 
-## Citations
+### 3. Reinforcement learning
 
-You can also cite references that are stored in a `bibtex` file. For example,
-the following syntax: `` {cite}`holdgraf_evidence_2014` `` will render like
-this: {cite}`holdgraf_evidence_2014`.
+The name comes from animal psychology, where we train animals/pets by reinforcing good behaviour, and discouraging bad behaviours. Here, the agent has to learn 
+how to interact with its environment in order to maximize the reward or minimize the punishment.
 
-Moreover, you can insert a bibliography into your page with this syntax:
-The `{bibliography}` directive must be used for all the `{cite}` roles to
-render properly.
-For example, if the references for your book are stored in `references.bib`,
-then the bibliography is inserted with:
+```{figure} media/overview/reinforcement_learning.png
+:alt: reinforcement_learning
+:width: 50%
+:align: center
 
+Reinforcement learning: incentivate actions that maximize reward and/or discourage actions that lead to punishment.  
+```
+
+## Hybrid modeling
+
+The central questions about hybrid modeling are: should we discard all the physical knowledge acquired for centuries and replace it by data-driven 
+models? Is there a way to combine both? Is it beneficial to do so?
+
+In general, the term hybrid modeling refers to the combination of mechanistic and data-driven models and is also called "grey-box modeling". For example, 
+mass and energy balances, thermodynamic laws and kinetics should be respected in our models. Introducing this physical knwoledge reduces the amount of data
+that is needed for the ML part and improves the cpacity of the models to generalize to unseen conditions.   
+
+```{figure} media/overview/hybrid_modeling.png
+:alt: hybrid_modeling
+:width: 75%
+:align: center
+
+Hybrid modeling is also refer in the literature as grey-box modeling.  
+```
+
+
+## References
 ```{bibliography}
 ```
 
-## Learn more
-
-This is just a simple starter to get you started.
-You can learn a lot more at [jupyterbook.org](https://jupyterbook.org).

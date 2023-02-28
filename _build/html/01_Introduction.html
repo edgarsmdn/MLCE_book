@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>What is this course about? &#8212; Machine Learning in Chemical Engineering</title>
+    <title>An overview of the course 🔭 &#8212; Machine Learning in Chemical Engineering</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -50,6 +50,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Introduction to Python 🐍" href="02_Introduction_Python.html" />
@@ -116,7 +118,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   What is this course about?
+   An overview of the course 🔭
   </a>
  </li>
  <li class="toctree-l1">
@@ -302,23 +304,35 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-myst">
-   What is MyST?
+  <a class="reference internal nav-link" href="#machine-learning">
+   Machine learning
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#supervised-learning">
+     1. Supervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#unsupervised-learning">
+     2. Unsupervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reinforcement-learning">
+     3. Reinforcement learning
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hybrid-modeling">
+   Hybrid modeling
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#sample-roles-and-directives">
-   Sample Roles and Directives
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#citations">
-   Citations
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#learn-more">
-   Learn more
+  <a class="reference internal nav-link" href="#references">
+   References
   </a>
  </li>
 </ul>
@@ -330,7 +344,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>What is this course about?</h1>
+                <h1>An overview of the course 🔭</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -341,23 +355,35 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-myst">
-   What is MyST?
+  <a class="reference internal nav-link" href="#machine-learning">
+   Machine learning
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#supervised-learning">
+     1. Supervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#unsupervised-learning">
+     2. Unsupervised learning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reinforcement-learning">
+     3. Reinforcement learning
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hybrid-modeling">
+   Hybrid modeling
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#sample-roles-and-directives">
-   Sample Roles and Directives
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#citations">
-   Citations
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#learn-more">
-   Learn more
+  <a class="reference internal nav-link" href="#references">
+   References
   </a>
  </li>
 </ul>
@@ -370,58 +396,89 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="what-is-this-course-about">
-<h1>What is this course about?<a class="headerlink" href="#what-is-this-course-about" title="Permalink to this headline">#</a></h1>
-<p>Whether you write your book’s content in Jupyter Notebooks (<code class="docutils literal notranslate"><span class="pre">.ipynb</span></code>) or
-in regular markdown files (<code class="docutils literal notranslate"><span class="pre">.md</span></code>), you’ll write in the same flavor of markdown
-called <strong>MyST Markdown</strong>.
-This is a simple file to help you get started and show off some syntax.</p>
-<section id="what-is-myst">
-<h2>What is MyST?<a class="headerlink" href="#what-is-myst" title="Permalink to this headline">#</a></h2>
-<p>MyST stands for “Markedly Structured Text”. It
-is a slight variation on a flavor of markdown called “CommonMark” markdown,
-with small syntax extensions to allow you to write <strong>roles</strong> and <strong>directives</strong>
-in the Sphinx ecosystem.</p>
-<p>For more about MyST, see <a class="reference external" href="https://jupyterbook.org/content/myst.html">the MyST Markdown Overview</a>.</p>
-</section>
-<section id="sample-roles-and-directives">
-<h2>Sample Roles and Directives<a class="headerlink" href="#sample-roles-and-directives" title="Permalink to this headline">#</a></h2>
-<p>Roles and directives are two of the most powerful tools in Jupyter Book. They
-are kind of like functions, but written in a markup language. They both
-serve a similar purpose, but <strong>roles are written in one line</strong>, whereas
-<strong>directives span many lines</strong>. They both accept different kinds of inputs,
-and what they do with those inputs depends on the specific role or directive
-that is being called.</p>
-<p>Here is a “note” directive:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="an-overview-of-the-course">
+<h1>An overview of the course 🔭<a class="headerlink" href="#an-overview-of-the-course" title="Permalink to this headline">#</a></h1>
+<p>This course covers the foundations of machine learning and shows some of the common
+applications to chemical engineering systems. Machine learning can be broadly classified into <strong>supervised learning</strong>, <strong>unsupervised learning</strong>
+and <strong>reinforcement learning</strong>. Additionally, it covers <strong>hybrid modeling</strong>, a very important aspect that deals with the
+combination of mechanistic knowledge with data-driven tools.</p>
+<section id="machine-learning">
+<h2>Machine learning<a class="headerlink" href="#machine-learning" title="Permalink to this headline">#</a></h2>
+<p>Machine learning (ML) is the field of study that gives computers the ability to learn without being explicitly programmed <span id="id1">[<a class="reference internal" href="#id3" title="Arthur L Samuel. Some studies in machine learning using the game of checkers. IBM Journal of research and development, 3(3):210–229, 1959.">Sam59</a>]</span>.
+This is in contrast to the “traditional” computer science on which exact instructions need to be specified in order to do a specific task.
+ML heavily relies on linear algebra, statistics and optimization. Therefore, expect to encounter such topics while studying this course.
+As mentioned before, ML can be broadly classified into 3 areas: supervised, unsupervised and reinforcement learning.</p>
+<section id="supervised-learning">
+<h3>1. Supervised learning<a class="headerlink" href="#supervised-learning" title="Permalink to this headline">#</a></h3>
+<p>This refers to obtaining an <strong>input-output mapping</strong> where the learning agent is fed with examples in order to generalize to new instances.
+For instance, assume there exist an unkown fuction <span class="math notranslate nohighlight">\(f(\textbf{x})\)</span> from which you only have a collection of input values
+<span class="math notranslate nohighlight">\(\textbf{X}\)</span> with their respective output values <span class="math notranslate nohighlight">\(\textbf{y}\)</span>.
+Then, the objective of supervised learning is to get an approximation <span class="math notranslate nohighlight">\(h(\textbf{x})\)</span> that minimizes the difference with respect to the true function <span class="math notranslate nohighlight">\(f(\textbf{x})\)</span>.
+The function <span class="math notranslate nohighlight">\(h\)</span> is refer to as hypothesis function.</p>
+<p>Depending on the form of the output <span class="math notranslate nohighlight">\(\textbf{y}\)</span> the problem can either be a:</p>
+<ul class="simple">
+<li><p>Classification: when <span class="math notranslate nohighlight">\(\textbf{y}\)</span> is categorical (e.g., a molecule is toxic or not).</p></li>
+<li><p>Regression: when <span class="math notranslate nohighlight">\(\textbf{y}\)</span> is continuous (e.g., the temperature profile of a reactor).</p></li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Here is a note</p>
+<p>In supervised learning we are not particularly interested in fitting the observed data very well, but rather in generalizing well to unseen data! Therefore, the
+concepts of <strong>overfitting</strong> and <strong>underfitting</strong> become really important.</p>
 </div>
-<p>It will be rendered in a special box when you build your book.</p>
-<p>Here is an inline directive to refer to a document: <span class="xref std std-doc">markdown-notebooks</span>.</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="_images/supervised_learning.png"><img alt="supervised_learning" src="_images/supervised_learning.png" style="width: 75%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">A collection of hypothesis functions (in blue) that could be fitted to the observed data (in red). Which hypothesis is the best? How can we determined the
+best hypothesis function?</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
-<section id="citations">
-<h2>Citations<a class="headerlink" href="#citations" title="Permalink to this headline">#</a></h2>
-<p>You can also cite references that are stored in a <code class="docutils literal notranslate"><span class="pre">bibtex</span></code> file. For example,
-the following syntax: <code class="docutils literal notranslate"><span class="pre">{cite}`holdgraf_evidence_2014`</span></code> will render like
-this: <span id="id1">[<a class="reference internal" href="#id3" title="Christopher Ramsay Holdgraf, Wendy de Heer, Brian N. Pasley, and Robert T. Knight. Evidence for Predictive Coding in Human Auditory Cortex. In International Conference on Cognitive Neuroscience. Brisbane, Australia, Australia, 2014. Frontiers in Neuroscience.">HdHPK14</a>]</span>.</p>
-<p>Moreover, you can insert a bibliography into your page with this syntax:
-The <code class="docutils literal notranslate"><span class="pre">{bibliography}</span></code> directive must be used for all the <code class="docutils literal notranslate"><span class="pre">{cite}</span></code> roles to
-render properly.
-For example, if the references for your book are stored in <code class="docutils literal notranslate"><span class="pre">references.bib</span></code>,
-then the bibliography is inserted with:</p>
+<section id="unsupervised-learning">
+<h3>2. Unsupervised learning<a class="headerlink" href="#unsupervised-learning" title="Permalink to this headline">#</a></h3>
+<p>In the case of unsupervised learning the output values are not available, only the input data <span class="math notranslate nohighlight">\(\textbf{X}\)</span>. Therefore, the goal of unsupervised learning is to <strong>identify
+patterns</strong> in the data. For instance, finding clusters or reducing the dimensionality of the data.</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="_images/unsupervised_learning.png"><img alt="unsupervised_learning" src="_images/unsupervised_learning.png" style="width: 50%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Clustering of data. How can we detect groups of data that are similar to each other? Why is this useful?</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="reinforcement-learning">
+<h3>3. Reinforcement learning<a class="headerlink" href="#reinforcement-learning" title="Permalink to this headline">#</a></h3>
+<p>The name comes from animal psychology, where we train animals/pets by reinforcing good behaviour, and discouraging bad behaviours. Here, the agent has to learn
+how to interact with its environment in order to maximize the reward or minimize the punishment.</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="_images/reinforcement_learning.png"><img alt="reinforcement_learning" src="_images/reinforcement_learning.png" style="width: 50%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Reinforcement learning: incentivate actions that maximize reward and/or discourage actions that lead to punishment.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="hybrid-modeling">
+<h2>Hybrid modeling<a class="headerlink" href="#hybrid-modeling" title="Permalink to this headline">#</a></h2>
+<p>The central questions about hybrid modeling are: should we discard all the physical knowledge acquired for centuries and replace it by data-driven
+models? Is there a way to combine both? Is it beneficial to do so?</p>
+<p>In general, the term hybrid modeling refers to the combination of mechanistic and data-driven models and is also called “grey-box modeling”. For example,
+mass and energy balances, thermodynamic laws and kinetics should be respected in our models. Introducing this physical knwoledge reduces the amount of data
+that is needed for the ML part and improves the cpacity of the models to generalize to unseen conditions.</p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="_images/hybrid_modeling.png"><img alt="hybrid_modeling" src="_images/hybrid_modeling.png" style="width: 75%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Hybrid modeling is also refer in the literature as grey-box modeling.</span><a class="headerlink" href="#id7" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
 <div class="docutils container" id="id2">
 <dl class="citation">
-<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">HdHPK14</a></span></dt>
-<dd><p>Christopher Ramsay Holdgraf, Wendy de Heer, Brian N. Pasley, and Robert T. Knight. Evidence for Predictive Coding in Human Auditory Cortex. In <em>International Conference on Cognitive Neuroscience</em>. Brisbane, Australia, Australia, 2014. Frontiers in Neuroscience.</p>
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">Sam59</a></span></dt>
+<dd><p>Arthur L Samuel. Some studies in machine learning using the game of checkers. <em>IBM Journal of research and development</em>, 3(3):210–229, 1959.</p>
 </dd>
 </dl>
 </div>
-</section>
-<section id="learn-more">
-<h2>Learn more<a class="headerlink" href="#learn-more" title="Permalink to this headline">#</a></h2>
-<p>This is just a simple starter to get you started.
-You can learn a lot more at <a class="reference external" href="https://jupyterbook.org">jupyterbook.org</a>.</p>
 </section>
 </section>
 

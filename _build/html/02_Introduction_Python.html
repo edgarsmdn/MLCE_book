@@ -50,11 +50,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="What is this course about?" href="01_Introduction.html" />
+    <link rel="prev" title="An overview of the course" href="01_Introduction.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -117,7 +117,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="01_Introduction.html">
-   What is this course about?
+   An overview of the course
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -598,7 +598,7 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-python">
 <h1>Introduction to Python 🐍<a class="headerlink" href="#introduction-to-python" title="Permalink to this headline">#</a></h1>
-<p><a href="https://githubtocolab.com/giswqs/geemap/blob/master/examples/notebooks/35_geemap_colab.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/02_Introduction_Python.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
 <p>This Notebook was originally prepared by <a class="reference external" href="https://mblondel.org/">Mathieu Blondel</a> and few modifications have been made by us.</p>
 <section id="goals-of-this-exercise">
 <h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
@@ -1259,11 +1259,11 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 0.51549153, -0.08764268, -0.36157453,  0.32593497],
-       [ 1.43746375,  0.48456224, -0.53116335,  0.07102728],
-       [ 0.03628011, -0.377341  , -0.6902577 ,  0.29137095],
-       [ 0.20974119, -0.32875418,  0.24287454,  0.68765404],
-       [ 0.15100378, -0.44164119, -0.20501277,  0.63850992]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 2.55069834, -0.77526939, -1.19665931, -1.41011654],
+       [ 0.84140306,  0.18477327, -0.45953604,  0.80178656],
+       [ 1.40995268, -0.0418566 , -0.78469101, -0.23343967],
+       [ 3.01239255, -0.02609187, -1.76270286, -0.97267421],
+       [ 2.9635826 , -0.97220833, -1.34352937, -1.53384928]])
 </pre></div>
 </div>
 </div>
@@ -1276,9 +1276,9 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.52516265, 0.03870491, 0.87621375, 0.63067596, 0.92090584],
-       [0.5442637 , 0.93669887, 0.30525636, 0.49488442, 0.50282353],
-       [0.64138971, 0.81375904, 0.98939565, 0.03517293, 0.56028574]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.7954418 , 0.23440367, 0.29683808, 0.49308823, 0.99351585],
+       [0.13125908, 0.92168604, 0.46245236, 0.67258598, 0.21877221],
+       [0.65914146, 0.10591486, 0.37077007, 0.89700855, 0.72680495]])
 </pre></div>
 </div>
 </div>
@@ -1365,19 +1365,6 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_3220</span>\<span class="mf">3916014498.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> 
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Result should be an array of size 4.</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;sklearn&#39;
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="id1">
@@ -1412,7 +1399,18 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/02_Introduction_Python_144_0.png" src="_images/02_Introduction_Python_144_0.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_23132</span>\<span class="mf">2825500618.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> 
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> 
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;matplotlib&#39;
+</pre></div>
+</div>
 </div>
 </div>
 <p>We continue with a rudimentary scatter plot example. This example displays samples from the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html">iris dataset</a> using the first two features. Colors indicate class membership (there are 3 classes).</p>
@@ -1495,7 +1493,7 @@ title="Print to PDF"
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">What is this course about?</p>
+            <p class="prev-next-title">An overview of the course</p>
         </div>
     </a>
 </div>
