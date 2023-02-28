@@ -3,7 +3,7 @@
 
 # # 1. Introduction to Python 🐍
 # 
-# <a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/02_Introduction_Python.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a>
+# <a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/01_Introduction_Python.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a>
 
 # This Notebook was originally prepared by [Mathieu Blondel](https://mblondel.org/) and few modifications have been made by us.
 
