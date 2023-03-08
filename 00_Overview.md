@@ -83,8 +83,8 @@ that is needed for the ML part and improves the capacity of the models to genera
 Hybrid modeling is also refer in the literature as grey-box modeling.  
 ```
 
-
 ## References
-```{bibliography}
-```
 
+```{bibliography}
+:filter: docname in docnames
+```

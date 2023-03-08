@@ -1,0 +1,2287 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2. kNN for (Q)SPR modeling ⚛️ &#8212; Machine Learning in Chemical Engineering</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. GLM for thermophysical property prediction ⚗️" href="03_GLM_thermophysical.html" />
+    <link rel="prev" title="1. Introduction to Python 🐍" href="01_Introduction_Python.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Machine Learning in Chemical Engineering</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="00_Overview.html">
+   An overview of the course 🔭
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="01_Introduction_Python.html">
+   1. Introduction to Python 🐍
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   2. kNN for (Q)SPR modeling ⚛️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_GLM_thermophysical.html">
+   3. GLM for thermophysical property prediction ⚗️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Acknowledgements.html">
+   Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/edgarsmdn/MLCE_book/master?urlpath=tree/docs/02_kNN_QSPR.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/edgarsmdn/MLCE_book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F02_kNN_QSPR.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/02_kNN_QSPR.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#goals-of-this-exercise">
+   Goals of this exercise 🌟
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-quick-reminder">
+   A quick reminder ✅
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#get-data">
+   Get data 📚
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-manipulate-a-dataframe">
+     Exercise - manipulate a DataFrame ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feature-scaling">
+   Feature scaling 📏
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-read-documentation">
+     Exercise - read documentation ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-and-test-split">
+   Training and test split ✂️
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-splits-distribution">
+     Exercise - splits distribution ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#knn-model">
+   kNN model 🏘️
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-to-vega-model">
+     Comparison to VEGA model
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#vega-model">
+       VEGA model
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#exercise-leave-one-out-cross-validation">
+       Exercise - leave-one-out cross-validation ❗❗
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finding-the-best-k-in-knn">
+   Finding the best k in kNN 🔎
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cross-validation">
+     Cross-validation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#challenge-knn-qspr-for-predicting-bcf">
+   Challenge - kNN QSPR for predicting BCF 🥇
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>2. kNN for (Q)SPR modeling ⚛️</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#goals-of-this-exercise">
+   Goals of this exercise 🌟
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-quick-reminder">
+   A quick reminder ✅
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#get-data">
+   Get data 📚
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-manipulate-a-dataframe">
+     Exercise - manipulate a DataFrame ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feature-scaling">
+   Feature scaling 📏
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-read-documentation">
+     Exercise - read documentation ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-and-test-split">
+   Training and test split ✂️
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-splits-distribution">
+     Exercise - splits distribution ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#knn-model">
+   kNN model 🏘️
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-to-vega-model">
+     Comparison to VEGA model
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#vega-model">
+       VEGA model
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#exercise-leave-one-out-cross-validation">
+       Exercise - leave-one-out cross-validation ❗❗
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finding-the-best-k-in-knn">
+   Finding the best k in kNN 🔎
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cross-validation">
+     Cross-validation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#challenge-knn-qspr-for-predicting-bcf">
+   Challenge - kNN QSPR for predicting BCF 🥇
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="knn-for-q-spr-modeling">
+<h1>2. kNN for (Q)SPR modeling ⚛️<a class="headerlink" href="#knn-for-q-spr-modeling" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/02_kNN_QSPR.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>We will learn how to construct a simple SPR model using kNN</p></li>
+<li><p>We will learn the importance of data normalization (scaling)</p></li>
+<li><p>We will review the concepts of training and test split and cross-validation</p></li>
+<li><p>We will review some of the performance metrics for assesing classification models</p></li>
+</ul>
+</section>
+<section id="a-quick-reminder">
+<h2>A quick reminder ✅<a class="headerlink" href="#a-quick-reminder" title="Permalink to this headline">#</a></h2>
+<p>Probably the simplest data-driven model that you can think of is K-nearest neighbours (kNN). It simply predicts future data as the average (or mode) of the “k” nearest neighbours of the queried point.</p>
+<p>As simple as this idea might be, it works relatively good in various applications. One of them is the generation of (quantitative) structure-property relationships ((Q)SPR) models <span id="id1">[<a class="reference internal" href="#id7" title="Min Shen, Yunde Xiao, Alexander Golbraikh, Vijay K Gombar, and Alexander Tropsha. Development and validation of k-nearest-neighbor qspr models of metabolic stability of drug candidates. Journal of medicinal chemistry, 46(14):3013–3020, 2003.">SXG+03</a>, <a class="reference internal" href="#id6" title="Shuai Yuan, Zeren Jiao, Noor Quddus, Joseph Sang-II Kwon, and Chad V Mashuga. Developing quantitative structure–property relationship models to predict the upper flammability limit using machine learning. Industrial &amp; Engineering Chemistry Research, 58(8):3531–3537, 2019.">YJQ+19</a>]</span>. Whether the word “Quantitative” is sometimes included or not depends on whether the model in question is a regression model or a classification model. Do you remember the difference?</p>
+<p>The key question in kNN is what do we consider a neighbour and what not? This indicates us that we need to define a sort of similarity or distance metric that allows us to distinguish neighbouring points from points that are far away.</p>
+<p>Common distance metrics use the different <a class="reference external" href="https://en.wikipedia.org/wiki/Norm_(mathematics)">mathematical norms</a>. For example, the Euclidean distance:</p>
+<div class="math notranslate nohighlight">
+\[
+ d(\textbf{x}, \textbf{x'}) = \sqrt{\sum_i^D (x_i - x'_i)^2}
+\]</div>
+<figure class="align-center" id="id11">
+<a class="reference internal image-reference" href="_images/kNN.png"><img alt="kNN" src="_images/kNN.png" style="width: 60%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Among the k-nearest neighbours (k=5), the majority of points are red 1s. Therefore, the queried point (green x) will be labeled as “red 1”. Image taken from <span id="id2">[<a class="reference internal" href="#id9" title="Kevin P Murphy. Probabilistic machine learning: an introduction. MIT press, 2022.">Mur22</a>]</span>.</span><a class="headerlink" href="#id11" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Let’s exemplify the use of kNN by constructing a SPR model that predicts the whether a molecule is mutagenic or not.</p>
+<p>Mutagenicity is the property of substances to induce genetic mutation. It is one of the most important environmental, health and safety (EHS) properties to check when dealing with novel chemicals (e.g., drugs or solvents). In this case, we are going to use the data of mutagenicity on Salmonella typhimurium (Ames test). This dataset was collected by the <a class="reference external" href="https://www.marionegri.it/">Istituto di Ricerche Farmacologiche Mario Negri</a>, merging experimental data from a benchmark dataset
+compiled by <span id="id3">[<a class="reference internal" href="#id8" title="Katja Hansen, Sebastian Mika, Timon Schroeter, Andreas Sutter, Antonius Ter Laak, Thomas Steger-Hartmann, Nikolaus Heinrich, and Klaus-Robert Muller. Benchmark data set for in silico prediction of ames mutagenicity. Journal of chemical information and modeling, 49(9):2077–2081, 2009.">HMS+09</a>]</span> from a collection of data made available
+by the <a class="reference external" href="https://www.nihs.go.jp/dgm/amesqsar.html">Japan Health Ministry</a> within their Ames (Q)SAR project.</p>
+<p>Let’s fist import some libraries</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="get-data">
+<h2>Get data 📚<a class="headerlink" href="#get-data" title="Permalink to this headline">#</a></h2>
+<p>We have previously computed some molecular descriptors that will serve as input to our model. However, this is also an important step to consider when facing a problem like this: what are the important inputs to model mutagenicity? how do we know if these pre-computed features are enough for modeling mutagenicity? can we generate relevant molecular features automatically? 🤔</p>
+<p>Ok, let’s use <a class="reference external" href="https://pandas.pydata.org/">pandas</a> to import the data as a DataFrame…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/mutagenicity_kNN.csv&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;references/mutagenicity_kNN.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Id</th>
+      <th>CAS</th>
+      <th>SMILES</th>
+      <th>Status</th>
+      <th>Experimental value</th>
+      <th>Predicted value</th>
+      <th>NumValenceElectrons</th>
+      <th>qed</th>
+      <th>TPSA</th>
+      <th>MolMR</th>
+      <th>BalabanJ</th>
+      <th>BertzCT</th>
+      <th>MolWt</th>
+      <th>MolLogP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>100-00-5</td>
+      <td>O=[N+]([O-])c1ccc(cc1)Cl</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.463602</td>
+      <td>43.14</td>
+      <td>38.1064</td>
+      <td>3.003401</td>
+      <td>244.429658</td>
+      <td>157.556</td>
+      <td>2.24820</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>2</td>
+      <td>100-01-6</td>
+      <td>O=[N+]([O-])c1ccc(N)cc1</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.359544</td>
+      <td>69.16</td>
+      <td>37.5088</td>
+      <td>3.003401</td>
+      <td>242.429658</td>
+      <td>138.126</td>
+      <td>1.17700</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3</td>
+      <td>100-02-7</td>
+      <td>O=[N+]([O-])c1ccc(O)cc1</td>
+      <td>Training</td>
+      <td>0</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.470728</td>
+      <td>63.37</td>
+      <td>34.7612</td>
+      <td>3.003401</td>
+      <td>241.674771</td>
+      <td>139.110</td>
+      <td>1.30040</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>4</td>
+      <td>100-11-8</td>
+      <td>O=[N+]([O-])c1ccc(cc1)CBr</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>58</td>
+      <td>0.432586</td>
+      <td>43.14</td>
+      <td>45.7274</td>
+      <td>2.913802</td>
+      <td>257.648013</td>
+      <td>216.034</td>
+      <td>2.48970</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>5</td>
+      <td>100-12-9</td>
+      <td>O=[N+]([O-])c1ccc(cc1)CC</td>
+      <td>Training</td>
+      <td>0</td>
+      <td>0</td>
+      <td>58</td>
+      <td>0.479785</td>
+      <td>43.14</td>
+      <td>42.4744</td>
+      <td>2.913802</td>
+      <td>253.299498</td>
+      <td>151.165</td>
+      <td>2.15720</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>5759</th>
+      <td>5759</td>
+      <td>5767</td>
+      <td>20395-16-8</td>
+      <td>O=C1N(C(=O)N(C(=O)N1CC=C)CC2OC2)CC=C</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>102</td>
+      <td>0.485090</td>
+      <td>78.53</td>
+      <td>69.3560</td>
+      <td>2.668492</td>
+      <td>627.435628</td>
+      <td>265.269</td>
+      <td>-1.05750</td>
+    </tr>
+    <tr>
+      <th>5760</th>
+      <td>5760</td>
+      <td>5768</td>
+      <td>34718-47-3</td>
+      <td>O=C(C(Br)(Br)Br)Cl</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>42</td>
+      <td>0.495987</td>
+      <td>17.07</td>
+      <td>40.3720</td>
+      <td>3.791118</td>
+      <td>85.425922</td>
+      <td>315.186</td>
+      <td>2.59030</td>
+    </tr>
+    <tr>
+      <th>5761</th>
+      <td>5761</td>
+      <td>5769</td>
+      <td>43204-63-3</td>
+      <td>N(CCBr)CCBr</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>44</td>
+      <td>0.568556</td>
+      <td>12.03</td>
+      <td>40.4577</td>
+      <td>2.447473</td>
+      <td>28.870765</td>
+      <td>230.931</td>
+      <td>1.36580</td>
+    </tr>
+    <tr>
+      <th>5762</th>
+      <td>5762</td>
+      <td>5770</td>
+      <td>52583-35-4</td>
+      <td>N#Cc2cc(cc(c2(N=Nc1ccc(cc1(NC(=O)C))N(CCOC)CCO...</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>184</td>
+      <td>0.264581</td>
+      <td>185.59</td>
+      <td>125.3525</td>
+      <td>2.552977</td>
+      <td>1169.342047</td>
+      <td>485.457</td>
+      <td>3.84768</td>
+    </tr>
+    <tr>
+      <th>5763</th>
+      <td>5763</td>
+      <td>5771</td>
+      <td>188021-38-7</td>
+      <td>O(c1c(cc(cc1Br)C)C(C)(C)C)CC=C</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>88</td>
+      <td>0.735392</td>
+      <td>9.23</td>
+      <td>73.2710</td>
+      <td>3.263016</td>
+      <td>388.457194</td>
+      <td>283.209</td>
+      <td>4.61982</td>
+    </tr>
+  </tbody>
+</table>
+<p>5764 rows × 15 columns</p>
+</div></div></div>
+</div>
+<p>The library pandas has many useful functions for data analytics. For example, we can print the type of the data we have…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">dtypes</span>    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Unnamed: 0               int64
+Id                       int64
+CAS                     object
+SMILES                  object
+Status                  object
+Experimental value       int64
+Predicted value         object
+NumValenceElectrons      int64
+qed                    float64
+TPSA                   float64
+MolMR                  float64
+BalabanJ               float64
+BertzCT                float64
+MolWt                  float64
+MolLogP                float64
+dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<p>And have a look at the first rows of our data to see how it looks like</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Id</th>
+      <th>CAS</th>
+      <th>SMILES</th>
+      <th>Status</th>
+      <th>Experimental value</th>
+      <th>Predicted value</th>
+      <th>NumValenceElectrons</th>
+      <th>qed</th>
+      <th>TPSA</th>
+      <th>MolMR</th>
+      <th>BalabanJ</th>
+      <th>BertzCT</th>
+      <th>MolWt</th>
+      <th>MolLogP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>100-00-5</td>
+      <td>O=[N+]([O-])c1ccc(cc1)Cl</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.463602</td>
+      <td>43.14</td>
+      <td>38.1064</td>
+      <td>3.003401</td>
+      <td>244.429658</td>
+      <td>157.556</td>
+      <td>2.2482</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>2</td>
+      <td>100-01-6</td>
+      <td>O=[N+]([O-])c1ccc(N)cc1</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.359544</td>
+      <td>69.16</td>
+      <td>37.5088</td>
+      <td>3.003401</td>
+      <td>242.429658</td>
+      <td>138.126</td>
+      <td>1.1770</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3</td>
+      <td>100-02-7</td>
+      <td>O=[N+]([O-])c1ccc(O)cc1</td>
+      <td>Training</td>
+      <td>0</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.470728</td>
+      <td>63.37</td>
+      <td>34.7612</td>
+      <td>3.003401</td>
+      <td>241.674771</td>
+      <td>139.110</td>
+      <td>1.3004</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>4</td>
+      <td>100-11-8</td>
+      <td>O=[N+]([O-])c1ccc(cc1)CBr</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>58</td>
+      <td>0.432586</td>
+      <td>43.14</td>
+      <td>45.7274</td>
+      <td>2.913802</td>
+      <td>257.648013</td>
+      <td>216.034</td>
+      <td>2.4897</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>5</td>
+      <td>100-12-9</td>
+      <td>O=[N+]([O-])c1ccc(cc1)CC</td>
+      <td>Training</td>
+      <td>0</td>
+      <td>0</td>
+      <td>58</td>
+      <td>0.479785</td>
+      <td>43.14</td>
+      <td>42.4744</td>
+      <td>2.913802</td>
+      <td>253.299498</td>
+      <td>151.165</td>
+      <td>2.1572</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>We can access columns in the DataFrame by the column’s name</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_experimental</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Experimental value&#39;</span><span class="p">]</span>
+<span class="n">y_experimental</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       1
+1       1
+2       0
+3       1
+4       0
+       ..
+5759    1
+5760    1
+5761    1
+5762    1
+5763    1
+Name: Experimental value, Length: 5764, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>and access rows by index</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">first_rows</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">first_rows</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Id</th>
+      <th>CAS</th>
+      <th>SMILES</th>
+      <th>Status</th>
+      <th>Experimental value</th>
+      <th>Predicted value</th>
+      <th>NumValenceElectrons</th>
+      <th>qed</th>
+      <th>TPSA</th>
+      <th>MolMR</th>
+      <th>BalabanJ</th>
+      <th>BertzCT</th>
+      <th>MolWt</th>
+      <th>MolLogP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>100-00-5</td>
+      <td>O=[N+]([O-])c1ccc(cc1)Cl</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.463602</td>
+      <td>43.14</td>
+      <td>38.1064</td>
+      <td>3.003401</td>
+      <td>244.429658</td>
+      <td>157.556</td>
+      <td>2.2482</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>2</td>
+      <td>100-01-6</td>
+      <td>O=[N+]([O-])c1ccc(N)cc1</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.359544</td>
+      <td>69.16</td>
+      <td>37.5088</td>
+      <td>3.003401</td>
+      <td>242.429658</td>
+      <td>138.126</td>
+      <td>1.1770</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3</td>
+      <td>100-02-7</td>
+      <td>O=[N+]([O-])c1ccc(O)cc1</td>
+      <td>Training</td>
+      <td>0</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.470728</td>
+      <td>63.37</td>
+      <td>34.7612</td>
+      <td>3.003401</td>
+      <td>241.674771</td>
+      <td>139.110</td>
+      <td>1.3004</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>4</td>
+      <td>100-11-8</td>
+      <td>O=[N+]([O-])c1ccc(cc1)CBr</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>58</td>
+      <td>0.432586</td>
+      <td>43.14</td>
+      <td>45.7274</td>
+      <td>2.913802</td>
+      <td>257.648013</td>
+      <td>216.034</td>
+      <td>2.4897</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>If we would like to get the subset of data that is labeled as mutagenic (i.e., ‘Experimenal value’ equal to 1), we could do it like this</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mutagenic_data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Experimental value&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">mutagenic_data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Id</th>
+      <th>CAS</th>
+      <th>SMILES</th>
+      <th>Status</th>
+      <th>Experimental value</th>
+      <th>Predicted value</th>
+      <th>NumValenceElectrons</th>
+      <th>qed</th>
+      <th>TPSA</th>
+      <th>MolMR</th>
+      <th>BalabanJ</th>
+      <th>BertzCT</th>
+      <th>MolWt</th>
+      <th>MolLogP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>100-00-5</td>
+      <td>O=[N+]([O-])c1ccc(cc1)Cl</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.463602</td>
+      <td>43.14</td>
+      <td>38.1064</td>
+      <td>3.003401</td>
+      <td>244.429658</td>
+      <td>157.556</td>
+      <td>2.24820</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>2</td>
+      <td>100-01-6</td>
+      <td>O=[N+]([O-])c1ccc(N)cc1</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>52</td>
+      <td>0.359544</td>
+      <td>69.16</td>
+      <td>37.5088</td>
+      <td>3.003401</td>
+      <td>242.429658</td>
+      <td>138.126</td>
+      <td>1.17700</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>4</td>
+      <td>100-11-8</td>
+      <td>O=[N+]([O-])c1ccc(cc1)CBr</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>58</td>
+      <td>0.432586</td>
+      <td>43.14</td>
+      <td>45.7274</td>
+      <td>2.913802</td>
+      <td>257.648013</td>
+      <td>216.034</td>
+      <td>2.48970</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>7</td>
+      <td>100-13-0</td>
+      <td>O=[N+]([O-])c1ccc(C=C)cc1</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0.477660</td>
+      <td>43.14</td>
+      <td>43.1874</td>
+      <td>3.000887</td>
+      <td>276.648462</td>
+      <td>149.149</td>
+      <td>2.23780</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>8</td>
+      <td>100-14-1</td>
+      <td>O=[N+]([O-])c1ccc(cc1)CCl</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>58</td>
+      <td>0.389482</td>
+      <td>43.14</td>
+      <td>42.6534</td>
+      <td>2.913802</td>
+      <td>257.648013</td>
+      <td>171.583</td>
+      <td>2.33360</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>5759</th>
+      <td>5759</td>
+      <td>5767</td>
+      <td>20395-16-8</td>
+      <td>O=C1N(C(=O)N(C(=O)N1CC=C)CC2OC2)CC=C</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>102</td>
+      <td>0.485090</td>
+      <td>78.53</td>
+      <td>69.3560</td>
+      <td>2.668492</td>
+      <td>627.435628</td>
+      <td>265.269</td>
+      <td>-1.05750</td>
+    </tr>
+    <tr>
+      <th>5760</th>
+      <td>5760</td>
+      <td>5768</td>
+      <td>34718-47-3</td>
+      <td>O=C(C(Br)(Br)Br)Cl</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>42</td>
+      <td>0.495987</td>
+      <td>17.07</td>
+      <td>40.3720</td>
+      <td>3.791118</td>
+      <td>85.425922</td>
+      <td>315.186</td>
+      <td>2.59030</td>
+    </tr>
+    <tr>
+      <th>5761</th>
+      <td>5761</td>
+      <td>5769</td>
+      <td>43204-63-3</td>
+      <td>N(CCBr)CCBr</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>44</td>
+      <td>0.568556</td>
+      <td>12.03</td>
+      <td>40.4577</td>
+      <td>2.447473</td>
+      <td>28.870765</td>
+      <td>230.931</td>
+      <td>1.36580</td>
+    </tr>
+    <tr>
+      <th>5762</th>
+      <td>5762</td>
+      <td>5770</td>
+      <td>52583-35-4</td>
+      <td>N#Cc2cc(cc(c2(N=Nc1ccc(cc1(NC(=O)C))N(CCOC)CCO...</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>1</td>
+      <td>184</td>
+      <td>0.264581</td>
+      <td>185.59</td>
+      <td>125.3525</td>
+      <td>2.552977</td>
+      <td>1169.342047</td>
+      <td>485.457</td>
+      <td>3.84768</td>
+    </tr>
+    <tr>
+      <th>5763</th>
+      <td>5763</td>
+      <td>5771</td>
+      <td>188021-38-7</td>
+      <td>O(c1c(cc(cc1Br)C)C(C)(C)C)CC=C</td>
+      <td>Training</td>
+      <td>1</td>
+      <td>0</td>
+      <td>88</td>
+      <td>0.735392</td>
+      <td>9.23</td>
+      <td>73.2710</td>
+      <td>3.263016</td>
+      <td>388.457194</td>
+      <td>283.209</td>
+      <td>4.61982</td>
+    </tr>
+  </tbody>
+</table>
+<p>3251 rows × 15 columns</p>
+</div></div></div>
+</div>
+<p>Let’s now collect all the input features of our dataset</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Unnamed: 0&#39;</span><span class="p">,</span> <span class="s1">&#39;Id&#39;</span><span class="p">,</span><span class="s1">&#39;CAS&#39;</span><span class="p">,</span><span class="s1">&#39;SMILES&#39;</span><span class="p">,</span><span class="s1">&#39;Status&#39;</span><span class="p">,</span><span class="s1">&#39;Experimental value&#39;</span><span class="p">,</span><span class="s1">&#39;Predicted value&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>NumValenceElectrons</th>
+      <th>qed</th>
+      <th>TPSA</th>
+      <th>MolMR</th>
+      <th>BalabanJ</th>
+      <th>BertzCT</th>
+      <th>MolWt</th>
+      <th>MolLogP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>52</td>
+      <td>0.463602</td>
+      <td>43.14</td>
+      <td>38.1064</td>
+      <td>3.003401</td>
+      <td>244.429658</td>
+      <td>157.556</td>
+      <td>2.24820</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>52</td>
+      <td>0.359544</td>
+      <td>69.16</td>
+      <td>37.5088</td>
+      <td>3.003401</td>
+      <td>242.429658</td>
+      <td>138.126</td>
+      <td>1.17700</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>52</td>
+      <td>0.470728</td>
+      <td>63.37</td>
+      <td>34.7612</td>
+      <td>3.003401</td>
+      <td>241.674771</td>
+      <td>139.110</td>
+      <td>1.30040</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>58</td>
+      <td>0.432586</td>
+      <td>43.14</td>
+      <td>45.7274</td>
+      <td>2.913802</td>
+      <td>257.648013</td>
+      <td>216.034</td>
+      <td>2.48970</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>58</td>
+      <td>0.479785</td>
+      <td>43.14</td>
+      <td>42.4744</td>
+      <td>2.913802</td>
+      <td>253.299498</td>
+      <td>151.165</td>
+      <td>2.15720</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>5759</th>
+      <td>102</td>
+      <td>0.485090</td>
+      <td>78.53</td>
+      <td>69.3560</td>
+      <td>2.668492</td>
+      <td>627.435628</td>
+      <td>265.269</td>
+      <td>-1.05750</td>
+    </tr>
+    <tr>
+      <th>5760</th>
+      <td>42</td>
+      <td>0.495987</td>
+      <td>17.07</td>
+      <td>40.3720</td>
+      <td>3.791118</td>
+      <td>85.425922</td>
+      <td>315.186</td>
+      <td>2.59030</td>
+    </tr>
+    <tr>
+      <th>5761</th>
+      <td>44</td>
+      <td>0.568556</td>
+      <td>12.03</td>
+      <td>40.4577</td>
+      <td>2.447473</td>
+      <td>28.870765</td>
+      <td>230.931</td>
+      <td>1.36580</td>
+    </tr>
+    <tr>
+      <th>5762</th>
+      <td>184</td>
+      <td>0.264581</td>
+      <td>185.59</td>
+      <td>125.3525</td>
+      <td>2.552977</td>
+      <td>1169.342047</td>
+      <td>485.457</td>
+      <td>3.84768</td>
+    </tr>
+    <tr>
+      <th>5763</th>
+      <td>88</td>
+      <td>0.735392</td>
+      <td>9.23</td>
+      <td>73.2710</td>
+      <td>3.263016</td>
+      <td>388.457194</td>
+      <td>283.209</td>
+      <td>4.61982</td>
+    </tr>
+  </tbody>
+</table>
+<p>5764 rows × 8 columns</p>
+</div></div></div>
+</div>
+<section id="exercise-manipulate-a-dataframe">
+<h3>Exercise - manipulate a DataFrame ❗❗<a class="headerlink" href="#exercise-manipulate-a-dataframe" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>How many molecules in our dataset have a <code class="docutils literal notranslate"><span class="pre">qed</span></code> less than 0.5?</p></li>
+<li><p>What is the molecule with the largest molecular weight <code class="docutils literal notranslate"><span class="pre">MolWt</span></code>?</p></li>
+<li><p>What is the average number of valance electrons <code class="docutils literal notranslate"><span class="pre">NumValenceElectrons</span></code> of the molecules in our dataset?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-scaling">
+<h2>Feature scaling 📏<a class="headerlink" href="#feature-scaling" title="Permalink to this headline">#</a></h2>
+<p>It is always a good practice to scale your data before starting modeling. This helps the training process of many machine learning models. This is specially true for kNN which works on distances! The distance between two points is naturally afected by the dimensions of the input space. Look for example at the Euclidean distance, if one dimension ranges from 0 to 10,000 and another ranges from 0 to 1, the former one will potentially impact the distance value much more!</p>
+<p>We do not want this to happen. Therefore, we need to scale all input features in order to give the same importance to all dimensions regardless of their original scale.</p>
+<p>Here, we will use the method known as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler">standardization</a>. Here, we move the distribution of the data to have unit variance and a mean equal to zero.</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\textbf{x}} = \frac{\textbf{x}-\mu_x}{\sigma_x}
+\]</div>
+<p>Of course there are other <a class="reference external" href="https://medium.com/greyatom/why-how-and-when-to-scale-your-features-4b30ab09db5e">scaling methods</a> are available and you might want to review them and check which one is better than the other in which conditions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We initialize our scaler function</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and fit it to our data (i.e., get the mean vector <span class="math notranslate nohighlight">\(\mu_x\)</span> and the standard deviation vector <span class="math notranslate nohighlight">\(\sigma_x\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>StandardScaler()
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s scale our data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_hat</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_hat</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.8207913 , -0.30394896, -0.24686341, ..., -0.7292805 ,
+        -0.7199414 , -0.17404176],
+       [-0.8207913 , -0.93144046,  0.35745018, ..., -0.7345701 ,
+        -0.88733148, -0.72655468],
+       [-0.8207913 , -0.26097723,  0.22297763, ..., -0.73656663,
+        -0.87885428, -0.66290635],
+       ...,
+       [-1.00853009,  0.32894267, -0.96939207, ..., -1.29939126,
+        -0.08781341, -0.62917377],
+       [ 2.27689879, -1.50408515,  3.06153285, ...,  1.71693037,
+         2.10493626,  0.65095204],
+       [ 0.02403327,  1.33499426, -1.03442197, ..., -0.34835607,
+         0.36256324,  1.04921318]])
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-read-documentation">
+<h3>Exercise - read documentation ❗❗<a class="headerlink" href="#exercise-read-documentation" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>What are exactly the mean an standard deviation vectors that we used to scaled the data? Go to the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">sklearn documentation</a> and learn how you can access these. Reading the documentation of a library is a super important skill to learn!</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="training-and-test-split">
+<h2>Training and test split ✂️<a class="headerlink" href="#training-and-test-split" title="Permalink to this headline">#</a></h2>
+<p>Now that we have scaled the data, we have to make sure we split it. Remember, our goal is to create a model that <strong>generalize well</strong> to unseen data and not simply fit some seen data perfectly. To achieve this, our goal while splitting the data should be to ensure that the distribution of the test set is as close as possible to the expected distribution of the future data. Hence, often what we want is to make the training and test datasets to have a similar distribution.</p>
+<p>For example, let’s see if how many molecules in our dataset are mutagenic vs. non-mutagenic.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Experimental value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">perc_mutagenic</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Percentage of mutagenic molecules    :&#39;</span><span class="p">,</span> <span class="n">perc_mutagenic</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Percentage of non-mutagenic molecules:&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="o">-</span><span class="n">perc_mutagenic</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of mutagenic molecules    : 56.40180430256766
+Percentage of non-mutagenic molecules: 43.59819569743234
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this case, the proportion of mutagenic and non-mutagenic data is very similar. Then, we will go ahead and split the data randomly. However, when you have a much more imbalanced dataset, how would you split the data better? You can look for instance at what <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#stratification">stratified splitting</a> is and why is it important.</p>
+<p>In summary, when splitting your data, always think about the distribution of your splits!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training points: &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training points: &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training points:  4611
+Training points:  1153
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-splits-distribution">
+<h3>Exercise - splits distribution ❗❗<a class="headerlink" href="#exercise-splits-distribution" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Check what is the proportion of mutagenic molecules in your train and test set? Was the random splitting good?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="knn-model">
+<h2>kNN model 🏘️<a class="headerlink" href="#knn-model" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We initialize the kNN model by specifying the parameter “k”. Later, we will review some ways that help us in determining this parameter better. For now, let’s set it to 3.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>we train it</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>KNeighborsClassifier(n_neighbors=3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>we predict the test set</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now evaluate our kNN model!</p>
+<p>We will use several metrics for classification, for a quick reminder on them check the <a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#classification-metrics">documentation</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="p">(</span><span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> 
+                             <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">ConfusionMatrixDisplay</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let first look at the confusion matrix</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">cm</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[330, 179],
+       [145, 499]], dtype=int64)
+</pre></div>
+</div>
+</div>
+</div>
+<p>to see a prettier confusion matrix</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">disp</span> <span class="o">=</span> <span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x24b8031d448&gt;
+</pre></div>
+</div>
+<img alt="_images/02_kNN_QSPR_56_1.png" src="_images/02_kNN_QSPR_56_1.png" />
+</div>
+</div>
+<p>Now, let’s look at the other metrics</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Accuracy:&#39;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Precision:&#39;</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Recall:&#39;</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;F1:&#39;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy:   0.7189939288811795
+Precision:  0.7359882005899705
+Recall:     0.7748447204968945
+F1:         0.7549167927382754
+</pre></div>
+</div>
+</div>
+</div>
+<section id="comparison-to-vega-model">
+<h3>Comparison to VEGA model<a class="headerlink" href="#comparison-to-vega-model" title="Permalink to this headline">#</a></h3>
+<p>What do you think about the metrics? Is the kNN model performing good or bad?
+Let’s compare it to the predictions of a kNN model trained on this same dataset and published as part of the <a class="reference external" href="https://www.vegahub.eu/portfolio-item/vega-qsar/">VEGA platform</a>. In the VEGA model, they have choosen k=4 with a similarity threshold of 0.7 (according to an internal similarity metric) Why is such threshold important?</p>
+<p>Also, the developers of the VEGA kNN model used the <a class="reference external" href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Leave-one-out_cross-validation">leave-one-out</a> approach to assess the performace of their model. Why is this approach specially suitable when using the kNN algorithm?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_vega</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Predicted value&#39;</span><span class="p">]</span>
+<span class="n">y_vega</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       1
+1       1
+2       1
+3       0
+4       0
+       ..
+5759    0
+5760    1
+5761    1
+5762    1
+5763    0
+Name: Predicted value, Length: 5764, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that the type of <code class="docutils literal notranslate"><span class="pre">y_vega</span></code> is <code class="docutils literal notranslate"><span class="pre">object</span></code>. This means that potentially its elements have different data types! Let’s use a for-loop to see if we can discover which elements are causing the trouble.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weird_predictions_idxs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_vega</span><span class="p">):</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+  <span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;4}</span><span class="s1">, </span><span class="si">{:&lt;10}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+    <span class="n">weird_predictions_idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1844, Non Predicted
+2194, Non Predicted
+4118, Non Predicted
+4180, Non Predicted
+5633, Non Predicted
+5655, Non Predicted
+</pre></div>
+</div>
+</div>
+</div>
+<p>Indeed!! 6 elements of the series are not integers, but rather strings! This is consistent with the reports of VEGA that say that 6 compounds in this database were not able to be predicted due to not complying with the minimum similarity threshold of 0.7.</p>
+<p>This illustrates clearly the concept of defining an <a class="reference external" href="https://en.wikipedia.org/wiki/Applicability_domain">applicability domain</a> of the models we develop. Specially for chemical engineering application!</p>
+<p>Let’s now remove these molecules from the comparison…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_clean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">weird_predictions_idxs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>now, let’s get the cleaned values 😀</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_vega_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;Predicted value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">y_vega_clean</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       1
+1       1
+2       1
+3       0
+4       0
+       ..
+5759    0
+5760    1
+5761    1
+5762    1
+5763    0
+Name: Predicted value, Length: 5758, dtype: int32
+</pre></div>
+</div>
+</div>
+</div>
+<section id="vega-model">
+<h4>VEGA model<a class="headerlink" href="#vega-model" title="Permalink to this headline">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="p">[</span><span class="s1">&#39;Experimental value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_vega_clean</span><span class="p">)</span>
+<span class="n">disp</span> <span class="o">=</span> <span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Accuracy:&#39;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_vega_clean</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Precision:&#39;</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_vega_clean</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Recall:&#39;</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_vega_clean</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;F1:&#39;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_vega_clean</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy:   0.7999305314345259
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Precision:  0.8168631006346329
+Recall:     0.8319482917820868
+F1:         0.8243366880146386
+</pre></div>
+</div>
+<img alt="_images/02_kNN_QSPR_69_2.png" src="_images/02_kNN_QSPR_69_2.png" />
+</div>
+</div>
+</section>
+<section id="exercise-leave-one-out-cross-validation">
+<h4>Exercise - leave-one-out cross-validation ❗❗<a class="headerlink" href="#exercise-leave-one-out-cross-validation" title="Permalink to this headline">#</a></h4>
+<ul class="simple">
+<li><p>Can you now assess our previous kNN model configuration using the leave-one-out approach on the cleaned dataset?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">LeaveOneOut</span>
+
+<span class="n">X_clean</span> <span class="o">=</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Unnamed: 0&#39;</span><span class="p">,</span> <span class="s1">&#39;Id&#39;</span><span class="p">,</span><span class="s1">&#39;CAS&#39;</span><span class="p">,</span><span class="s1">&#39;SMILES&#39;</span><span class="p">,</span><span class="s1">&#39;Status&#39;</span><span class="p">,</span><span class="s1">&#39;Experimental value&#39;</span><span class="p">,</span><span class="s1">&#39;Predicted value&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">loo</span> <span class="o">=</span> <span class="n">LeaveOneOut</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of folds: &#39;</span><span class="p">,</span> <span class="n">loo</span><span class="o">.</span><span class="n">get_n_splits</span><span class="p">(</span><span class="n">X_clean</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of folds:  5758
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred_loo_our_model</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y_clean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loo</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_clean</span><span class="p">)):</span>
+  <span class="c1"># Get training data for the current fold</span>
+  <span class="n">X_train_loo</span> <span class="o">=</span> <span class="n">X_clean</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">]</span>
+  <span class="n">y_train_loo</span> <span class="o">=</span> <span class="n">y_clean</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">]</span>
+
+  <span class="c1"># Get test data for the current fold</span>
+  <span class="n">X_test_loo</span> <span class="o">=</span> <span class="n">X_clean</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+
+  <span class="c1"># Train kNN</span>
+  <span class="c1"># Your code here</span>
+
+  <span class="c1"># Get prediction on the test molecule</span>
+  <span class="c1"># Your code here</span>
+
+  <span class="c1"># Store the prediction in `y_pred_loo_our_model`</span>
+  <span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_pred_loo_our_model</span><span class="p">)</span>
+<span class="n">disp</span> <span class="o">=</span> <span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Accuracy:&#39;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_pred_loo_our_model</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Precision:&#39;</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_pred_loo_our_model</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Recall:&#39;</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_pred_loo_our_model</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&lt;10}</span><span class="s1">  </span><span class="si">{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;F1:&#39;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">y_pred_loo_our_model</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy:   0.4357415769364363
+Precision:  0.0            
+Recall:     0.0            
+F1:         0.0            
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\sklearn\metrics\_classification.py:1318: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+</pre></div>
+</div>
+<img alt="_images/02_kNN_QSPR_73_2.png" src="_images/02_kNN_QSPR_73_2.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="finding-the-best-k-in-knn">
+<h2>Finding the best k in kNN 🔎<a class="headerlink" href="#finding-the-best-k-in-knn" title="Permalink to this headline">#</a></h2>
+<p>What about the parameter k? How do we find the best k for our model? Why the VEGA model developers used k=4? Let’s try to answer this…</p>
+<p>k is a hyperparameter of the model and should be chosen using a validation set.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Remember to reserve your test set exclusively for assesing your model! Never use it for training or hyperparameter tuning!</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">num_ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">X_train_hyp</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train_hyp</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">train_accuracy</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">valid_accuracy</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">num_ks</span><span class="p">))):</span>
+  <span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">num_ks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  <span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_hyp</span><span class="p">,</span> <span class="n">y_train_hyp</span><span class="p">)</span>
+
+  <span class="n">pred_train</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train_hyp</span><span class="p">)</span>
+  <span class="n">pred_valid</span>  <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
+
+  <span class="n">train_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_train_hyp</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">))</span>
+  <span class="n">valid_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">pred_valid</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "dfe096ed45f04d8d9a2f041cf91e5d6c"}
+</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_ks</span><span class="p">,</span> <span class="n">train_accuracy</span><span class="p">,</span> <span class="s1">&#39;bs--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_ks</span><span class="p">,</span> <span class="n">valid_accuracy</span><span class="p">,</span> <span class="s1">&#39;rx--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Misclasification rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/02_kNN_QSPR_76_0.png" src="_images/02_kNN_QSPR_76_0.png" />
+</div>
+</div>
+<p>This graph is pretty similar to the one that we saw on slide 9 of Lecture 2. Here, we can see the expected general trend of the performance curves.</p>
+<p>Which k do you think is the best?</p>
+<section id="cross-validation">
+<h3>Cross-validation<a class="headerlink" href="#cross-validation" title="Permalink to this headline">#</a></h3>
+<p>Problem: if validation set is small and noisy, it might be misleading
+Idea: Increase the size of the validation set
+Problem: This would reduce the size of the training set</p>
+<p>Then, let’s use all data for training and validation using k-fold cross-validation!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_validate</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">train_misclassification</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">valid_misclassification</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">num_ks</span><span class="p">))):</span>
+  <span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">num_ks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  <span class="n">cv_dict</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">knn</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                                 <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  
+  <span class="n">k_fold_train_scored</span> <span class="o">=</span> <span class="n">cv_dict</span><span class="p">[</span><span class="s1">&#39;train_score&#39;</span><span class="p">]</span>
+  <span class="n">k_fold_valid_scored</span> <span class="o">=</span> <span class="n">cv_dict</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">]</span>
+  
+  <span class="n">train_misclassification</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">k_fold_train_scored</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+  <span class="n">valid_misclassification</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">k_fold_valid_scored</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+  
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "55025f2ddf9440668807511e2440e46d"}
+</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_ks</span><span class="p">,</span> <span class="n">train_misclassification</span><span class="p">,</span> <span class="s1">&#39;bs--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_ks</span><span class="p">,</span> <span class="n">valid_misclassification</span><span class="p">,</span> <span class="s1">&#39;rx--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Misclasification rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/02_kNN_QSPR_81_0.png" src="_images/02_kNN_QSPR_81_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;k with minimum validation misclassification: &#39;</span><span class="p">,</span> <span class="n">num_ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">valid_misclassification</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>k with minimum validation misclassification:  14
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_ks</span><span class="p">,</span> <span class="n">valid_misclassification</span><span class="p">,</span> <span class="s1">&#39;rx--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Misclasification rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/02_kNN_QSPR_83_0.png" src="_images/02_kNN_QSPR_83_0.png" />
+</div>
+</div>
+<p>You can now go back to your implementation of leave-one-out and train your kNN model using the best k that you found. How does it perform compared to the VEGA kNN? Do you got a better model? Why?</p>
+</section>
+</section>
+<section id="challenge-knn-qspr-for-predicting-bcf">
+<h2>Challenge - kNN QSPR for predicting BCF 🥇<a class="headerlink" href="#challenge-knn-qspr-for-predicting-bcf" title="Permalink to this headline">#</a></h2>
+<p>Develop a kNN model for regression to predict the bioconcentration factor (BCF).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+  <span class="n">df_bcf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/BCF_training.csv&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">df_bcf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;references/BCF_training.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div class="docutils container" id="id4">
+<dl class="citation">
+<dt class="label" id="id8"><span class="brackets"><a class="fn-backref" href="#id3">HMS+09</a></span></dt>
+<dd><p>Katja Hansen, Sebastian Mika, Timon Schroeter, Andreas Sutter, Antonius Ter Laak, Thomas Steger-Hartmann, Nikolaus Heinrich, and Klaus-Robert Muller. Benchmark data set for in silico prediction of ames mutagenicity. <em>Journal of chemical information and modeling</em>, 49(9):2077–2081, 2009.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id2">Mur22</a></span></dt>
+<dd><p>Kevin P Murphy. <em>Probabilistic machine learning: an introduction</em>. MIT press, 2022.</p>
+</dd>
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id1">SXG+03</a></span></dt>
+<dd><p>Min Shen, Yunde Xiao, Alexander Golbraikh, Vijay K Gombar, and Alexander Tropsha. Development and validation of k-nearest-neighbor qspr models of metabolic stability of drug candidates. <em>Journal of medicinal chemistry</em>, 46(14):3013–3020, 2003.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id1">YJQ+19</a></span></dt>
+<dd><p>Shuai Yuan, Zeren Jiao, Noor Quddus, Joseph Sang-II Kwon, and Chad V Mashuga. Developing quantitative structure–property relationship models to predict the upper flammability limit using machine learning. <em>Industrial &amp; Engineering Chemistry Research</em>, 58(8):3531–3537, 2019.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"39c89400111e40df92efdcc517dc9807": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a7b214d81c2c456a82be6af16fea1dbc": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "fbb2767acd4946f286a8dfc4d38106db": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_39c89400111e40df92efdcc517dc9807", "max": 50.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_a7b214d81c2c456a82be6af16fea1dbc", "value": 50.0}}, "89cca3eaf5b34cf0843487837afcc312": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a1d10c692af24d348244caaa662f3fd3": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "ff7a3f339bb24bb88677cd639f0b1a53": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_89cca3eaf5b34cf0843487837afcc312", "placeholder": "\u200b", "style": "IPY_MODEL_a1d10c692af24d348244caaa662f3fd3", "value": "100%"}}, "8e7e89f8499349559669ab59e84a2128": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "0b7727ad3ddc4596a2bde1c9d71abe85": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "202fe4b4e2c24d7e90e122ae95e54a6a": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_8e7e89f8499349559669ab59e84a2128", "placeholder": "\u200b", "style": "IPY_MODEL_0b7727ad3ddc4596a2bde1c9d71abe85", "value": " 50/50 [00:19&lt;00:00,  2.04it/s]"}}, "36bf9133ebdd401c9ceab0d40b4e151c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "dfe096ed45f04d8d9a2f041cf91e5d6c": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_ff7a3f339bb24bb88677cd639f0b1a53", "IPY_MODEL_fbb2767acd4946f286a8dfc4d38106db", "IPY_MODEL_202fe4b4e2c24d7e90e122ae95e54a6a"], "layout": "IPY_MODEL_36bf9133ebdd401c9ceab0d40b4e151c"}}, "e05783f940a441968911dc344c845dad": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "1a0b97cb40fc4531a19018a0c1c2dc4f": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "6395206bc3af43d9ba398abc6d504cd7": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_e05783f940a441968911dc344c845dad", "max": 49.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_1a0b97cb40fc4531a19018a0c1c2dc4f", "value": 49.0}}, "a2d901e551364d05976de47381f798ca": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "359b98cc5f9f4f0ab999422dd716509b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "b245420b636c4056b727a856b711a5c5": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_a2d901e551364d05976de47381f798ca", "placeholder": "\u200b", "style": "IPY_MODEL_359b98cc5f9f4f0ab999422dd716509b", "value": "100%"}}, "619cced934844db092eba28f6419a92b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "85686b50b9cf49a5b9ddd37ebb4f1715": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "af9bd61cc5344297a1206302bac2a859": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_619cced934844db092eba28f6419a92b", "placeholder": "\u200b", "style": "IPY_MODEL_85686b50b9cf49a5b9ddd37ebb4f1715", "value": " 49/49 [02:35&lt;00:00,  3.79s/it]"}}, "f1708accda8e413da5e1f419faf8cd2d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "55025f2ddf9440668807511e2440e46d": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_b245420b636c4056b727a856b711a5c5", "IPY_MODEL_6395206bc3af43d9ba398abc6d504cd7", "IPY_MODEL_af9bd61cc5344297a1206302bac2a859"], "layout": "IPY_MODEL_f1708accda8e413da5e1f419faf8cd2d"}}}, "version_major": 2, "version_minor": 0}
+</script>
+
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="01_Introduction_Python.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">1. Introduction to Python 🐍</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="03_GLM_thermophysical.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">3. GLM for thermophysical property prediction ⚗️</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Edgar Sanchez and Antonio del Rio<br/>
+  
+      &copy; Copyright 2023.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

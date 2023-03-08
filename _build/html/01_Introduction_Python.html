@@ -50,10 +50,13 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. kNN for (Q)SPR modeling ⚛️" href="02_kNN_QSPR.html" />
     <link rel="prev" title="An overview of the course 🔭" href="00_Overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -123,6 +126,21 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    1. Introduction to Python 🐍
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02_kNN_QSPR.html">
+   2. kNN for (Q)SPR modeling ⚛️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_GLM_thermophysical.html">
+   3. GLM for thermophysical property prediction ⚗️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Acknowledgements.html">
+   Acknowledgements
   </a>
  </li>
 </ul>
@@ -1259,11 +1277,11 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 0.49677577,  0.65824866, -0.87070094, -0.41291873],
-       [ 0.81027567,  1.18184254,  0.11231161, -1.26770427],
-       [ 0.56819462,  0.56356369, -1.01124699, -0.55469942],
-       [ 0.38690477,  0.9179679 ,  0.13776118, -0.47469852],
-       [ 0.4961178 ,  0.60683409, -0.51223694, -0.58648957]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.97072758,  1.25331938, -0.16993481, -0.85545788],
+       [-0.42621817,  1.40555055,  0.02026206, -0.41607262],
+       [-0.91909789,  0.60540122, -0.4117457 , -0.61425519],
+       [-0.06602899,  0.82726404,  0.14649229, -0.16165151],
+       [-0.63293185,  0.55477342, -0.38753562, -0.32187113]])
 </pre></div>
 </div>
 </div>
@@ -1276,9 +1294,9 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.40793444, 0.97115805, 0.37460262, 0.64474953, 0.44290183],
-       [0.84870722, 0.51605942, 0.82795047, 0.47856092, 0.58417166],
-       [0.31705686, 0.52840482, 0.42517232, 0.13721007, 0.34448007]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.90609145, 0.45308171, 0.57276253, 0.21017948, 0.2448669 ],
+       [0.68421031, 0.94246698, 0.07976608, 0.65709794, 0.07413887],
+       [0.3658717 , 0.42590732, 0.32428475, 0.19075573, 0.36730223]])
 </pre></div>
 </div>
 </div>
@@ -1485,6 +1503,13 @@ title="Print to PDF"
             <p class="prev-next-title">An overview of the course 🔭</p>
         </div>
     </a>
+    <a class='right-next' id="next-link" href="02_kNN_QSPR.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2. kNN for (Q)SPR modeling ⚛️</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
             </footer>
         </div>
@@ -1492,7 +1517,7 @@ title="Print to PDF"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Edgar Sanchez, Caroline Ganzer and Antonio del Rio<br/>
+    By Edgar Sanchez and Antonio del Rio<br/>
   
       &copy; Copyright 2023.<br/>
 </p>

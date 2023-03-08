@@ -6,3 +6,6 @@ root: intro
 chapters:
 - file: 00_Overview
 - file: 01_Introduction_Python
+- file: 02_kNN_QSPR
+- file: 03_GLM_thermophysical
+- file: Acknowledgements

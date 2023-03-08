@@ -50,6 +50,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="An overview of the course 🔭" href="00_Overview.html" />
@@ -121,6 +123,21 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="01_Introduction_Python.html">
    1. Introduction to Python 🐍
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02_kNN_QSPR.html">
+   2. kNN for (Q)SPR modeling ⚛️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_GLM_thermophysical.html">
+   3. GLM for thermophysical property prediction ⚗️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Acknowledgements.html">
+   Acknowledgements
   </a>
  </li>
 </ul>
@@ -315,9 +332,12 @@ used in the respective MLCE courses offered in these institutions.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="00_Overview.html">An overview of the course 🔭</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01_Introduction_Python.html">1. Introduction to Python 🐍</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements</a></li>
 </ul>
 </div>
-<p>This book was prepared by <a class="reference external" href="https://edgarsmdn.github.io/">Edgar Sanchez</a>, <a class="reference external" href="https://www.mpi-magdeburg.mpg.de/person/126003/1681423">Caroline Ganzer</a>
+<p>This book was prepared by <a class="reference external" href="https://edgarsmdn.github.io/">Edgar Sanchez</a>
 and <a class="reference external" href="https://www.imperial.ac.uk/people/a.del-rio-chanona">Antonio del Rio</a> with the help of many collegues. If you have a question or need some
 help in adapting this book to your MLCE course feel free to contact us!</p>
 </section>
@@ -363,7 +383,7 @@ help in adapting this book to your MLCE course feel free to contact us!</p>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Edgar Sanchez, Caroline Ganzer and Antonio del Rio<br/>
+    By Edgar Sanchez and Antonio del Rio<br/>
   
       &copy; Copyright 2023.<br/>
 </p>

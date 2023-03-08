@@ -1,4 +1,15 @@
 Traceback (most recent call last):
+  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 730, in _async_poll_for_reply
+    msg = await ensure_async(self.kc.shell_channel.get_msg(timeout=new_timeout))
+  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\util.py", line 96, in ensure_async
+    result = await obj
+  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\jupyter_client\channels.py", line 230, in get_msg
+    raise Empty
+_queue.Empty
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
   File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\jupyter_cache\executors\utils.py", line 56, in single_nb_execution
     record_timing=False,
   File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 1204, in execute
@@ -11,28 +22,18 @@ Traceback (most recent call last):
     return future.result()
   File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 664, in async_execute
     cell, index, execution_count=self.code_cells_executed + 1
-  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 965, in async_execute_cell
-    await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 862, in _check_raise_for_error
-    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
-nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
-------------------
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sn
-import numpy as np
-%matplotlib inline
-------------------
-
-[1;31m---------------------------------------------------------------------------[0m
-[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-[1;32m~\AppData\Local\Temp\ipykernel_9860\3382756367.py[0m in [0;36m<module>[1;34m[0m
-[1;32m----> 1[1;33m [1;32mimport[0m [0mpandas[0m [1;32mas[0m [0mpd[0m[1;33m[0m[1;33m[0m[0m
-[0m[0;32m      2[0m [1;32mimport[0m [0mmatplotlib[0m[1;33m.[0m[0mpyplot[0m [1;32mas[0m [0mplt[0m[1;33m[0m[1;33m[0m[0m
-[0;32m      3[0m [1;32mimport[0m [0mseaborn[0m [1;32mas[0m [0msn[0m[1;33m[0m[1;33m[0m[0m
-[0;32m      4[0m [1;32mimport[0m [0mnumpy[0m [1;32mas[0m [0mnp[0m[1;33m[0m[1;33m[0m[0m
-[0;32m      5[0m [0mget_ipython[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0mrun_line_magic[0m[1;33m([0m[1;34m'matplotlib'[0m[1;33m,[0m [1;34m'inline'[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
-
-[1;31mModuleNotFoundError[0m: No module named 'pandas'
-ModuleNotFoundError: No module named 'pandas'
+  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 949, in async_execute_cell
+    exec_reply = await self.task_poll_for_reply
+  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 754, in _async_poll_for_reply
+    await self._async_handle_timeout(timeout, cell)
+  File "C:\Users\DELL\Anaconda3\envs\ML4ChemEng\lib\site-packages\nbclient\client.py", line 802, in _async_handle_timeout
+    "Cell execution timed out", timeout, cell
+nbclient.exceptions.CellTimeoutError: A cell timed out while it was being executed, after 30 seconds.
+The message was: Cell execution timed out.
+Here is a preview of the cell contents:
+-------------------
+['num_ks = np.arange(1, 50, 1).astype(int)', '', 'train_misclassification = []', 'valid_misclassification = []', 'for i in tqdm(range(len(num_ks))):']
+...
+["  k_fold_train_scored = cv_dict['train_score']", "  k_fold_valid_scored = cv_dict['test_score']", '  ', '  train_misclassification.append(1-k_fold_train_scored.mean())', '  valid_misclassification.append(1-k_fold_valid_scored.mean())']
+-------------------
 

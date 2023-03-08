@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title      : Machine Learning in Chemical Engineering
-author     : Edgar Sanchez and Antonio del Rio
+author     : Edgar Sanchez, Antonio del Rio and Caroline Ganzer
 logo       : logo.png
 copyright  : "2023"
 
@@ -11,6 +11,7 @@ copyright  : "2023"
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
+  timeout          : 3000       # max seconds for notebook to execute
 
 ########################################################################
 # Define the name of the latex output file for PDF builds

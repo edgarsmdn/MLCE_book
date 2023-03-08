@@ -1,0 +1,1366 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3. GLM for thermophysical property prediction ⚗️ &#8212; Machine Learning in Chemical Engineering</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Acknowledgements" href="Acknowledgements.html" />
+    <link rel="prev" title="2. kNN for (Q)SPR modeling ⚛️" href="02_kNN_QSPR.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Machine Learning in Chemical Engineering</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="00_Overview.html">
+   An overview of the course 🔭
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="01_Introduction_Python.html">
+   1. Introduction to Python 🐍
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02_kNN_QSPR.html">
+   2. kNN for (Q)SPR modeling ⚛️
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   3. GLM for thermophysical property prediction ⚗️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Acknowledgements.html">
+   Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/edgarsmdn/MLCE_book/master?urlpath=tree/docs/03_GLM_thermophysical.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/edgarsmdn/MLCE_book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F03_GLM_thermophysical.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/03_GLM_thermophysical.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#goals-of-this-exercise">
+   Goals of this exercise 🌟
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-quick-reminder">
+   A quick reminder ✅
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-about-non-linear-problems">
+     What about non-linear problems? 🤔
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linear-regression">
+   Linear regression 📉
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#multivariate-linear-regression">
+   Multivariate-linear regression 🤹
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-multi-variate-linear-regression">
+     Exercise - multi-variate linear regression ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generalized-linear-regression">
+   Generalized Linear Regression 📈
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-polynomial-regression">
+     Exercise - polynomial regression ❗❗
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-a-different-base">
+     Using a different base
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-generalized-linear-regression">
+     Exercise - Generalized linear regression ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>3. GLM for thermophysical property prediction ⚗️</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#goals-of-this-exercise">
+   Goals of this exercise 🌟
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-quick-reminder">
+   A quick reminder ✅
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-about-non-linear-problems">
+     What about non-linear problems? 🤔
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linear-regression">
+   Linear regression 📉
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#multivariate-linear-regression">
+   Multivariate-linear regression 🤹
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-multi-variate-linear-regression">
+     Exercise - multi-variate linear regression ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generalized-linear-regression">
+   Generalized Linear Regression 📈
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-polynomial-regression">
+     Exercise - polynomial regression ❗❗
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-a-different-base">
+     Using a different base
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-generalized-linear-regression">
+     Exercise - Generalized linear regression ❗❗
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="glm-for-thermophysical-property-prediction">
+<h1>3. GLM for thermophysical property prediction ⚗️<a class="headerlink" href="#glm-for-thermophysical-property-prediction" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/03_GLM_thermophysical.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>We will learn how to apply (generalized) linear regression</p></li>
+<li><p>We will review some performance metrics for assesing regression models</p></li>
+</ul>
+</section>
+<section id="a-quick-reminder">
+<h2>A quick reminder ✅<a class="headerlink" href="#a-quick-reminder" title="Permalink to this headline">#</a></h2>
+<p>The process of “learning” in the context of supervised <strong>learning</strong> can be seen as exploring a hypothesis space <span class="math notranslate nohighlight">\(\mathcal{H}\)</span> looking for the most appropriate hypothesis function <span class="math notranslate nohighlight">\(h\)</span>. In the context of linear regression the hypothesis space is of course the space of linear functions.</p>
+<p>Let’s imagine our input space is two-dimensional, continuous and non-negative. This could be denoted mathematically as <span class="math notranslate nohighlight">\(\textbf{x} \in \mathbb{R}_+^2\)</span>. For example, for an ideal gas, its pressure is a function of the temperature and volume. In this case, our dataset will be a collection of <span class="math notranslate nohighlight">\(N\)</span> points with temperature and volume values as inputs and pressure as output</p>
+<div class="math notranslate nohighlight">
+\[
+\{(\textbf{x}^{(1)}, y^{(1)}), (\textbf{x}^{(2)}, y^{(2)}), ..., (\textbf{x}^{(N)}, y^{(N)}) \}
+\]</div>
+<p>where for each point <span class="math notranslate nohighlight">\(\textbf{x} = [x_1, x_2]^T\)</span>. Our hypothesis function would be</p>
+<div class="math notranslate nohighlight">
+\[
+h(\textbf{x}, \textbf{w}) = w_0 + w_1x_1 + w_2+x_2
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\textbf{w} = [w_0, w_1, w_2]^T\)</span> is the vector of model parameters that the machine has to learn. You will soon realize that “learn” means solving an optimization problem to arrive to a set of optimal parameters. In this case, we could for example minimize the sum of squarred errors to get the optimal parameters <span class="math notranslate nohighlight">\(\textbf{w}^* \)</span></p>
+<div class="math notranslate nohighlight">
+\[
+\textbf{w}^* = argmin_{\textbf{w}} ~~ \frac{1}{2} \sum_{n=1}^N \left( y^{(n)} - h(\textbf{x}^{(n)}, \textbf{w}) \right)^2
+\]</div>
+<p>This turns out to be a convex problem. This means that there exist only one optimum which is the global optimum.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Did you remember the difference between local and global optima?</p>
+</div>
+<p>There are many ways in which this optimization problem can be solved. For example, we can use gradient-based methods (e.g., <a class="reference external" href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a>), Hessian-based methods (e.g., <a class="reference external" href="https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization">Newton’s method</a>) or, in this case, even an <a class="reference external" href="https://math.stackexchange.com/questions/4177039/deriving-the-normal-equation-for-linear-regression">analytical solution</a> exists!</p>
+<section id="what-about-non-linear-problems">
+<h3>What about non-linear problems? 🤔<a class="headerlink" href="#what-about-non-linear-problems" title="Permalink to this headline">#</a></h3>
+<p>We can expand this concept to cover non-linear spaces by introducing the concept of basis functions <span class="math notranslate nohighlight">\(\phi(\textbf{x})\)</span> that map our original inputs to a different space where the problem becomes linear. Then, in this new space we perform linear regression (or classification) and effectively we are performing non-linear regression (classification) in the original space! Nice trick right?</p>
+<p>This get rise to what we call Generalized Linear Models (GLM)!</p>
+</section>
+</section>
+<section id="linear-regression">
+<h2>Linear regression 📉<a class="headerlink" href="#linear-regression" title="Permalink to this headline">#</a></h2>
+<p>Let’s now play around with this concepts by looking at a specific example: regressing thermophysical data of saturated and superheated vapor.</p>
+<p>The data is taken from the Appendix F of <span id="id1">[<a class="reference internal" href="#id8" title="Joseph Mauk Smith, Hendrick C Van Ness, Michael M Abbott, and Mark Thomas Swihart. Introduction to chemical engineering thermodynamics. McGraw-Hill Education, 7th edition, 2004.">SVNAS04</a>]</span>.</p>
+<p>Let’s import some libraries.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and then import the data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/superheated_vapor.csv&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;references/superheated_vapor.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Pressure</th>
+      <th>Property</th>
+      <th>Liq_Sat</th>
+      <th>Vap_Sat</th>
+      <th>75</th>
+      <th>100</th>
+      <th>125</th>
+      <th>150</th>
+      <th>175</th>
+      <th>200</th>
+      <th>...</th>
+      <th>425</th>
+      <th>450</th>
+      <th>475</th>
+      <th>500</th>
+      <th>525</th>
+      <th>550</th>
+      <th>575</th>
+      <th>600</th>
+      <th>625</th>
+      <th>650</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>V</td>
+      <td>1.000</td>
+      <td>129200.0000</td>
+      <td>160640.0000</td>
+      <td>172180.0000</td>
+      <td>183720.0000</td>
+      <td>195270.0000</td>
+      <td>206810.0000</td>
+      <td>218350.0000</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>333730.00</td>
+      <td>NaN</td>
+      <td>356810.0000</td>
+      <td>NaN</td>
+      <td>379880.0000</td>
+      <td>NaN</td>
+      <td>402960.0000</td>
+      <td>NaN</td>
+      <td>426040.0000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>U</td>
+      <td>29.334</td>
+      <td>2385.2000</td>
+      <td>2480.8000</td>
+      <td>2516.4000</td>
+      <td>2552.3000</td>
+      <td>2588.5000</td>
+      <td>2624.9000</td>
+      <td>2661.7000</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>3049.90</td>
+      <td>NaN</td>
+      <td>3132.4000</td>
+      <td>NaN</td>
+      <td>3216.7000</td>
+      <td>NaN</td>
+      <td>3302.6000</td>
+      <td>NaN</td>
+      <td>3390.3000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.0</td>
+      <td>H</td>
+      <td>29.335</td>
+      <td>2514.4000</td>
+      <td>2641.5000</td>
+      <td>2688.6000</td>
+      <td>2736.0000</td>
+      <td>2783.7000</td>
+      <td>2831.7000</td>
+      <td>2880.1000</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>3383.60</td>
+      <td>NaN</td>
+      <td>3489.2000</td>
+      <td>NaN</td>
+      <td>3596.5000</td>
+      <td>NaN</td>
+      <td>3705.6000</td>
+      <td>NaN</td>
+      <td>3816.4000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.0</td>
+      <td>S</td>
+      <td>0.106</td>
+      <td>8.9767</td>
+      <td>9.3828</td>
+      <td>9.5136</td>
+      <td>9.6365</td>
+      <td>9.7527</td>
+      <td>9.8629</td>
+      <td>9.9679</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>10.82</td>
+      <td>NaN</td>
+      <td>10.9612</td>
+      <td>NaN</td>
+      <td>11.0957</td>
+      <td>NaN</td>
+      <td>11.2243</td>
+      <td>NaN</td>
+      <td>11.3476</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>10.0</td>
+      <td>V</td>
+      <td>1.010</td>
+      <td>14670.0000</td>
+      <td>16030.0000</td>
+      <td>17190.0000</td>
+      <td>18350.0000</td>
+      <td>19510.0000</td>
+      <td>20660.0000</td>
+      <td>21820.0000</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>33370.00</td>
+      <td>NaN</td>
+      <td>35670.0000</td>
+      <td>NaN</td>
+      <td>37980.0000</td>
+      <td>NaN</td>
+      <td>40290.0000</td>
+      <td>NaN</td>
+      <td>42600.0000</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 37 columns</p>
+</div></div></div>
+</div>
+<p>Many things to notice from observing the data above:</p>
+<ul class="simple">
+<li><p>We have 4 different properties V, U, H and S referring to the specific properties volume [cm<span class="math notranslate nohighlight">\(^3\)</span> g<span class="math notranslate nohighlight">\(^{-1}\)</span>], internal energy [kJ kg<span class="math notranslate nohighlight">\(^{-1}\)</span>], enthalpy [kJ kg<span class="math notranslate nohighlight">\(^{-1}\)</span>] and entropy[kJ kg<span class="math notranslate nohighlight">\(^{-1}\)</span> K<span class="math notranslate nohighlight">\(^{-1}\)</span>], respectively.</p></li>
+<li><p>We have values for each property at different pressures [kPa] and temperatures [°C].</p></li>
+<li><p>We have also the value of each property at each pressure for the saturated liquid and vapor.</p></li>
+</ul>
+<p>Since we plan to build models per each property individually, let’s separate the data per property.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">V</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Property&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;V&#39;</span><span class="p">]</span>
+<span class="n">U</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Property&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;U&#39;</span><span class="p">]</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Property&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span><span class="p">]</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Property&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;S&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ploting the data, whenever possible, is always useful! So, let’s plot for instance the saturated liquid data to see what trends it follows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">property_to_plot</span> <span class="o">=</span> <span class="s1">&#39;Liq_Sat&#39;</span>
+
+<span class="c1"># Plot saturated liquid</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">],</span> <span class="n">V</span><span class="p">[</span><span class="n">property_to_plot</span><span class="p">],</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific volume [$cm^3 g^{-1}$]&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">],</span> <span class="n">U</span><span class="p">[</span><span class="n">property_to_plot</span><span class="p">],</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific internal energy [$kJ kg^{-1}$]&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="n">property_to_plot</span><span class="p">],</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific enthalpy [$kJ kg^{-1}$]&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">],</span> <span class="n">S</span><span class="p">[</span><span class="n">property_to_plot</span><span class="p">],</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific enthropy [$kJ kg^{-1} K^{-1}$]&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">property_to_plot</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/03_GLM_thermophysical_14_0.png" src="_images/03_GLM_thermophysical_14_0.png" />
+</div>
+</div>
+<p>We can also get some statical description of the data really fast by calling the method <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html"><code class="docutils literal notranslate"><span class="pre">describe()</span></code></a> on a DataFrame or Series</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Liq_Sat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>count    136.000000
+mean       1.215382
+std        0.128941
+min        1.000000
+25%        1.111500
+50%        1.191000
+75%        1.309750
+max        1.504000
+Name: Liq_Sat, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Well, the trend is clearly non-linear in the whole range of pressures right?</p>
+<p>We will focus in this exercise on a single property, let’s take for instance the specific volume of the saturated liquid.</p>
+<p>Our goal is to build a mathematical model (for now using (generalized) linear regression), that predicts the specific volume of a saturated liquid as a function of the pressure. This means that we are dealing with a one-dimensional problem.</p>
+<p>It is also quite noticible to see that a simple line is not going to fit the data very well on the whole range of pressures. Do you see why looking at your data first is important? This process is formally known as <a class="reference external" href="https://en.wikipedia.org/wiki/Exploratory_data_analysis">Exploratory Data Analysis (EDA)</a> and refers to the general task of analyzing the data using statistical metrics, visualization tools, etc…</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Before starting modeling, explore your data!</p>
+</div>
+<p>For now, let’s assume we only know how to do a simple linear regression. Maybe one idea would be to split the data into sections and approximate each section with a different linear regression. This of course will result in a discrete model that is not very handdy… But let’s try</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lim_1</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">lim_2</span> <span class="o">=</span> <span class="mi">1500</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">],</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Liq_Sat&#39;</span><span class="p">],</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lim_1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lim_2</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific volume [$cm^3 g^{-1}$]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Saturated liquid&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/03_GLM_thermophysical_18_0.png" src="_images/03_GLM_thermophysical_18_0.png" />
+</div>
+</div>
+<p>Let’s extract these sections from our data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">First_P</span>  <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lim_1</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">First_V</span>  <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Liq_Sat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lim_1</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">Second_P</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">lim_1</span><span class="p">)</span> <span class="o">&amp;</span> 
+                                  <span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lim_2</span><span class="p">)]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Second_V</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Liq_Sat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">lim_1</span><span class="p">)</span> <span class="o">&amp;</span> 
+                                  <span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lim_2</span><span class="p">)]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">Third_P</span>  <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">lim_2</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Third_V</span>  <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Liq_Sat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">lim_2</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we fit the 3 models</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LR_1</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">First_P</span><span class="p">,</span> <span class="n">First_V</span><span class="p">)</span>
+<span class="n">LR_2</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Second_P</span><span class="p">,</span> <span class="n">Second_V</span><span class="p">)</span>
+<span class="n">LR_3</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Third_P</span><span class="p">,</span> <span class="n">Third_V</span><span class="p">)</span>
+
+<span class="c1"># - Plot splits and models</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific volume [$cm^3 g^{-1}$]&#39;</span><span class="p">)</span>
+
+<span class="c1"># -- First split</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">First_P</span><span class="p">,</span> <span class="n">First_V</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1st Section&#39;</span><span class="p">)</span>    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">lim_1</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> 
+         <span class="n">LR_1</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">lim_1</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+
+<span class="c1"># -- Second split</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Second_P</span><span class="p">,</span> <span class="n">Second_V</span><span class="p">,</span> <span class="s1">&#39;bx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;2nd Section&#39;</span><span class="p">)</span>  
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lim_1</span><span class="p">,</span> <span class="n">lim_2</span><span class="o">+</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> 
+         <span class="n">LR_2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lim_1</span><span class="p">,</span> <span class="n">lim_2</span><span class="o">+</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="c1"># -- Third split</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Third_P</span><span class="p">,</span> <span class="n">Third_V</span><span class="p">,</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;3rd Section&#39;</span><span class="p">)</span>    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lim_2</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">Third_P</span><span class="p">),</span> <span class="mi">100</span><span class="p">),</span> 
+         <span class="n">LR_3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lim_2</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">Third_P</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/03_GLM_thermophysical_22_0.png" src="_images/03_GLM_thermophysical_22_0.png" />
+</div>
+</div>
+<p>We can check how well our model is fitting our data by printing the R<span class="math notranslate nohighlight">\(^2\)</span> coefficient</p>
+<p>The coefficient R<span class="math notranslate nohighlight">\(^2\)</span> is defined as <span class="math notranslate nohighlight">\(1 - \frac{u}{v}\)</span>, where <span class="math notranslate nohighlight">\(u\)</span> is the residual sum of squares <span class="math notranslate nohighlight">\(\sum (y - \hat{y})^2\)</span> and <span class="math notranslate nohighlight">\(v\)</span> is the total sum of squares <span class="math notranslate nohighlight">\(\sum (y - \mu_y)^2\)</span>. Here, <span class="math notranslate nohighlight">\(y\)</span> denotes the true output value, <span class="math notranslate nohighlight">\(\hat{y}\)</span> denotes the predicted output and <span class="math notranslate nohighlight">\(\mu_y\)</span> stands for the mean of the output data. The best possible score is 1.0 and it can be negative (because the model can be arbitrarily worse). A constant model that always predicts the mean of <span class="math notranslate nohighlight">\(y\)</span>, disregarding the input features, would get a R<span class="math notranslate nohighlight">\(^2\)</span> score of 0.0.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> R2 for 1st split:&#39;</span><span class="p">,</span> <span class="n">LR_1</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">First_P</span><span class="p">,</span> <span class="n">First_V</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> R2 for 2nd split:&#39;</span><span class="p">,</span> <span class="n">LR_2</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Second_P</span><span class="p">,</span> <span class="n">Second_V</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> R2 for 3rd split:&#39;</span><span class="p">,</span> <span class="n">LR_3</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Third_P</span><span class="p">,</span> <span class="n">Third_V</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> R2 for 1st split: 0.9263208134364597
+
+ R2 for 2nd split: 0.9870087187227413
+
+ R2 for 3rd split: 0.9990370407798591
+</pre></div>
+</div>
+</div>
+</div>
+<div class="hint admonition">
+<p class="admonition-title">Question</p>
+<p>What about training and test split? 😟 Can my model extrapolate to other pressures accurately?</p>
+</div>
+<p>To check the model parameters <span class="math notranslate nohighlight">\(\textbf{w}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Slope for 1st split    :&#39;</span><span class="p">,</span> <span class="n">LR_1</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; Intercept for 1st split:&#39;</span><span class="p">,</span> <span class="n">LR_1</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Slope for 2nd split    :&#39;</span><span class="p">,</span> <span class="n">LR_2</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; Intercept for 2nd split:&#39;</span><span class="p">,</span> <span class="n">LR_2</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Slope for 3rd split    :&#39;</span><span class="p">,</span> <span class="n">LR_3</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; Intercept for 3rd split:&#39;</span><span class="p">,</span> <span class="n">LR_3</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Slope for 1st split    : [[0.00023137]]
+ Intercept for 1st split: [1.01438786]
+
+ Slope for 2nd split    : [[6.67710359e-05]]
+ Intercept for 2nd split: [1.05921557]
+
+ Slope for 3rd split    : [[3.44236231e-05]]
+ Intercept for 3rd split: [1.11072464]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="hint admonition">
+<p class="admonition-title">Question</p>
+<p>What about scaling? 😟 Does scaling matters for linear regression? Why or why not?</p>
+</div>
+</section>
+<section id="multivariate-linear-regression">
+<h2>Multivariate-linear regression 🤹<a class="headerlink" href="#multivariate-linear-regression" title="Permalink to this headline">#</a></h2>
+<p>In our data set, we have a bunch of data corresponding to superheated vapor. We can take a look into it to see how can we create a mathematical model for it. This would be useful later for process simulation or process optimization.</p>
+<p>Let’s pick just one property for now, the enthalpy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%matplotlib qt #Uncomment this line to plot in a separate window (not available in Colab)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">Axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">auto_add_to_figure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">H</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">4</span><span class="p">:][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">4</span><span class="p">:]))])</span>
+<span class="n">X</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;75&#39;</span><span class="p">:</span><span class="s1">&#39;650&#39;</span><span class="p">]</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Temperature [°C]&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Specific enthalpy [$kJ kg^{-1}$]&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Superheated vapor&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/03_GLM_thermophysical_30_0.png" src="_images/03_GLM_thermophysical_30_0.png" />
+</div>
+</div>
+<p>It seems like a multivariate linear regression would fit our experimental data quite well, right?</p>
+<p>You will notice that the enthalpy data contains NaN values (i.e., empty values), which we should remove before fitting our model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Ps</span>   <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">Ts</span>   <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">Hs</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># -- Clean data to eliminate NaN which cannot be used to fit the LR</span>
+<span class="n">H_bool</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">Hs</span><span class="p">)</span>
+<span class="n">P_clean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Ps</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">H_bool</span><span class="p">))</span>
+<span class="n">T_clean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P_clean</span><span class="p">))</span>
+<span class="n">H_clean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P_clean</span><span class="p">))</span>
+
+<span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">H_bool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">P_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">T_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">H_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Hs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_14908</span>\<span class="mf">4047478542.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> 
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="ne">---&gt; </span><span class="mi">12</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="k">if</span> <span class="n">H_bool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span>         <span class="n">P_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="ne">NameError</span>: name &#39;P&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-multi-variate-linear-regression">
+<h3>Exercise - multi-variate linear regression ❗❗<a class="headerlink" href="#exercise-multi-variate-linear-regression" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Fit a multi-variate linear regression to the enthalpy data</p></li>
+<li><p>What are the model parameters?</p></li>
+<li><p>What is the R<span class="math notranslate nohighlight">\(^2\)</span>?</p></li>
+<li><p>Plot your model using <a class="reference external" href="https://matplotlib.org/stable/gallery/mplot3d/surface3d.html"><code class="docutils literal notranslate"><span class="pre">plot_surface</span></code></a> along with the experimental data</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code for the linear regression here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code for model parameters here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code for R2 here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code for plotting here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="generalized-linear-regression">
+<h2>Generalized Linear Regression 📈<a class="headerlink" href="#generalized-linear-regression" title="Permalink to this headline">#</a></h2>
+<p>Previously we sectioned the volume data for a saturated liquid into three parts and we approximate each part with a
+linear regression. In this way, we obtained a discrete model for the whole range of pressures. This
+type of discrete models can be sometimes troublesome when applied to optimization problems (e.g.
+they have points where the gradient does not exist). A non-linear smooth model would be preferable (e.g., some sort of polynomial).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Ps</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Pressure&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">Vs</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="s1">&#39;Liq_Sat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s create some polynomial basis functions. For instance:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\phi_1(x) = x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\phi_2(x) = x^2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\phi_3(x) = x^3\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\phi_4(x) = x^4\)</span></p></li>
+</ul>
+<p>Notice, that by using these basis functions we will be moving the problem from one-dimension to four-dimensions, in which the new input features are given by the corresponding basis function. We will integrate this series of transformations into a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html">pipeline</a> just to exemplify its use.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">LR</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+
+<span class="c1"># Define pipeline</span>
+<span class="n">GLM</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;pf&quot;</span><span class="p">,</span> <span class="n">pf</span><span class="p">),</span>  <span class="p">(</span><span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="n">LR</span><span class="p">)</span> <span class="p">])</span>
+<span class="n">GLM</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Vs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pipeline(steps=[(&#39;pf&#39;, PolynomialFeatures(degree=4, include_bias=False)),
+                (&#39;LR&#39;, LinearRegression())])
+</pre></div>
+</div>
+</div>
+</div>
+<p>A pipeline helps us in sequentially applying a list of transformations to the data. This could help us in preventing that we forget to apply one of the transformations when using our model.</p>
+<p>Let’s plot now the GLM</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluation_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">Ps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Vs</span><span class="p">,</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">evaluation_points</span><span class="p">,</span> <span class="n">GLM</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">evaluation_points</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Polynomial regression&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific volume [$cm^3 g^{-1}$]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">Ps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="n">Vs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Vs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/03_GLM_thermophysical_44_0.png" src="_images/03_GLM_thermophysical_44_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print model parameters</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Parameters: &#39;</span><span class="p">,</span> <span class="n">GLM</span><span class="p">[</span><span class="s1">&#39;LR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Intercept : &#39;</span><span class="p">,</span> <span class="n">GLM</span><span class="p">[</span><span class="s1">&#39;LR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Parameters:  [[ 1.02749632e-04 -1.93838195e-08  2.14712769e-12 -8.15517498e-17]]
+Intercept :  [1.03748932]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> R2 for GLM:&#39;</span><span class="p">,</span> <span class="n">GLM</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Vs</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> R2 for GLM: 0.9970238146790564
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-polynomial-regression">
+<h3>Exercise - polynomial regression ❗❗<a class="headerlink" href="#exercise-polynomial-regression" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Create a function that takes as inputs 1) the pressure data and 2) the model parameters and returns the specific volume.</p></li>
+<li><p>Use the polynomial model parameters obtained with sklearn as 2)</p></li>
+<li><p>Plot the predictions along with the experimental data. Do you obtain the same plot?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">poly_regression</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">model_params</span><span class="p">):</span>
+    <span class="n">w_0</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">w_1</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">w_2</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">w_3</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">w_4</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    
+    <span class="c1"># Your code here</span>
+
+<span class="c1"># Your code for usign the function here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code for plotting here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-a-different-base">
+<h3>Using a different base<a class="headerlink" href="#using-a-different-base" title="Permalink to this headline">#</a></h3>
+<p>Generalized Linear Models are not restriceted to polynomial features. We can, in principle, use any basis functions that we want. How can we use for example a logarithmic basis function?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">log_feature</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+        
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+        
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+       <span class="n">X_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+       <span class="n">X_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">X_log</span><span class="p">))</span>
+       <span class="k">return</span> <span class="n">X_new</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log_f</span> <span class="o">=</span> <span class="n">log_feature</span><span class="p">()</span>
+
+<span class="n">GLM_log</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;log_f&quot;</span><span class="p">,</span> <span class="n">log_f</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;ss&quot;</span><span class="p">,</span> <span class="n">ss</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="n">LR</span><span class="p">),])</span>
+<span class="n">GLM_log</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Vs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pipeline(steps=[(&#39;log_f&#39;, log_feature()), (&#39;ss&#39;, StandardScaler()),
+                (&#39;LR&#39;, LinearRegression())])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluation_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">Ps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Vs</span><span class="p">,</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">evaluation_points</span><span class="p">,</span> <span class="n">GLM_log</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">evaluation_points</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Generalized linear regression&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Pressure [kPa]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Specific volume [$cm^3 g^{-1}$]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">Ps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="n">Vs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Vs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/03_GLM_thermophysical_54_0.png" src="_images/03_GLM_thermophysical_54_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print model parameters</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Parameters: &#39;</span><span class="p">,</span> <span class="n">GLM_log</span><span class="p">[</span><span class="s1">&#39;LR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Intercept : &#39;</span><span class="p">,</span> <span class="n">GLM_log</span><span class="p">[</span><span class="s1">&#39;LR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Parameters:  [[0.10138431 0.0320854 ]]
+Intercept :  [1.21538235]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> R2 for GLM:&#39;</span><span class="p">,</span> <span class="n">GLM_log</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Vs</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> R2 for GLM: 0.9982014296705168
+</pre></div>
+</div>
+</div>
+</div>
+<p>Regarding physical interpretability, what are the advantages that you see when using the logarithmic basis function vs. the polynomials?</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Can the pressure become negative?</p>
+</div>
+</section>
+<section id="exercise-generalized-linear-regression">
+<h3>Exercise - Generalized linear regression ❗❗<a class="headerlink" href="#exercise-generalized-linear-regression" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Create a function that takes as inputs 1) the pressure data and 2) the model parameters and returns the specific volume.</p></li>
+<li><p>Use the logaritmic model parameters obtained with sklearn as 2)</p></li>
+<li><p>Plot the predictions along with the experimental data. Do you obtain the same plot?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div class="docutils container" id="id2">
+<dl class="citation">
+<dt class="label" id="id8"><span class="brackets"><a class="fn-backref" href="#id1">SVNAS04</a></span></dt>
+<dd><p>Joseph Mauk Smith, Hendrick C Van Ness, Michael M Abbott, and Mark Thomas Swihart. <em>Introduction to chemical engineering thermodynamics</em>. McGraw-Hill Education, 7th edition, 2004.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="02_kNN_QSPR.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">2. kNN for (Q)SPR modeling ⚛️</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="Acknowledgements.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Acknowledgements</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Edgar Sanchez and Antonio del Rio<br/>
+  
+      &copy; Copyright 2023.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
