@@ -462,11 +462,11 @@ class log_feature(BaseEstimator, TransformerMixin):
 
 log_f = log_feature()
 
-GLM_log = Pipeline([("log_f", log_f), ("ss", ss), ("LR", LR),])
+GLM_log = Pipeline([("log_f", log_f), ("LR", LR),])
 GLM_log.fit(Ps, Vs)
 
 
-# In[58]:
+# In[26]:
 
 
 evaluation_points = np.linspace(Ps[0], Ps[-1], 100)
@@ -482,7 +482,7 @@ plt.ylim((Vs[0], Vs[-1]))
 plt.show()
 
 
-# In[59]:
+# In[27]:
 
 
 # Print model parameters
@@ -490,7 +490,7 @@ print('Parameters: ', GLM_log['LR'].coef_)
 print('Intercept : ', GLM_log['LR'].intercept_)
 
 
-# In[61]:
+# In[28]:
 
 
 print('\n R2 for GLM:', GLM_log.score(Ps, Vs))
@@ -508,7 +508,7 @@ print('\n R2 for GLM:', GLM_log.score(Ps, Vs))
 # * Use the logaritmic model parameters obtained with sklearn as 2)
 # * Plot the predictions along with the experimental data. Do you obtain the same plot?
 
-# In[62]:
+# In[29]:
 
 
 # Your code here

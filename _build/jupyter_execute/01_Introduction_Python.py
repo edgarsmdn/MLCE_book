@@ -527,15 +527,15 @@ x[mask]
 
 # **Exercise 1.** Create a 3d array of shape (2, 2, 2), containing 8 values. Access individual elements and slices.
 
-# In[ ]:
+# In[47]:
 
 
-
+# Your code here
 
 
 # **Exercise 2.** Rewrite the relu function (see Python section) using [np.maximum](https://numpy.org/doc/stable/reference/generated/numpy.maximum.html). Check that it works on both a single value and on an array of values.
 
-# In[47]:
+# In[48]:
 
 
 def relu_numpy(x):
@@ -546,7 +546,7 @@ relu_numpy(np.array([1, -3, 2.5]))
 
 # **Exercise 3.** Rewrite the Euclidean norm of a vector (1d array) using NumPy (without for loop)
 
-# In[48]:
+# In[49]:
 
 
 def euclidean_norm_numpy(x):
@@ -558,7 +558,7 @@ euclidean_norm_numpy(my_vector)
 
 # **Exercise 4.** Write a function that computes the Euclidean norms of a matrix (2d array) in a row-wise fashion. Hint: use the `axis` argument of [np.sum](https://numpy.org/doc/stable/reference/generated/numpy.sum.html).
 
-# In[49]:
+# In[50]:
 
 
 def euclidean_norm_2d(X):
@@ -572,7 +572,7 @@ euclidean_norm_2d(my_matrix)
 
 # **Exercise 5.** Compute the mean value of the features in the [iris dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html). Hint: use the `axis` argument on [np.mean](https://numpy.org/doc/stable/reference/generated/numpy.mean.html).
 
-# In[50]:
+# In[51]:
 
 
 from sklearn.datasets import load_iris
@@ -597,7 +597,7 @@ X, y = load_iris(return_X_y=True)
 
 # We start with a rudimentary plotting example.
 
-# In[51]:
+# In[52]:
 
 
 from matplotlib import pyplot as plt
@@ -615,7 +615,7 @@ plt.show()
 
 # We continue with a rudimentary scatter plot example. This example displays samples from the [iris dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html) using the first two features. Colors indicate class membership (there are 3 classes).
 
-# In[52]:
+# In[53]:
 
 
 from sklearn.datasets import load_iris
@@ -640,17 +640,17 @@ plt.show()
 
 # **Exercise 1.** Plot the relu and the [softplus](https://en.wikipedia.org/wiki/Rectifier_(neural_networks)#Softplus) functions on the same graph.
 
-# In[ ]:
+# In[54]:
 
 
-
+# Your code here
 
 
 # What is the main difference between the two functions?
 
 # **Exercise 2.** Repeat the same scatter plot but using the [digits dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html) instead.
 
-# In[53]:
+# In[55]:
 
 
 from sklearn.datasets import load_digits
@@ -663,9 +663,3 @@ X, y = load_digits(return_X_y=True)
 # 
 # *  Official [tutorial](https://matplotlib.org/tutorials/introductory/pyplot.html)
 # * [Tutorial](https://www.youtube.com/watch?v=qErBw-R2Ybk) on Youtube
-
-# In[ ]:
-
-
-
-

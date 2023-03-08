@@ -1,4 +1,4 @@
-# Acknowledgements
+# Acknowledgements 🙏
 
 This book is possible thanks to the collective effort of many people that have coded, checked or given feedback. We would like to 
 thank all of you!

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Deep Neural Networks for VLE prediction 🌐
+# # 4. Deep Neural Networks for VLE prediction 🌐
 # 
 # <a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/04_DNN_VLE.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a>
 
@@ -533,6 +533,8 @@ for hs in hidden_sizes:
     
     model = DNN(X_train.shape[1], hs, 1)
     model = model.to(device)
+    
+    model_params = count_parameters(model)
     print('Hidden-size: ', hs)
     print('Model parameters: ', model_params)
     
@@ -553,7 +555,6 @@ for hs in hidden_sizes:
 
     # Evaluate final model in validation set
     models.append(model)
-    model_params = count_parameters(model)
     model.eval()
     with torch.no_grad():
         y_valid_pred = model(X_valid_torch)

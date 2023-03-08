@@ -14,7 +14,7 @@
 
 # ## A quick reminder ✅
 
-# Probably the simplest data-driven model that you can think of is K-nearest neighbours (kNN). It simply predicts future data as the average (or mode) of the "k" nearest neighbours of the queried point.
+# Probably the simplest data-driven model that you can think of is k-nearest neighbours (kNN). It simply predicts future data as the average (or mode) of the "k" nearest neighbours of the queried point.
 # 
 # As simple as this idea might be, it works relatively good in various applications. One of them is the generation of (quantitative) structure-property relationships ((Q)SPR) models {cite}`yuan2019developing, shen2003development`. Whether the word "Quantitative" is sometimes included or not depends on whether the model in question is a regression model or a classification model. Do you remember the difference?
 # 
@@ -28,7 +28,7 @@
 # 
 # ```{figure} media/02_kNN/kNN.png
 # :alt: kNN
-# :width: 60%
+# :width: 75%
 # :align: center
 # 
 # Among the k-nearest neighbours (k=5), the majority of points are red 1s. Therefore, the queried point (green x) will be labeled as "red 1". Image taken from {cite}`murphy2022probabilistic`. 
@@ -50,7 +50,9 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sn
 import numpy as np
+get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # ## Get data 📚
@@ -86,25 +88,25 @@ df.dtypes
 df.head()
 
 
-# We can access columns in the DataFrame by the column's name
-
-# In[5]:
-
-
-y_experimental = df['Experimental value']
-y_experimental
-
-
 # and access rows by index
 
-# In[6]:
+# In[5]:
 
 
 first_rows = df.iloc[:4]
 first_rows
 
 
-# If we would like to get the subset of data that is labeled as mutagenic (i.e., 'Experimenal value' equal to 1), we could do it like this
+# We can access columns in the DataFrame by the column's name
+
+# In[6]:
+
+
+y_experimental = df['Experimental value']
+y_experimental
+
+
+# If we would like to get the subset of data that is labeled as mutagenic (i.e., 'Experimental value' equal to 1), we could do it like this
 
 # In[7]:
 
@@ -113,12 +115,43 @@ mutagenic_data = df[df['Experimental value']==1]
 mutagenic_data
 
 
-# Let's now collect all the input features of our dataset
+# Let's have a look at the predictions by VEGA which we'll use to compare our results with:
 
 # In[8]:
 
 
-X = df.drop(['Unnamed: 0', 'Id','CAS','SMILES','Status','Experimental value','Predicted value'],axis=1)
+df['Predicted value']
+
+
+# We notice the data type says `object` even though it should be all `0` and `1`. Let's try to find out why:
+
+# In[9]:
+
+
+df['Predicted value'].drop_duplicates()
+
+
+# In[10]:
+
+
+df[ (df['Predicted value'] != "0") & (df['Predicted value'] != "1") ]
+
+
+# For some inputs the VEGA model decides to output `non predicted`. As detailed in the documentation, it does this for particularly uncertain predictions. Let's remove these from the data set:
+
+# In[11]:
+
+
+non_predicted = df[ (df['Predicted value'] != "0") & (df['Predicted value'] != "1") ].index
+df_clean = df.drop(non_predicted)
+
+
+# Let's now collect all the input features of our dataset and remove the unnecessary ones:
+
+# In[12]:
+
+
+X = df_clean.drop(['Unnamed: 0', 'Id','CAS','SMILES','Status','Experimental value','Predicted value'],axis=1)
 X
 
 
@@ -128,7 +161,7 @@ X
 # * What is the molecule with the largest molecular weight `MolWt`?
 # * What is the average number of valance electrons `NumValenceElectrons` of the molecules in our dataset? 
 
-# In[9]:
+# In[13]:
 
 
 # Your code here
@@ -148,7 +181,7 @@ X
 # 
 # Of course there are other [scaling methods](https://medium.com/greyatom/why-how-and-when-to-scale-your-features-4b30ab09db5e) are available and you might want to review them and check which one is better than the other in which conditions.
 
-# In[10]:
+# In[14]:
 
 
 from sklearn.preprocessing import StandardScaler
@@ -156,7 +189,7 @@ from sklearn.preprocessing import StandardScaler
 
 # We initialize our scaler function
 
-# In[11]:
+# In[15]:
 
 
 scaler = StandardScaler()
@@ -164,7 +197,7 @@ scaler = StandardScaler()
 
 # and fit it to our data (i.e., get the mean vector $\mu_x$ and the standard deviation vector $\sigma_x$.
 
-# In[12]:
+# In[16]:
 
 
 scaler.fit(X)
@@ -172,7 +205,7 @@ scaler.fit(X)
 
 # Now, let's scale our data
 
-# In[13]:
+# In[17]:
 
 
 X_hat = scaler.transform(X)
@@ -183,7 +216,7 @@ X_hat
 # 
 # * What are exactly the mean an standard deviation vectors that we used to scaled the data? Go to the [sklearn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html) and learn how you can access these. Reading the documentation of a library is a super important skill to learn! 
 
-# In[14]:
+# In[18]:
 
 
 # Your code here
@@ -195,10 +228,10 @@ X_hat
 # 
 # For example, let's see if how many molecules in our dataset are mutagenic vs. non-mutagenic.
 
-# In[15]:
+# In[19]:
 
 
-y = df['Experimental value'].to_numpy()
+y = df_clean['Experimental value'].to_numpy()
 perc_mutagenic = y.sum()/len(y)*100
 print('Percentage of mutagenic molecules    :', perc_mutagenic)
 print('Percentage of non-mutagenic molecules:', 100-perc_mutagenic)
@@ -208,19 +241,19 @@ print('Percentage of non-mutagenic molecules:', 100-perc_mutagenic)
 # 
 # In summary, when splitting your data, always think about the distribution of your splits!
 
-# In[16]:
+# In[20]:
 
 
 from sklearn.model_selection import train_test_split
 
 
-# In[17]:
+# In[21]:
 
 
 X_train, X_test, y_train, y_test = train_test_split(X_hat, y, test_size=0.2, random_state=0)
 
 
-# In[18]:
+# In[22]:
 
 
 print('Training points: ', len(y_train))
@@ -231,7 +264,7 @@ print('Training points: ', len(y_test))
 # 
 # * Check what is the proportion of mutagenic molecules in your train and test set? Was the random splitting good?
 
-# In[19]:
+# In[23]:
 
 
 # Your code here
@@ -239,7 +272,7 @@ print('Training points: ', len(y_test))
 
 # ## kNN model 🏘️
 
-# In[20]:
+# In[24]:
 
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -247,7 +280,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 # We initialize the kNN model by specifying the parameter "k". Later, we will review some ways that help us in determining this parameter better. For now, let's set it to 3.
 
-# In[21]:
+# In[25]:
 
 
 knn = KNeighborsClassifier(n_neighbors=3)
@@ -255,7 +288,7 @@ knn = KNeighborsClassifier(n_neighbors=3)
 
 # we train it
 
-# In[22]:
+# In[26]:
 
 
 knn.fit(X_train, y_train)
@@ -263,7 +296,7 @@ knn.fit(X_train, y_train)
 
 # we predict the test set
 
-# In[23]:
+# In[27]:
 
 
 y_pred = knn.predict(X_test)
@@ -273,7 +306,7 @@ y_pred = knn.predict(X_test)
 # 
 # We will use several metrics for classification, for a quick reminder on them check the [documentation](https://scikit-learn.org/stable/modules/classes.html#classification-metrics).
 
-# In[24]:
+# In[28]:
 
 
 from sklearn.metrics import (confusion_matrix, accuracy_score, precision_score, 
@@ -282,7 +315,7 @@ from sklearn.metrics import (confusion_matrix, accuracy_score, precision_score,
 
 # Let first look at the confusion matrix
 
-# In[25]:
+# In[29]:
 
 
 cm = confusion_matrix(y_test, y_pred)
@@ -291,7 +324,7 @@ cm
 
 # to see a prettier confusion matrix
 
-# In[26]:
+# In[30]:
 
 
 disp = ConfusionMatrixDisplay(confusion_matrix=cm)
@@ -300,7 +333,7 @@ disp.plot()
 
 # Now, let's look at the other metrics
 
-# In[27]:
+# In[31]:
 
 
 print('{:<10}  {:<15}'.format('Accuracy:', accuracy_score(y_test, y_pred)))
@@ -316,54 +349,13 @@ print('{:<10}  {:<15}'.format('F1:', f1_score(y_test, y_pred)))
 # 
 # Also, the developers of the VEGA kNN model used the [leave-one-out](https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Leave-one-out_cross-validation) approach to assess the performace of their model. Why is this approach specially suitable when using the kNN algorithm? 
 
-# In[28]:
-
-
-y_vega = df['Predicted value']
-y_vega
-
-
-# Notice that the type of `y_vega` is `object`. This means that potentially its elements have different data types! Let's use a for-loop to see if we can discover which elements are causing the trouble.
-
-# In[29]:
-
-
-weird_predictions_idxs = []
-for i, label in enumerate(y_vega):
-  try:
-    int(label)
-  except:
-    print('{:<4}, {:<10}'.format(i, label))
-    weird_predictions_idxs.append(i)
-
-
-# Indeed!! 6 elements of the series are not integers, but rather strings! This is consistent with the reports of VEGA that say that 6 compounds in this database were not able to be predicted due to not complying with the minimum similarity threshold of 0.7.
-# 
-# This illustrates clearly the concept of defining an [applicability domain](https://en.wikipedia.org/wiki/Applicability_domain) of the models we develop. Specially for chemical engineering application! 
-# 
-# Let's now remove these molecules from the comparison...
-
-# In[30]:
-
-
-df_clean = df.drop(index=weird_predictions_idxs)
-
-
-# now, let's get the cleaned values 😀
-
-# In[31]:
-
-
-y_vega_clean = df_clean['Predicted value'].astype(int)
-y_vega_clean
-
-
 # #### VEGA model
 
 # In[32]:
 
 
 y_clean = df_clean['Experimental value'].astype(int)
+y_vega_clean = df_clean['Predicted value'].astype(int)
 
 cm = confusion_matrix(y_clean, y_vega_clean)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm)
@@ -561,9 +553,3 @@ else:
 
 # Your code here
 
-
-# ## References
-# 
-# ```{bibliography}
-# :filter: docname in docnames
-# ```
