@@ -8,4 +8,5 @@ chapters:
 - file: 01_Introduction_Python
 - file: 02_kNN_QSPR
 - file: 03_GLM_thermophysical
+- file: 04_DNN_VLE
 - file: Acknowledgements
