@@ -12,6 +12,6 @@ Check out the content of the book:
 ```{tableofcontents}
 ```
 
-This book was prepared by [Edgar Sanchez](https://edgarsmdn.github.io/)
-and [Antonio del Rio](https://www.imperial.ac.uk/people/a.del-rio-chanona) with the help of many collegues. If you have a question or need some 
+This book was prepared by [Edgar Sanchez](https://edgarsmdn.github.io/), [Antonio del Rio](https://www.imperial.ac.uk/people/a.del-rio-chanona) and 
+[Caroline Ganzer](https://www.mpi-magdeburg.mpg.de/person/126003/1681423) with the help of many collegues. If you have a question or need some 
 help in adapting this book to your MLCE course feel free to contact us!

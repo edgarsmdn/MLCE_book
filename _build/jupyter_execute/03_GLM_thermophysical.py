@@ -305,7 +305,7 @@ T_clean = np.zeros(len(P_clean))
 H_clean = np.zeros(len(P_clean))
 
 j = 0
-for i in range(P.shape[0]):
+for i in range(Ps.shape[0]):
     if H_bool[i] == False:
         P_clean[j] = Ps[i]
         T_clean[j] = Ts[i]
@@ -320,25 +320,25 @@ for i in range(P.shape[0]):
 # * What is the R$^2$?
 # * Plot your model using [`plot_surface`](https://matplotlib.org/stable/gallery/mplot3d/surface3d.html) along with the experimental data
 
-# In[18]:
+# In[13]:
 
 
 # Your code for the linear regression here
 
 
-# In[19]:
+# In[14]:
 
 
 # Your code for model parameters here
 
 
-# In[20]:
+# In[15]:
 
 
 # Your code for R2 here
 
 
-# In[27]:
+# In[16]:
 
 
 # Your code for plotting here
@@ -351,7 +351,7 @@ for i in range(P.shape[0]):
 # type of discrete models can be sometimes troublesome when applied to optimization problems (e.g.
 # they have points where the gradient does not exist). A non-linear smooth model would be preferable (e.g., some sort of polynomial).
 
-# In[38]:
+# In[17]:
 
 
 Ps = V['Pressure'].to_numpy().reshape(-1,1)
@@ -367,7 +367,7 @@ Vs = V['Liq_Sat'].to_numpy().reshape(-1,1)
 # 
 # Notice, that by using these basis functions we will be moving the problem from one-dimension to four-dimensions, in which the new input features are given by the corresponding basis function. We will integrate this series of transformations into a [pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html) just to exemplify its use.
 
-# In[49]:
+# In[18]:
 
 
 pf = PolynomialFeatures(degree=4, include_bias=False)
@@ -382,7 +382,7 @@ GLM.fit(Ps, Vs)
 # 
 # Let's plot now the GLM
 
-# In[50]:
+# In[19]:
 
 
 evaluation_points = np.linspace(Ps[0], Ps[-1], 100)
@@ -398,7 +398,7 @@ plt.ylim((Vs[0], Vs[-1]))
 plt.show()
 
 
-# In[51]:
+# In[20]:
 
 
 # Print model parameters
@@ -406,7 +406,7 @@ print('Parameters: ', GLM['LR'].coef_)
 print('Intercept : ', GLM['LR'].intercept_)
 
 
-# In[52]:
+# In[21]:
 
 
 print('\n R2 for GLM:', GLM.score(Ps, Vs))
@@ -418,7 +418,7 @@ print('\n R2 for GLM:', GLM.score(Ps, Vs))
 # * Use the polynomial model parameters obtained with sklearn as 2)
 # * Plot the predictions along with the experimental data. Do you obtain the same plot?
 
-# In[54]:
+# In[22]:
 
 
 def poly_regression(Ps, model_params):
@@ -433,7 +433,7 @@ def poly_regression(Ps, model_params):
 # Your code for usign the function here
 
 
-# In[55]:
+# In[23]:
 
 
 # Your code for plotting here
@@ -443,7 +443,7 @@ def poly_regression(Ps, model_params):
 
 # Generalized Linear Models are not restriceted to polynomial features. We can, in principle, use any basis functions that we want. How can we use for example a logarithmic basis function?
 
-# In[56]:
+# In[24]:
 
 
 class log_feature(BaseEstimator, TransformerMixin):
@@ -457,7 +457,7 @@ class log_feature(BaseEstimator, TransformerMixin):
        return X_new
 
 
-# In[57]:
+# In[25]:
 
 
 log_f = log_feature()

@@ -50,14 +50,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Acknowledgements" href="Acknowledgements.html" />
-    <link rel="prev" title="2. kNN for (Q)SPR modeling ⚛️" href="02_kNN_QSPR.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="02_kNN_QSPR.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -126,11 +124,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="01_Introduction_Python.html">
    1. Introduction to Python 🐍
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="02_kNN_QSPR.html">
-   2. kNN for (Q)SPR modeling ⚛️
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -1000,26 +993,12 @@ Name: Liq_Sat, dtype: float64
 <span class="n">H_clean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P_clean</span><span class="p">))</span>
 
 <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Ps</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
     <span class="k">if</span> <span class="n">H_bool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">P_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">T_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">H_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Hs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_14908</span>\<span class="mf">4047478542.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> 
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="ne">---&gt; </span><span class="mi">12</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="k">if</span> <span class="n">H_bool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span>         <span class="n">P_clean</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;P&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1210,8 +1189,15 @@ Intercept :  [1.03748932]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pipeline(steps=[(&#39;log_f&#39;, log_feature()), (&#39;ss&#39;, StandardScaler()),
-                (&#39;LR&#39;, LinearRegression())])
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_28636</span>\<span class="mf">191454113.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">log_f</span> <span class="o">=</span> <span class="n">log_feature</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> 
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">GLM_log</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;log_f&quot;</span><span class="p">,</span> <span class="n">log_f</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;ss&quot;</span><span class="p">,</span> <span class="n">ss</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="n">LR</span><span class="p">),])</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">GLM_log</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Vs</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;ss&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1328,7 +1314,7 @@ Intercept :  [1.21538235]
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">2. kNN for (Q)SPR modeling ⚛️</p>
+            <p class="prev-next-title">&lt;no title&gt;</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Acknowledgements.html" title="next page">
@@ -1345,7 +1331,7 @@ Intercept :  [1.21538235]
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Edgar Sanchez and Antonio del Rio<br/>
+    By Edgar Sanchez, Antonio del Rio and Caroline Ganzer<br/>
   
       &copy; Copyright 2023.<br/>
 </p>

@@ -50,8 +50,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -126,11 +124,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="01_Introduction_Python.html">
    1. Introduction to Python 🐍
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="02_kNN_QSPR.html">
-   2. kNN for (Q)SPR modeling ⚛️
   </a>
  </li>
  <li class="toctree-l1">
@@ -442,11 +435,11 @@ The function <span class="math notranslate nohighlight">\(h\)</span> is refer to
 <p>In supervised learning we are not particularly interested in fitting the observed data very well, but rather in generalizing well to unseen data! Therefore, the
 concepts of <strong>overfitting</strong> and <strong>underfitting</strong> become really important.</p>
 </div>
-<figure class="align-center" id="id9">
+<figure class="align-center" id="id11">
 <a class="reference internal image-reference" href="_images/supervised_learning.png"><img alt="supervised_learning" src="_images/supervised_learning.png" style="width: 75%;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 1 </span><span class="caption-text">A collection of hypothesis functions (in blue) that could be fitted to the observed data (in red). Which hypothesis is the best? How can we determined the
-best hypothesis function?</span><a class="headerlink" href="#id9" title="Permalink to this image">#</a></p>
+best hypothesis function?</span><a class="headerlink" href="#id11" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -454,10 +447,10 @@ best hypothesis function?</span><a class="headerlink" href="#id9" title="Permali
 <h3>2. Unsupervised learning<a class="headerlink" href="#unsupervised-learning" title="Permalink to this headline">#</a></h3>
 <p>In the case of unsupervised learning the output values are not available, only the input data <span class="math notranslate nohighlight">\(\textbf{X}\)</span>. Therefore, the goal of unsupervised learning is to <strong>identify
 patterns</strong> in the data. For instance, finding clusters or reducing the dimensionality of the data.</p>
-<figure class="align-center" id="id10">
+<figure class="align-center" id="id12">
 <a class="reference internal image-reference" href="_images/unsupervised_learning.png"><img alt="unsupervised_learning" src="_images/unsupervised_learning.png" style="width: 50%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Clustering of data. How can we detect groups of data that are similar to each other? Why is this useful?</span><a class="headerlink" href="#id10" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Clustering of data. How can we detect groups of data that are similar to each other? Why is this useful?</span><a class="headerlink" href="#id12" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -465,10 +458,10 @@ patterns</strong> in the data. For instance, finding clusters or reducing the di
 <h3>3. Reinforcement learning<a class="headerlink" href="#reinforcement-learning" title="Permalink to this headline">#</a></h3>
 <p>The name comes from animal psychology, where we train animals/pets by reinforcing good behaviour, and discouraging bad behaviours. Here, the agent has to learn
 how to interact with its environment in order to maximize the reward or minimize the punishment.</p>
-<figure class="align-center" id="id11">
+<figure class="align-center" id="id13">
 <a class="reference internal image-reference" href="_images/reinforcement_learning.png"><img alt="reinforcement_learning" src="_images/reinforcement_learning.png" style="width: 50%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Reinforcement learning: incentivate actions that maximize reward and/or discourage actions that lead to punishment.</span><a class="headerlink" href="#id11" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Reinforcement learning: incentivate actions that maximize reward and/or discourage actions that lead to punishment.</span><a class="headerlink" href="#id13" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -480,10 +473,10 @@ models? Is there a way to combine both? Is it beneficial to do so?</p>
 <p>In general, the term hybrid modeling refers to the combination of mechanistic and data-driven models and is also called “grey-box modeling”. For example,
 mass and energy balances, thermodynamic laws and kinetics should be respected in our models. Introducing this physical knwoledge reduces the amount of data
 that is needed for the ML part and improves the capacity of the models to generalize to unseen conditions.</p>
-<figure class="align-center" id="id12">
+<figure class="align-center" id="id14">
 <a class="reference internal image-reference" href="_images/hybrid_modeling.png"><img alt="hybrid_modeling" src="_images/hybrid_modeling.png" style="width: 75%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Hybrid modeling is also refer in the literature as grey-box modeling.</span><a class="headerlink" href="#id12" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Hybrid modeling is also refer in the literature as grey-box modeling.</span><a class="headerlink" href="#id14" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -547,7 +540,7 @@ that is needed for the ML part and improves the capacity of the models to genera
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Edgar Sanchez and Antonio del Rio<br/>
+    By Edgar Sanchez, Antonio del Rio and Caroline Ganzer<br/>
   
       &copy; Copyright 2023.<br/>
 </p>

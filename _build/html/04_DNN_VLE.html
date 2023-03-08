@@ -1,0 +1,1534 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Deep Neural Networks for VLE prediction 🌐 &#8212; Machine Learning in Chemical Engineering</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Machine Learning in Chemical Engineering</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="00_Overview.html">
+   An overview of the course 🔭
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="01_Introduction_Python.html">
+   1. Introduction to Python 🐍
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_GLM_thermophysical.html">
+   3. GLM for thermophysical property prediction ⚗️
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Acknowledgements.html">
+   Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/edgarsmdn/MLCE_book/master?urlpath=tree/docs/04_DNN_VLE.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/edgarsmdn/MLCE_book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F04_DNN_VLE.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/04_DNN_VLE.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#goals-of-this-exercise">
+   Goals of this exercise 🌟
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modeling-the-phase-envelope-of-co-2">
+   Modeling the phase envelope of CO
+   <span class="math notranslate nohighlight">
+    \(_2\)
+   </span>
+   🛫
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modeling-the-phase-envelope-of-other-compounds">
+   Modeling the phase envelope of other compounds 🧪
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-a-deep-neural-network">
+     Train a Deep Neural Network
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-implement-early-stopping">
+     Exercise - implement Early stopping ❗❗
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hyperparameter-optimization">
+     Hyperparameter optimization
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Deep Neural Networks for VLE prediction 🌐</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#goals-of-this-exercise">
+   Goals of this exercise 🌟
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modeling-the-phase-envelope-of-co-2">
+   Modeling the phase envelope of CO
+   <span class="math notranslate nohighlight">
+    \(_2\)
+   </span>
+   🛫
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modeling-the-phase-envelope-of-other-compounds">
+   Modeling the phase envelope of other compounds 🧪
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-a-deep-neural-network">
+     Train a Deep Neural Network
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise-implement-early-stopping">
+     Exercise - implement Early stopping ❗❗
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hyperparameter-optimization">
+     Hyperparameter optimization
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="deep-neural-networks-for-vle-prediction">
+<h1>Deep Neural Networks for VLE prediction 🌐<a class="headerlink" href="#deep-neural-networks-for-vle-prediction" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/04_DNN_VLE.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>We will observe the effect of considering physics when builiding ML models for chemical engineering</p></li>
+<li><p>We will learn how to train Deep Neural Networks using <a class="reference external" href="https://pytorch.org/">PyTorch</a></p></li>
+</ul>
+</section>
+<section id="modeling-the-phase-envelope-of-co-2">
+<h2>Modeling the phase envelope of CO<span class="math notranslate nohighlight">\(_2\)</span> 🛫<a class="headerlink" href="#modeling-the-phase-envelope-of-co-2" title="Permalink to this headline">#</a></h2>
+<p>The data that we are going to use is taken from <span id="id1">[<a class="reference internal" href="#id10" title="William M Haynes. CRC handbook of chemistry and physics. CRC press, 2016.">Hay16</a>]</span> and <span id="id2">[<a class="reference internal" href="#id11" title="James G Speight. Lange's handbook of chemistry. McGraw-Hill Education, 2017.">Spe17</a>]</span> and corresponds to the vapor-liquid equilibria of CO<span class="math notranslate nohighlight">\(_2\)</span>. Heat of vaporizaion and vapor and liquid densities are also provided.</p>
+<p>As usual, let’s import some libraries and read the data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/CO2_data.csv&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;references/CO2_data.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>T [C]</th>
+      <th>P_vap [kPa]</th>
+      <th>H_vap [J/g]</th>
+      <th>rho_vap [g/cm3]</th>
+      <th>rho_liq [g/cm3]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-56.6</td>
+      <td>518.3</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.179</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-56.0</td>
+      <td>531.8</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.177</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-54.0</td>
+      <td>579.1</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.169</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-52.0</td>
+      <td>629.6</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.162</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-50.0</td>
+      <td>683.4</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.155</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>We get some statistics</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>T [C]</th>
+      <th>P_vap [kPa]</th>
+      <th>H_vap [J/g]</th>
+      <th>rho_vap [g/cm3]</th>
+      <th>rho_liq [g/cm3]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>72.000000</td>
+      <td>72.000000</td>
+      <td>57.000000</td>
+      <td>57.000000</td>
+      <td>72.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>-7.696944</td>
+      <td>3318.288889</td>
+      <td>208.747544</td>
+      <td>0.132168</td>
+      <td>0.924410</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>24.977866</td>
+      <td>2016.721511</td>
+      <td>70.314376</td>
+      <td>0.093078</td>
+      <td>0.159318</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>-56.600000</td>
+      <td>518.300000</td>
+      <td>0.000000</td>
+      <td>0.038460</td>
+      <td>0.464100</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>-25.837500</td>
+      <td>1672.000000</td>
+      <td>169.100000</td>
+      <td>0.063140</td>
+      <td>0.831700</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>-6.115000</td>
+      <td>2954.500000</td>
+      <td>227.300000</td>
+      <td>0.101300</td>
+      <td>0.941800</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>13.057500</td>
+      <td>4830.750000</td>
+      <td>264.500000</td>
+      <td>0.171700</td>
+      <td>1.021725</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>31.100000</td>
+      <td>7391.000000</td>
+      <td>292.900000</td>
+      <td>0.464100</td>
+      <td>1.179000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Look at the counts of each property, it becomes evident that some values are missing. Let’s remove those rows. Also, look at the minimum value of the enthalpy of vaporization, it is zero!  This correspond to the <a class="reference external" href="https://en.wikipedia.org/wiki/Critical_point_(thermodynamics)">critical point</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;H_vap [J/g]&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;rho_vap [g/cm3]&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">())]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and we plot the data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;T [C]&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;P_vap [kPa]&#39;</span><span class="p">)</span>
+
+<span class="n">T_critical</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;H_vap [J/g]&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="s1">&#39;T [C]&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">P_critical</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;H_vap [J/g]&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="s1">&#39;P_vap [kPa]&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T_critical</span><span class="p">,</span> <span class="n">P_critical</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Critical point&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1cd643bb808&gt;
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_11_1.png" src="_images/04_DNN_VLE_11_1.png" />
+</div>
+</div>
+<p>Let’s now plot the <a class="reference external" href="https://en.wikipedia.org/wiki/Enthalpy_of_vaporization">enthalpy of vaporization</a> which is the amount of energy that certain amount of liquid needs to be transformed into a vapor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;T [C]&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;H_vap [J/g]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;T [C]&#39;, ylabel=&#39;H_vap [J/g]&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_13_1.png" src="_images/04_DNN_VLE_13_1.png" />
+</div>
+</div>
+<p>From this we can clearly see that the maximum temperature in the dataset correspond to the <a class="reference external" href="https://en.wikipedia.org/wiki/Critical_point_(thermodynamics)">critical point</a> (i.e., when the enthalpy of vaporization is zero)! As we have discovered before.</p>
+<p>Let’s quickly fit a linear model as a baseline…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="n">Ts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;T [C]&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">Ps</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;P_vap [kPa]&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">Ps</span><span class="p">)</span>
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">Ts</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ts</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">linear_regression</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_pred</span><span class="p">)</span>
+<span class="n">R2</span> <span class="o">=</span> <span class="n">linear_regression</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">Ps</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">Ps</span><span class="p">,</span> <span class="s1">&#39;co&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Linear model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T_critical</span><span class="p">,</span> <span class="n">P_critical</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Critical point&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="s1">&#39;R$^2 = $&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">R2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1cd6cc09888&gt;
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_15_1.png" src="_images/04_DNN_VLE_15_1.png" />
+</div>
+</div>
+<p>Well, the fit is not very good. But, we have knowledge of a useful relationship between vapor pressure and temperature for single components: the <a class="reference external" href="https://en.wikipedia.org/wiki/Clausius%E2%80%93Clapeyron_relation">Clausius–Clapeyron equation</a></p>
+<div class="math notranslate nohighlight">
+\[
+\ln P = - \frac{\hat{h}_{vap}}{R_sT} + c 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat{h}_{vap}\)</span> is the approximated specific enthalpy of vaporization, <span class="math notranslate nohighlight">\(R_s\)</span> is the <a class="reference external" href="https://en.wikipedia.org/wiki/Gas_constant#Specific_gas_constant">specific gas constant</a> and <span class="math notranslate nohighlight">\(c\)</span> is a constant. In this equation <span class="math notranslate nohighlight">\(T\)</span> is used in the absolute scale. Notice that this relationship assumes that the enthalpy of vaporization is constant over temperature, which we have observed not to be entirely true. Let’s use this relationship and fit a linear model…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ln_P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Ps</span><span class="p">)</span>
+<span class="n">inv_T</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Ts</span> <span class="o">+</span> <span class="mf">273.15</span><span class="p">)</span>
+
+<span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inv_T</span><span class="p">,</span> <span class="n">ln_P</span><span class="p">)</span>
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">inv_T</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">inv_T</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">linear_regression</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_pred</span><span class="p">)</span>
+<span class="n">R2</span> <span class="o">=</span> <span class="n">linear_regression</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">inv_T</span><span class="p">,</span> <span class="n">ln_P</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">inv_T</span><span class="p">,</span> <span class="n">ln_P</span><span class="p">,</span> <span class="s1">&#39;co&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Linear model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.004</span><span class="p">,</span> <span class="mf">8.7</span><span class="p">,</span> <span class="s1">&#39;R$^2 = $&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">R2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1cd6dbb3a48&gt;
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_17_1.png" src="_images/04_DNN_VLE_17_1.png" />
+</div>
+</div>
+<p>A valuable lesson to take from this very simple example</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Do not by-pass the mechanistic knowledge!</p>
+</div>
+<p>However, even when the Clasius-Clapeyron equation shown above gives us a very useful relationship between vapor pressure and temperature, this relationship can only be used to approximate the enthalpy of vaporization. This is because the enthalpy of vaporization depends on temperature. Let’s observe this…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Hvaps</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;H_vap [J/g]&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Change units of Hvap</span>
+<span class="n">mw_CO2</span> <span class="o">=</span> <span class="mf">44.01</span> <span class="c1"># g/mol</span>
+<span class="n">Hvaps</span> <span class="o">=</span> <span class="n">Hvaps</span> <span class="o">*</span> <span class="n">mw_CO2</span>
+
+<span class="n">ln_P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Ps</span><span class="p">)</span>
+<span class="n">neg_hvap_T</span> <span class="o">=</span> <span class="o">-</span> <span class="n">Hvaps</span><span class="o">/</span><span class="p">(</span><span class="n">Ts</span> <span class="o">+</span> <span class="mf">273.15</span><span class="p">)</span>
+
+<span class="n">linear_regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">neg_hvap_T</span><span class="p">,</span> <span class="n">ln_P</span><span class="p">)</span>
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">neg_hvap_T</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">neg_hvap_T</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">linear_regression</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_pred</span><span class="p">)</span>
+<span class="n">R2</span> <span class="o">=</span> <span class="n">linear_regression</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">neg_hvap_T</span><span class="p">,</span> <span class="n">ln_P</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">neg_hvap_T</span><span class="p">,</span> <span class="n">ln_P</span><span class="p">,</span> <span class="s1">&#39;co&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Linear model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;R$^2 = $&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">R2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1cd6ddb17c8&gt;
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_19_1.png" src="_images/04_DNN_VLE_19_1.png" />
+</div>
+</div>
+</section>
+<section id="modeling-the-phase-envelope-of-other-compounds">
+<h2>Modeling the phase envelope of other compounds 🧪<a class="headerlink" href="#modeling-the-phase-envelope-of-other-compounds" title="Permalink to this headline">#</a></h2>
+<p>As you can see, the relationship between vapor pressure and temperature is somehow easy to tackle. Even a linear model returns a pretty good approximation of it (combined with the knowledge of the Clasius-Clapeyron equation). A non-linear regression would also take care of the dependency of the enthalpy of vaporization with temperature.</p>
+<p>Now, a more realistic problem would be to approximate the phase envelope of other compounds for which we do not have any experimental data. This can be seen as doing an extrapolation in the chemical space…</p>
+<p>Can we develope a decent model for this task using deep neural networks?</p>
+<p>Let’s first get the data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/Vapor_pressures.csv&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;references/Vapor_pressures.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>CAS-RN</th>
+      <th>Formula</th>
+      <th>SMILES</th>
+      <th>T</th>
+      <th>Pvap</th>
+      <th>KDB_ID</th>
+      <th>Class</th>
+      <th>Subclass</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>METHANE</td>
+      <td>74-82-8</td>
+      <td>CH4</td>
+      <td>C</td>
+      <td>90.670000</td>
+      <td>11.702099</td>
+      <td>1</td>
+      <td>Paraffinic Hydrocarbons</td>
+      <td>n-Alkanes</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>METHANE</td>
+      <td>74-82-8</td>
+      <td>CH4</td>
+      <td>C</td>
+      <td>94.115172</td>
+      <td>17.886999</td>
+      <td>1</td>
+      <td>Paraffinic Hydrocarbons</td>
+      <td>n-Alkanes</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>METHANE</td>
+      <td>74-82-8</td>
+      <td>CH4</td>
+      <td>C</td>
+      <td>97.560345</td>
+      <td>26.489535</td>
+      <td>1</td>
+      <td>Paraffinic Hydrocarbons</td>
+      <td>n-Alkanes</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>METHANE</td>
+      <td>74-82-8</td>
+      <td>CH4</td>
+      <td>C</td>
+      <td>101.005517</td>
+      <td>38.137051</td>
+      <td>1</td>
+      <td>Paraffinic Hydrocarbons</td>
+      <td>n-Alkanes</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>METHANE</td>
+      <td>74-82-8</td>
+      <td>CH4</td>
+      <td>C</td>
+      <td>104.450690</td>
+      <td>53.534190</td>
+      <td>1</td>
+      <td>Paraffinic Hydrocarbons</td>
+      <td>n-Alkanes</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>This dataset contains the vapor pressures of various compounds. It has been collected from the <a class="reference external" href="https://www.cheric.org/research/kdb/">Korean Data Bank</a>. As you can see above, several identifiers are available for the compounds (e.g., name, formula, SMILES). The temperature in the dataset is given in Kelvin and the vapor presures on kPa.</p>
+<p>Here, we will use the SMILES representation of molecules to get some input features to train our models. You can read more about SMILES <a class="reference external" href="https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system">elsewhere</a>, what it is important to know for now is that SMILES is a string representation of a molecule! We can use this representation to get some molecular descriptors that will serve as input features to our models.</p>
+<p>Here, we will use a popular vectorial representation of a molecule in cheminformatics known as molecular fingerprint. Of course, there are many types of molecular fingerprints. But, again, you can learn more about this <a class="reference external" href="https://www.rdkit.org/docs/GettingStartedInPython.html#fingerprinting-and-molecular-similarity">elsewhere</a>.</p>
+<p>We will use here <a class="reference external" href="https://datamol.io/">datamol</a> to get some molecular objects and fingerprints. Feel free to learn more about it on your own! This is a library that is not installed by default in Colab. Therefore, if you are using Colab, simply run the cell below, otherwise follow the installation instructions given in their <a class="reference external" href="https://datamol.io/">website</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="o">!</span>pip install rdkit
+    <span class="o">!</span>pip install datamol
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datamol</span> <span class="k">as</span> <span class="nn">dm</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;SMILES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">to_mol</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mol&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">to_fp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+[11:22:24] WARNING: not removing hydrogen atom without neighbors
+</pre></div>
+</div>
+</div>
+</div>
+<p>Do not worry about the warning above. I appears for the hydrogen molecule (with SMILES <code class="docutils literal notranslate"><span class="pre">[HH]</span></code>).</p>
+<p>Now, we have a vectorial representation of each molecule: a fingerprint! Each fingerprint is an array of 2048 bit elements in which 1 denotes the presence of certain molecular substructure and 0 denotes the abscense of it.</p>
+<p>Okay, now let’s go a bit deeper into our <a class="reference external" href="https://en.wikipedia.org/wiki/Exploratory_data_analysis">Exploratory Data Analysis</a>.</p>
+<p>How many chemical compounds are considered in our dataset?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1391
+</pre></div>
+</div>
+</div>
+</div>
+<p>How many chemical classes?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17
+</pre></div>
+</div>
+</div>
+</div>
+<p>What about subclasses?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Subclass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>53
+</pre></div>
+</div>
+</div>
+</div>
+<p>What are distributions of the covered temperatures and vapor pressures?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature [K]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 9.444444444444459, &#39;Temperature [K]&#39;)
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_32_1.png" src="_images/04_DNN_VLE_32_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Pvap&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Vapor Pressure [kPa]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 9.444444444444459, &#39;Vapor Pressure [kPa]&#39;)
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_33_1.png" src="_images/04_DNN_VLE_33_1.png" />
+</div>
+</div>
+<p>Interesting distribution for the vapor pressure, isn’t it? We have a huge range of vapor pressures in our dataset. It would make sense to scale the data using a logarithmic function. Also, do you remember the Clasius-Clapeyron equation? The vapor pressure is given in logarithmic units! So, let’s go ahead and scale our data according to the Clasius-Clapeyron form.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ln_P&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Pvap&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;ln_P&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;ln Pvap&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 9.444444444444459, &#39;ln Pvap&#39;)
+</pre></div>
+</div>
+<img alt="_images/04_DNN_VLE_36_1.png" src="_images/04_DNN_VLE_36_1.png" />
+</div>
+</div>
+<p>And we will standarize the temperature values</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;T_scaled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now split the data!</p>
+<p>Instead of doing it blindly using a random split on the whole dataset, let’s ensure that we train on certain molecules and test on other molecules. At the end of the day this was our original goal do you remember?</p>
+<p>We can go one step further and use the information that we have available regarding the chemical classes. We will split the data in such a way that the chemical classes are well-distributed among training, validation and test. This strategy is called as <a class="reference external" href="https://medium.com/&#64;analyttica/what-is-meant-by-stratified-split-289a8a986a90">stratified splitting</a>. Be aware that the way in which you split your data is very linked to the conclusions that you can draw from the model performance!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">chemical_classes</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+<span class="n">train_comps</span><span class="p">,</span> <span class="n">valid_comps</span><span class="p">,</span> <span class="n">test_comps</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="n">chemical_classes</span><span class="p">:</span>
+    <span class="c1"># Get the data with this class</span>
+    <span class="n">df_cl</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Class&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cl</span><span class="p">]</span>
+    
+    <span class="c1"># Get unique compounds for this class</span>
+    <span class="n">unique_compounds_cl</span> <span class="o">=</span> <span class="n">df_cl</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    
+    <span class="c1"># Randomly split the compounds for train and test</span>
+    <span class="n">comp_train_all</span><span class="p">,</span> <span class="n">comp_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">unique_compounds_cl</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">comp_train</span><span class="p">,</span> <span class="n">comp_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">unique_compounds_cl</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">train_comps</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">comp_train</span><span class="p">))</span>
+    <span class="n">valid_comps</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">comp_valid</span><span class="p">))</span>
+    <span class="n">test_comps</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">comp_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_comps</span><span class="p">)]</span>
+<span class="n">df_valid</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">valid_comps</span><span class="p">)]</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_comps</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now extract the input and output data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="c1"># Fingerprints to Matrix</span>
+<span class="n">Ts_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;T_scaled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Ts_train</span><span class="p">))</span> <span class="c1"># Concatenate the temperature as part of the input matrix</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;ln_P&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">X_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">df_valid</span><span class="p">[</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="c1"># Fingerprints to Matrix</span>
+<span class="n">Ts_valid</span> <span class="o">=</span> <span class="n">df_valid</span><span class="p">[</span><span class="s1">&#39;T_scaled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_valid</span><span class="p">,</span> <span class="n">Ts_valid</span><span class="p">))</span> <span class="c1"># Concatenate the temperature as part of the input matrix</span>
+<span class="n">y_valid</span> <span class="o">=</span> <span class="n">df_valid</span><span class="p">[</span><span class="s1">&#39;ln_P&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="c1"># Fingerprints to Matrix</span>
+<span class="n">Ts_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;T_scaled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Ts_test</span><span class="p">))</span> <span class="c1"># Concatenate the temperature as part of the input matrix</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;ln_P&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">MemoryError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_22920</span>\<span class="mf">4133180164.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="c1"># Fingerprints to Matrix</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">Ts_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;T_scaled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Ts_train</span><span class="p">))</span> <span class="c1"># Concatenate the temperature as part of the input matrix</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;ln_P&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+
+<span class="nn">&lt;__array_function__ internals&gt;</span> in <span class="ni">hstack</span><span class="nt">(*args, **kwargs)</span>
+
+<span class="nn">~\Anaconda3\envs\ML4ChemEng\lib\site-packages\numpy\core\shape_base.py</span> in <span class="ni">hstack</span><span class="nt">(tup)</span>
+<span class="g g-Whitespace">    </span><span class="mi">343</span>         <span class="k">return</span> <span class="n">_nx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">arrs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">344</span>     <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">345</span>         <span class="k">return</span> <span class="n">_nx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">arrs</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">346</span> 
+<span class="g g-Whitespace">    </span><span class="mi">347</span> 
+
+<span class="nn">&lt;__array_function__ internals&gt;</span> in <span class="ni">concatenate</span><span class="nt">(*args, **kwargs)</span>
+
+<span class="ne">MemoryError</span>: Unable to allocate 518. MiB for an array with shape (33120, 2049) and data type float64
+</pre></div>
+</div>
+</div>
+</div>
+<section id="train-a-deep-neural-network">
+<h3>Train a Deep Neural Network<a class="headerlink" href="#train-a-deep-neural-network" title="Permalink to this headline">#</a></h3>
+<p>Let’s now build a 2 hidden-layer neural network using PyTorch with the <a class="reference external" href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">ReLU</a> activation function.</p>
+<p>For doing this, we need to create a class and define the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> and the <code class="docutils literal notranslate"><span class="pre">forward</span></code> functions. In <code class="docutils literal notranslate"><span class="pre">__init__</span></code> we initialize the type of layers that we are going to use and in <code class="docutils literal notranslate"><span class="pre">forward</span></code> we apply the operations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">DNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">out_dim</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">out_dim</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we intialize our model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">DNN</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can count the number of trainable model parameters using the following function</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">count_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">)</span>
+
+<span class="n">count_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>41441
+</pre></div>
+</div>
+</div>
+</div>
+<p>We have now initialized our model with some parameters using the default Kaiming uniform initilization procedure. Other intizalization procedures are also <a class="reference external" href="https://pytorch.org/docs/master/nn.init.html">available</a>.</p>
+<p>Now, for training our model, we need to define the <a class="reference external" href="https://pytorch.org/docs/stable/nn.html#loss-functions">loss function</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loss_function</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and the <a class="reference external" href="https://pytorch.org/docs/stable/optim.html#algorithms">optimization algorithm</a> to be used, for which we should pass the model parameters that will be adjusted by it and the optimizer parameters (e.g., learning rate).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.002</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can construct the training loop that performs the following steps:</p>
+<ul class="simple">
+<li><p>Forward propagation</p></li>
+<li><p>Backward propagation</p></li>
+<li><p>Update of model parameters</p></li>
+</ul>
+<p>Notice that if you are running this from Colab, it is possible to get access to <a class="reference external" href="https://en.wikipedia.org/wiki/Graphics_processing_unit">GPUs</a> that speed-up the training and evaluation of the model! 😃 This is one of the great advantages of using Colab!</p>
+<p>To abilitate the GPU in Colab do the following:</p>
+<ol class="simple">
+<li><p>Click on <code class="docutils literal notranslate"><span class="pre">Runtime</span></code> in the upper menu.</p></li>
+<li><p>Click on <code class="docutils literal notranslate"><span class="pre">Change</span> <span class="pre">runtime</span> <span class="pre">type</span></code>.</p></li>
+<li><p>On the <code class="docutils literal notranslate"><span class="pre">Hardware</span> <span class="pre">accelerator</span></code> select <code class="docutils literal notranslate"><span class="pre">GPU</span></code>.</p></li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When using a GPU, you should send the model and the data to the GPU!</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">200</span>
+
+<span class="c1"># Send model and data to device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">X_train_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">y_train_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">X_valid_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">y_valid_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y_valid</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_epochs</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">)):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="c1"># Forward propagation</span>
+    <span class="n">y_train_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_train_torch</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">y_train_pred</span><span class="p">,</span> <span class="n">y_train_torch</span><span class="p">)</span>
+    <span class="n">losses</span><span class="p">[</span><span class="n">epoch</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    
+    <span class="c1"># Backward propagation</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    
+    <span class="c1"># Update of model parameters</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    
+    <span class="c1"># Evaluate model in validation set</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">y_valid_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_valid_torch</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">y_valid_pred</span><span class="p">,</span> <span class="n">y_valid_torch</span><span class="p">)</span>
+        <span class="n">losses</span><span class="p">[</span><span class="n">epoch</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "5be882ecd55546658019d6764d5d4032", "version_major": 2, "version_minor": 0}
+</script></div>
+</div>
+<p>Let’s now plot the loss function across the epochs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">losses</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">losses</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Valid&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/04_DNN_VLE_57_0.png" src="_images/04_DNN_VLE_57_0.png" />
+</div>
+</div>
+<p>Observe that over the epochs the model parameters are being learned and the training loss decreases. However, notice that the validation loss starts to decrease but at some point it increases again. This is a clear evidence of overfitting!</p>
+<p>Do you remember some ways to tackle overfitting in neural networks?</p>
+</section>
+<section id="exercise-implement-early-stopping">
+<h3>Exercise - implement Early stopping ❗❗<a class="headerlink" href="#exercise-implement-early-stopping" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Check out how early stopping was implemented <a class="reference external" href="https://stackoverflow.com/questions/71998978/early-stopping-in-pytorch">here</a>. And apply it to the training of our previous network.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, let’s see the performance of the model in the test set using the <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_absolute_percentage_error">mean absolute percentage error</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_percentage_error</span> <span class="k">as</span> <span class="n">MAPE</span>
+
+<span class="n">X_test_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">y_test_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_test_torch</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAPE: &#39;</span><span class="p">,</span> <span class="n">MAPE</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_test_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAPE:  2.54968246029853
+</pre></div>
+</div>
+</div>
+</div>
+<p>Quite impressive result for a general vapor pressure model of this kind right? Deep learning is indeed a powerful tool 🤓</p>
+</section>
+<section id="hyperparameter-optimization">
+<h3>Hyperparameter optimization<a class="headerlink" href="#hyperparameter-optimization" title="Permalink to this headline">#</a></h3>
+<p>There is still one important aspect to learn: hyperparameter optimization. In the previous implementation we used 2 hidden-layers and a constant hidden-size accross the model of 20. Also, we just decided for a learning rate of 0.002.</p>
+<p>Let’s tune one of these hyperparameters, notice that we are not going to use early stopping here, but this could be easily implemented here too! Feel free to try it out yourself</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hidden_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">params_lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">valid_mape_lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">hs</span> <span class="ow">in</span> <span class="n">hidden_sizes</span><span class="p">:</span>
+    
+    <span class="n">model</span> <span class="o">=</span> <span class="n">DNN</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hs</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hidden-size: &#39;</span><span class="p">,</span> <span class="n">hs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model parameters: &#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="p">)</span>
+    
+    <span class="n">losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_epochs</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">)):</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="c1"># Forward propagation</span>
+        <span class="n">y_train_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_train_torch</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">y_train_pred</span><span class="p">,</span> <span class="n">y_train_torch</span><span class="p">)</span>
+        <span class="n">losses</span><span class="p">[</span><span class="n">epoch</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="c1"># Backward propagation</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+        <span class="c1"># Update of model parameters</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="c1"># Evaluate final model in validation set</span>
+    <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">model_params</span> <span class="o">=</span> <span class="n">count_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">y_valid_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_valid_torch</span><span class="p">)</span>
+        <span class="n">mape</span> <span class="o">=</span> <span class="n">MAPE</span><span class="p">(</span><span class="n">y_valid_torch</span><span class="p">,</span> <span class="n">y_valid_pred</span><span class="p">)</span>
+    <span class="n">params_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
+    <span class="n">valid_mape_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mape</span><span class="p">)</span>       
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "a4b6b64511f74f368a8f476dde1a51a7", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
+Hidden-size:  5
+Model parameters:  10286
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "9c76bc5c24774d50a64042165636e088", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
+Hidden-size:  10
+Model parameters:  20621
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "f02be41ce51f419ba58972161e60916c", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
+Hidden-size:  30
+Model parameters:  62461
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "612efeb2da0749769cc33ba2ef489001", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
+Hidden-size:  40
+Model parameters:  83681
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">valid_mape_lst</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best hidden size: &#39;</span><span class="p">,</span> <span class="n">hidden_sizes</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Valid MAPE&#39;</span><span class="p">,</span> <span class="n">valid_mape_lst</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best hidden size:  40
+Valid MAPE 1.0261384
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">y_test_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_test_torch</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAPE: &#39;</span><span class="p">,</span> <span class="n">MAPE</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_test_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAPE:  1.0324883304394763
+</pre></div>
+</div>
+</div>
+</div>
+<p>A somehow significant improvement, right?</p>
+<p>More efficient tools for hyperparameter optimization are available (e.g., <a class="reference external" href="https://docs.ray.io/en/latest/tune/index.html">Ray Tune</a>, <a class="reference external" href="https://optuna.org/">Optuna</a>, <a class="reference external" href="https://github.com/hyperopt/hyperopt">HyperOpt</a>) which implement advanced techniques like Bayesian Optimization. Feel free to try them out!</p>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div class="docutils container" id="id3">
+<dl class="citation">
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id1">Hay16</a></span></dt>
+<dd><p>William M Haynes. <em>CRC handbook of chemistry and physics</em>. CRC press, 2016.</p>
+</dd>
+<dt class="label" id="id11"><span class="brackets"><a class="fn-backref" href="#id2">Spe17</a></span></dt>
+<dd><p>James G Speight. <em>Lange's handbook of chemistry</em>. McGraw-Hill Education, 2017.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Edgar Sanchez, Antonio del Rio and Caroline Ganzer<br/>
+  
+      &copy; Copyright 2023.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
