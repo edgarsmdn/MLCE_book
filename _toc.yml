@@ -9,4 +9,5 @@ chapters:
 - file: 02_kNN_QSPR
 - file: 03_GLM_thermophysical
 - file: 04_DNN_VLE
+- file: 05_Hybrid_CSTR
 - file: Acknowledgements
