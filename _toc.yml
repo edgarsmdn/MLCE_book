@@ -3,11 +3,21 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: 00_Overview
-- file: 01_Introduction_Python
-- file: 02_kNN_QSPR
-- file: 03_GLM_thermophysical
-- file: 04_DNN_VLE
-- file: 05_Hybrid_CSTR
-- file: Acknowledgements
+parts:
+  - caption: Introduction
+    chapters:
+    - file: 00_Overview
+    - file: 01_Introduction_Python
+  - caption: Supervised learning
+    chapters:
+    - file: 02_kNN_QSPR
+    - file: 03_GLM_thermophysical
+    - file: 04_DNN_VLE
+  - caption: Hybrid modelling
+    chapters:
+    - file: 05_Hybrid_CSTR
+  #- caption: Data-driven optimization
+  #- caption: Reinforcement learning
+  - caption: Acknowledgments
+    chapters:
+    - file: Acknowledgements

@@ -157,12 +157,23 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00_Overview.html">An overview of the course 🔭</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Introduction to Python 🐍</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised learning</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_DNN_VLE.html">4. Deep Neural Networks for VLE prediction 🌐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_Hybrid_CSTR.html">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
 </ul>
 
@@ -1061,11 +1072,16 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.26574826,  0.58771529, -0.02405329, -0.13119504],
-       [-0.54852116,  0.97265902,  0.91361956, -0.70804648],
-       [-0.3939929 ,  0.11440878,  0.68155753, -2.20826616],
-       [-0.35270256,  0.7056803 ,  0.24034275, -0.31635902],
-       [-0.31163922,  0.8206428 ,  0.11555912,  0.26966293]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-7.12090862e-01,  1.40363959e+00, -7.46262282e-01,
+         5.99721821e-02],
+       [-1.05162635e+00,  9.34883080e-01,  8.46691204e-01,
+        -2.65237398e-01],
+       [-8.41755283e-01,  1.53676683e+00, -2.08441577e-01,
+         1.08095297e-02],
+       [-8.81679821e-01,  7.06689795e-01, -2.94888413e-01,
+        -1.92421773e-01],
+       [-7.20436398e-01,  5.64340289e-04,  4.28085757e-01,
+        -3.21456251e-01]])
 </pre></div>
 </div>
 </div>
@@ -1078,9 +1094,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.64105191, 0.91825128, 0.43462769, 0.73399033, 0.75336133],
-       [0.33071681, 0.36028357, 0.99392569, 0.35603487, 0.12442487],
-       [0.04558354, 0.90133578, 0.54542656, 0.28730573, 0.20960694]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.04350802, 0.93637925, 0.44597105, 0.10745891, 0.32329063],
+       [0.25237983, 0.14275417, 0.09536247, 0.54075595, 0.44775076],
+       [0.81700198, 0.30426476, 0.70864523, 0.58602693, 0.13142501]])
 </pre></div>
 </div>
 </div>
@@ -1372,7 +1388,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Edgar Sanchez, Antonio del Rio and Caroline Ganzer
+By Edgar Ivan Sanchez Medina, Antonio del Rio Chanona and Caroline Ganzer
 </p>
 
   </div>
