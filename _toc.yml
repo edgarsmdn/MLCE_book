@@ -16,8 +16,13 @@ parts:
   - caption: Hybrid modelling
     chapters:
     - file: 05_Hybrid_CSTR
-  #- caption: Data-driven optimization
+  - caption: Data-driven optimization
+    chapters:
+    - file: 06_PID_tuning
   #- caption: Reinforcement learning
+  - caption: Unsupervised learning
+    chapters:
+    - file: 08_PCA
   - caption: Acknowledgments
     chapters:
     - file: Acknowledgements

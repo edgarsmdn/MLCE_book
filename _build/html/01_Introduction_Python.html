@@ -172,6 +172,14 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="05_Hybrid_CSTR.html">5. Hybrid model for CSTR 🔆</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
@@ -1072,16 +1080,11 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-7.12090862e-01,  1.40363959e+00, -7.46262282e-01,
-         5.99721821e-02],
-       [-1.05162635e+00,  9.34883080e-01,  8.46691204e-01,
-        -2.65237398e-01],
-       [-8.41755283e-01,  1.53676683e+00, -2.08441577e-01,
-         1.08095297e-02],
-       [-8.81679821e-01,  7.06689795e-01, -2.94888413e-01,
-        -1.92421773e-01],
-       [-7.20436398e-01,  5.64340289e-04,  4.28085757e-01,
-        -3.21456251e-01]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 0.36071301,  0.12549698, -0.03754283,  0.78123096],
+       [ 0.18236857, -0.19478158, -0.2569345 ,  0.79543168],
+       [ 0.43648972, -0.03685811,  0.42689742,  0.47066533],
+       [ 0.02485133, -0.21724232, -0.64802294,  0.92336792],
+       [ 1.04092349,  0.94597657,  1.56351495,  0.00266068]])
 </pre></div>
 </div>
 </div>
@@ -1094,9 +1097,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.04350802, 0.93637925, 0.44597105, 0.10745891, 0.32329063],
-       [0.25237983, 0.14275417, 0.09536247, 0.54075595, 0.44775076],
-       [0.81700198, 0.30426476, 0.70864523, 0.58602693, 0.13142501]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.12411154, 0.2093492 , 0.40761886, 0.03508961, 0.29041668],
+       [0.63594829, 0.39712646, 0.37159581, 0.41661969, 0.86905802],
+       [0.85123281, 0.9400063 , 0.67796578, 0.99473775, 0.03291549]])
 </pre></div>
 </div>
 </div>

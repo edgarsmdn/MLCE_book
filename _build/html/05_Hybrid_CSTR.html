@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '05_Hybrid_CSTR';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Acknowledgements 🙏" href="Acknowledgements.html" />
+    <link rel="next" title="6. PID tuning via data-driven optimization 🔩" href="06_PID_tuning.html" />
     <link rel="prev" title="4. Deep Neural Networks for VLE prediction 🌐" href="04_DNN_VLE.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
@@ -171,6 +171,14 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
 <ul class="nav bd-sidenav">
@@ -418,10 +426,10 @@ $<span class="math notranslate nohighlight">\(
 A + B \rightleftarrows X
 \)</span>$</p>
 <p>The reactor is fed by a feed of flowrate <span class="math notranslate nohighlight">\(F_{in}\)</span> and concentrations <span class="math notranslate nohighlight">\(C_{i, in}\)</span> with <span class="math notranslate nohighlight">\(i\)</span> denoting species <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(X\)</span>. The reactor has constant volume <span class="math notranslate nohighlight">\(V\)</span> and is assumed to be perfectly mixed, with an average residence time <span class="math notranslate nohighlight">\(\tau\)</span>. The concentrations in the reactor are denoted by <span class="math notranslate nohighlight">\(C_{i}\)</span>. A stream with constant flowrate <span class="math notranslate nohighlight">\(F=F_{in}\)</span> exits the reactor:</p>
-<figure class="align-center" id="id14">
+<figure class="align-center" id="id16">
 <a class="reference internal image-reference" href="_images/CSTR_vars_2.png"><img alt="cstr" src="_images/CSTR_vars_2.png" style="width: 40%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Schematic representation of the CSTR considered here</span><a class="headerlink" href="#id14" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Schematic representation of the CSTR considered here</span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Let’s say we use the following reactor model:</p>
@@ -468,10 +476,10 @@ C_{B,0} = 0.5\,\mathrm{kmol/m^3}
 C_{X,0} = 0\,\mathrm{kmol/m^3}
 \]</div>
 <p>Time-dependent experimental measurements for all concentrations are available:</p>
-<figure class="align-center" id="id15">
+<figure class="align-center" id="id17">
 <a class="reference internal image-reference" href="_images/CSTR_experimental.png"><img alt="cstr_measurements" src="_images/CSTR_experimental.png" style="width: 60%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7 </span><span class="caption-text">CSTR measurements of the concentrations.</span><a class="headerlink" href="#id15" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">CSTR measurements of the concentrations.</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The task is to construct a <strong>serial hybrid model</strong>, in which the reaction rate <span class="math notranslate nohighlight">\(r\)</span> is described by a data-driven model. In this particular example, a <strong>neural network</strong> will be used.</p>
@@ -1283,11 +1291,11 @@ value of the derivative: -19.0
       </div>
     </a>
     <a class="right-next"
-       href="Acknowledgements.html"
+       href="06_PID_tuning.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Acknowledgements 🙏</p>
+        <p class="prev-next-title">6. PID tuning via data-driven optimization 🔩</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
