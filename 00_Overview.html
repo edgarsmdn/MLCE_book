@@ -157,12 +157,35 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">An overview of the course 🔭</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01_Introduction_Python.html">1. Introduction to Python 🐍</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised learning</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_DNN_VLE.html">4. Deep Neural Networks for VLE prediction 🌐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_Hybrid_CSTR.html">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="07_RL_PID.html">7. Reinforcement learning for PID tuning 🐶</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
 </ul>
 
@@ -405,11 +428,11 @@ The function <span class="math notranslate nohighlight">\(h\)</span> is refer to
 <p>In supervised learning we are not particularly interested in fitting the observed data very well, but rather in generalizing well to unseen data! Therefore, the
 concepts of <strong>overfitting</strong> and <strong>underfitting</strong> become really important.</p>
 </div>
-<figure class="align-center" id="id11">
+<figure class="align-center" id="id16">
 <a class="reference internal image-reference" href="_images/supervised_learning.png"><img alt="supervised_learning" src="_images/supervised_learning.png" style="width: 75%;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 1 </span><span class="caption-text">A collection of hypothesis functions (in blue) that could be fitted to the observed data (in red). Which hypothesis is the best? How can we determined the
-best hypothesis function?</span><a class="headerlink" href="#id11" title="Permalink to this image">#</a></p>
+best hypothesis function?</span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -417,10 +440,10 @@ best hypothesis function?</span><a class="headerlink" href="#id11" title="Permal
 <h3>2. Unsupervised learning<a class="headerlink" href="#unsupervised-learning" title="Permalink to this headline">#</a></h3>
 <p>In the case of unsupervised learning the output values are not available, only the input data <span class="math notranslate nohighlight">\(\textbf{X}\)</span>. Therefore, the goal of unsupervised learning is to <strong>identify
 patterns</strong> in the data. For instance, finding clusters or reducing the dimensionality of the data.</p>
-<figure class="align-center" id="id12">
+<figure class="align-center" id="id17">
 <a class="reference internal image-reference" href="_images/unsupervised_learning.png"><img alt="unsupervised_learning" src="_images/unsupervised_learning.png" style="width: 50%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Clustering of data. How can we detect groups of data that are similar to each other? Why is this useful?</span><a class="headerlink" href="#id12" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Clustering of data. How can we detect groups of data that are similar to each other? Why is this useful?</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -428,10 +451,10 @@ patterns</strong> in the data. For instance, finding clusters or reducing the di
 <h3>3. Reinforcement learning<a class="headerlink" href="#reinforcement-learning" title="Permalink to this headline">#</a></h3>
 <p>The name comes from animal psychology, where we train animals/pets by reinforcing good behaviour, and discouraging bad behaviours. Here, the agent has to learn
 how to interact with its environment in order to maximize the reward or minimize the punishment.</p>
-<figure class="align-center" id="id13">
+<figure class="align-center" id="id18">
 <a class="reference internal image-reference" href="_images/reinforcement_learning.png"><img alt="reinforcement_learning" src="_images/reinforcement_learning.png" style="width: 50%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Reinforcement learning: incentivate actions that maximize reward and/or discourage actions that lead to punishment.</span><a class="headerlink" href="#id13" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Reinforcement learning: incentivate actions that maximize reward and/or discourage actions that lead to punishment.</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -443,10 +466,10 @@ models? Is there a way to combine both? Is it beneficial to do so?</p>
 <p>In general, the term hybrid modeling refers to the combination of mechanistic and data-driven models and is also called “grey-box modeling”. For example,
 mass and energy balances, thermodynamic laws and kinetics should be respected in our models. Introducing this physical knwoledge reduces the amount of data
 that is needed for the ML part and improves the capacity of the models to generalize to unseen conditions.</p>
-<figure class="align-center" id="id14">
+<figure class="align-center" id="id19">
 <a class="reference internal image-reference" href="_images/hybrid_modeling.png"><img alt="hybrid_modeling" src="_images/hybrid_modeling.png" style="width: 75%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Hybrid modeling is also refer in the literature as grey-box modeling.</span><a class="headerlink" href="#id14" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Hybrid modeling is also refer in the literature as grey-box modeling.</span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -545,7 +568,7 @@ that is needed for the ML part and improves the capacity of the models to genera
   <div class="footer-item">
     
 <p class="component-author">
-By Edgar Sanchez, Antonio del Rio and Caroline Ganzer
+By Edgar Ivan Sanchez Medina, Antonio del Rio Chanona and Caroline Ganzer
 </p>
 
   </div>

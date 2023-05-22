@@ -1,0 +1,1607 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>6. PID tuning via data-driven optimization 🔩 &#8212; Machine Learning in Chemical Engineering</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '06_PID_tuning';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="7. Reinforcement learning for PID tuning 🐶" href="07_RL_PID.html" />
+    <link rel="prev" title="5. Hybrid model for CSTR 🔆" href="05_Hybrid_CSTR.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_Overview.html">An overview of the course 🔭</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_Introduction_Python.html">1. Introduction to Python 🐍</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_DNN_VLE.html">4. Deep Neural Networks for VLE prediction 🌐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_Hybrid_CSTR.html">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="07_RL_PID.html">7. Reinforcement learning for PID tuning 🐶</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F06_PID_tuning.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/06_PID_tuning.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>6. PID tuning via data-driven optimization 🔩</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-driven-optimization">Data-driven optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pid-controller">PID controller</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cstr-model">CSTR model 💻</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cstr-simulation">CSTR simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pid-tuning-of-cstr-controller">PID tuning of CSTR controller ➿</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bobyqa-bound-optimization-by-quadratic-approximation">BOBYQA - Bound Optimization by Quadratic Approximation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bo-bayesian-optimization">BO - Bayesian Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#entmoot-ensemble-tree-model-optimization">EntMooT - Ensemble Tree Model Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-remarks">Final remarks</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pid-tuning-via-data-driven-optimization">
+<h1>6. PID tuning via data-driven optimization 🔩<a class="headerlink" href="#pid-tuning-via-data-driven-optimization" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/06_PID_tuning.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>We will revise some state-of-the-art data-driven optimization algorithms</p></li>
+<li><p>We will use data-driven optimization methods to tune the PID controller of a CSTR</p></li>
+</ul>
+</section>
+<section id="a-quick-reminder">
+<h2>A quick reminder ✅<a class="headerlink" href="#a-quick-reminder" title="Permalink to this headline">#</a></h2>
+<section id="data-driven-optimization">
+<h3>Data-driven optimization<a class="headerlink" href="#data-driven-optimization" title="Permalink to this headline">#</a></h3>
+<p>In this notebook we refer to <strong>data-driven optimization</strong> algorithms to the class of methods that use only function evaluations to optimize an unknown function. This is also referred to as <a class="reference external" href="https://arxiv.org/abs/1904.11585">derivative-free</a>, simulation-based, zeroth-order, and gradient-free optimization by other communities.</p>
+<p>Consider the optimization problem of the following form</p>
+<div class="math notranslate nohighlight">
+\[ \min_{ {\bf x} \in X} \quad  f({\bf x}) \]</div>
+<p>The vector <span class="math notranslate nohighlight">\({\bf x} = [x_1,..., x_n]^T\)</span> is the optimization variable of the problem, the function <span class="math notranslate nohighlight">\(f : \mathbb{R}^n \to \mathbb{R} \)</span> is the objective function.</p>
+<p>Data-driven optimization algorithms assume:</p>
+<ul class="simple">
+<li><p>Derivative information of <span class="math notranslate nohighlight">\(f({\bf x})\)</span> is unavailable</p></li>
+<li><p>It is only posible to sample <span class="math notranslate nohighlight">\(f\)</span> for values of <span class="math notranslate nohighlight">\({\bf x}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(f({\bf x})\)</span> is called a black-box function, given that we can only see the input (<span class="math notranslate nohighlight">\({\bf x}_i\)</span>) and output <span class="math notranslate nohighlight">\((f({\bf x}_i))\)</span>, but we do not know the explict closed-form of <span class="math notranslate nohighlight">\(f\)</span></p></li>
+</ul>
+<p>For <em>expensive</em> (in terms of time, cost, or other metric) black-box functions, <em>model-based</em> data-driven optimization algorithms seem to offer particularly good performance.</p>
+<p>The <strong>general idea</strong> of model-based (also called <em>surrogate based</em>) algorithms is to sample the objective function and create a <em>surrogate</em> function <span class="math notranslate nohighlight">\(\hat{f}_{\mathcal{S}}\)</span> which can be optimized easily. After optimizing <span class="math notranslate nohighlight">\(\hat{f}_{\mathcal{S}}\)</span>, the “true” objective function <span class="math notranslate nohighlight">\(f\)</span> is sampled at the optimal location found by the surrogate. With this new datapoint, the surrogate function <span class="math notranslate nohighlight">\(\hat{f}_{\mathcal{S}}\)</span> is refined with this new datapoint, and then optimized again. This is done iteratively until a covergence criterion is achieved.</p>
+<p>In this specific notebook tutorial we have included 3 different state-of-the-art data-driven optimization packages, each using a different surrogate function</p>
+<ul class="simple">
+<li><p>(Py)BOBYQA</p></li>
+</ul>
+<blockquote>
+<div><p>The name BOBYQA is an acronym for <strong>B</strong>ound <strong>O</strong>ptimization <strong>BY</strong> <strong>Q</strong>uadratic <strong>A</strong>pproximation. BOBYQA is a type of trust-region method, and the choice of surrogate is a quadractic approximation to <span class="math notranslate nohighlight">\(f\)</span>. More details can be found in <a class="reference external" href="https://dl.acm.org/doi/10.1145/3338517">Py-BOBYQA</a> and <a class="reference external" href="https://optimization-online.org/2010/05/2616/">BOBYQA</a>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>GPyOpt</p></li>
+</ul>
+<blockquote>
+<div><p>GPyOpt is a Python open-source library for Bayesian Optimization developed by the Machine Learning group of the University of Sheffield. It is based on GPy, a Python framework for Gaussian process modelling. More information can be found on their <a class="reference external" href="https://sheffieldml.github.io/GPyOpt/firstexamples/index.html">webpage</a>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>EntMoot</p></li>
+</ul>
+<blockquote>
+<div><p>ENTMOOT (<strong>EN</strong>semble <strong>T</strong>ree <strong>MO</strong>del <strong>O</strong>ptimization Tool) is a framework to handle tree-based surrogate models in Bayesian optimization applications. Gradient-boosted tree models from <a class="reference external" href="https://lightgbm.readthedocs.io/en/v3.3.2/">LightGBM</a> are combined with a distance-based uncertainty measure in a deterministic global optimization framework to optimize black-box functions. More details on the method can be found on the <a class="reference external" href="https://arxiv.org/abs/2003.04774">paper</a> or the <a class="reference external" href="https://github.com/cog-imperial/entmoot">GitHub repository</a></p>
+</div></blockquote>
+<p>A comparative study can be found in: <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0009250921007004">Data-driven optimization for process systems engineering applications</a></p>
+</section>
+<section id="pid-controller">
+<h3>PID controller<a class="headerlink" href="#pid-controller" title="Permalink to this headline">#</a></h3>
+<p>A proportional–integral–derivative controller (<a class="reference external" href="https://en.wikipedia.org/wiki/PID_controller">PID controller</a>) is a control loop mechanism employing feedback that is used in industrial control systems. A PID controller calculates an error value <span class="math notranslate nohighlight">\(e(k)\)</span> at time-step <span class="math notranslate nohighlight">\(k\)</span> as the difference between a desired setpoint (SP) and a measured process variable (PV) and applies a correction based on proportional, integral, and derivative terms (denoted P, I, and D), hence the name. The control action is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[u(k)=K_P~e(k)+K_I~\sum^{i=k}_{i=0}e(i)+K_D~\frac{e(k)-e(k-1)}{\Delta t}\]</div>
+<p>where <span class="math notranslate nohighlight">\(K_P,K_I,K_D\)</span> are parameters to be tuned.</p>
+<p>Traditionally, methods exist to tune such parameters, however, treating the problem as a (expensive) black-box optimization problem is an efficient solution method.</p>
+<p>We can formulate the discrete-time control of a chemical process by a PID controller as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\min_{K_P,K_I,K_D} \quad &amp; \sum_{k=0}^{k=T_f} (e(k))^2\\
+\text{s.t.} \quad &amp; x(k+1) = f(x(k),u(k)), \quad k=0,...,T_f-1 \\
+&amp; u(k)=K_P~e(k)+K_I~\sum^{i=k}_{i=0}e(i)+K_D~\frac{e(k)-e(k-1)}{\Delta t}, \quad k=0,...,T_f-1\\
+&amp; x(0)=x_0 \quad \text{given}
+\end{aligned}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(e(k)=x_{SP}-x(k)\)</span>. Notice that the above optimization problem has only 3 degrees of freedom, <span class="math notranslate nohighlight">\(K_P,K_I,K_D\)</span>. Notice also that <span class="math notranslate nohighlight">\(u(k)\)</span> is a function of <span class="math notranslate nohighlight">\(x(k)\)</span>, <span class="math notranslate nohighlight">\(u(x(k))\)</span>.</p>
+<p>Let’s first import some libraries</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">odeint</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="n">grid</span>
+<span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will take the numerical precision of the machine as the epsilon tolerance for our algorithms</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eps</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="cstr-model">
+<h2>CSTR model 💻<a class="headerlink" href="#cstr-model" title="Permalink to this headline">#</a></h2>
+<p>The system used in this tutorial notebook is a Continuous Stirred Tank Reactor (CSTR) described by the following equations</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\text{Ca}}{dt}  = (\text{Ca}_f - \text{Ca})q/V - r_A\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{dT}{dt}   = \frac{q (T_f - T)}{V} + \frac{\Delta H}{(\rho ~C_p)}r_A + \frac{U_A}{(\rho~ V~  Cp)}(Tc-T)\]</div>
+<p>with <span class="math notranslate nohighlight">\(r_A = k_0 \exp^{(-E/(RT))}\text{Ca}\)</span>.</p>
+<p>The reaction taking place in the reactor is</p>
+<div class="math notranslate nohighlight">
+\[ A \rightarrow B \]</div>
+<p>The reactor has a cooling jacket with temperature <span class="math notranslate nohighlight">\(T_c\)</span> that acts as the input of the system. The states are the temperature of the reactor <span class="math notranslate nohighlight">\(T\)</span> and the concentration <span class="math notranslate nohighlight">\(C_a\)</span>.</p>
+<p>Details of the nomenclature for this system can be found in the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">###############</span>
+<span class="c1">#  CSTR model #</span>
+<span class="c1">###############</span>
+
+<span class="c1"># Taken from http://apmonitor.com/do/index.php/Main/NonlinearControl</span>
+
+<span class="k">def</span> <span class="nf">cstr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
+
+    <span class="c1"># ==  Inputs == #</span>
+    <span class="n">Tc</span>  <span class="o">=</span> <span class="n">u</span>   <span class="c1"># Temperature of cooling jacket (K)</span>
+
+    <span class="c1"># == States == #</span>
+    <span class="n">Ca</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Concentration of A in CSTR (mol/m^3)</span>
+    <span class="n">T</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Temperature in CSTR (K)</span>
+
+    <span class="c1"># == Process parameters == #</span>
+    <span class="n">Tf</span>     <span class="o">=</span> <span class="mi">350</span>    <span class="c1"># Feed temperature (K)</span>
+    <span class="n">q</span>      <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># Volumetric Flowrate (m^3/sec)</span>
+    <span class="n">Caf</span>    <span class="o">=</span> <span class="mi">1</span>      <span class="c1"># Feed Concentration (mol/m^3)</span>
+    <span class="n">V</span>      <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># Volume of CSTR (m^3)</span>
+    <span class="n">rho</span>    <span class="o">=</span> <span class="mi">1000</span>   <span class="c1"># Density of A-B Mixture (kg/m^3)</span>
+    <span class="n">Cp</span>     <span class="o">=</span> <span class="mf">0.239</span>  <span class="c1"># Heat capacity of A-B Mixture (J/kg-K)</span>
+    <span class="n">mdelH</span>  <span class="o">=</span> <span class="mf">5e4</span>    <span class="c1"># Heat of reaction for A-&gt;B (J/mol)</span>
+    <span class="n">EoverR</span> <span class="o">=</span> <span class="mi">8750</span>   <span class="c1"># E -Activation energy (J/mol), R -Constant = 8.31451 J/mol-K</span>
+    <span class="n">k0</span>     <span class="o">=</span> <span class="mf">7.2e10</span> <span class="c1"># Pre-exponential factor (1/sec)</span>
+    <span class="n">UA</span>     <span class="o">=</span> <span class="mf">5e4</span>    <span class="c1"># U -Heat Transfer Coefficient (W/m^2-K) A -Area - (m^2)</span>
+    
+    <span class="c1"># == Equations == #</span>
+    <span class="n">rA</span>     <span class="o">=</span> <span class="n">k0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">EoverR</span><span class="o">/</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="n">Ca</span> <span class="c1"># reaction rate</span>
+    <span class="n">dCadt</span>  <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="n">V</span><span class="o">*</span><span class="p">(</span><span class="n">Caf</span> <span class="o">-</span> <span class="n">Ca</span><span class="p">)</span> <span class="o">-</span> <span class="n">rA</span>     <span class="c1"># Calculate concentration derivative</span>
+    <span class="n">dTdt</span>   <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="n">V</span><span class="o">*</span><span class="p">(</span><span class="n">Tf</span> <span class="o">-</span> <span class="n">T</span><span class="p">)</span> \
+              <span class="o">+</span> <span class="n">mdelH</span><span class="o">/</span><span class="p">(</span><span class="n">rho</span><span class="o">*</span><span class="n">Cp</span><span class="p">)</span><span class="o">*</span><span class="n">rA</span> \
+              <span class="o">+</span> <span class="n">UA</span><span class="o">/</span><span class="n">V</span><span class="o">/</span><span class="n">rho</span><span class="o">/</span><span class="n">Cp</span><span class="o">*</span><span class="p">(</span><span class="n">Tc</span><span class="o">-</span><span class="n">T</span><span class="p">)</span>   <span class="c1"># Calculate temperature derivative</span>
+
+    <span class="c1"># == Return xdot == #</span>
+    <span class="n">xdot</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">xdot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dCadt</span>
+    <span class="n">xdot</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dTdt</span>
+    <span class="k">return</span> <span class="n">xdot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#@title Ploting routines</span>
+
+<span class="c1">####################################</span>
+<span class="c1"># plot control actions performance #</span>
+<span class="c1">####################################</span>
+
+<span class="k">def</span> <span class="nf">plot_simulation</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span> <span class="n">T_dat</span><span class="p">,</span> <span class="n">Tc_dat</span><span class="p">,</span> <span class="n">data_simulation</span><span class="p">):</span>    
+    
+    <span class="n">Ca_des</span> <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">]</span>
+    <span class="n">T_des</span> <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> 
+                           <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Ca_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Ca (mol/m^3)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Concentration of A in CSTR&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">T_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;c-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">T_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">T_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> 
+                           <span class="n">color</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">T_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Reactor Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Tc_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cooling T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Jacket Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">##################</span>
+<span class="c1"># Training plots #</span>
+<span class="c1">##################</span>
+
+<span class="k">def</span> <span class="nf">plot_training</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">,</span> <span class="n">repetitions</span><span class="p">):</span>
+    <span class="n">t</span>        <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> 
+    <span class="n">Ca_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">])</span>
+    <span class="n">T_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">])</span>
+    <span class="n">Tc_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">])</span>
+    <span class="n">Ca_des</span>   <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">]</span>
+    <span class="n">T_des</span>    <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>
+
+    <span class="n">c_</span>    <span class="o">=</span> <span class="p">[(</span><span class="n">repetitions</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">/</span><span class="n">repetitions</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">)]</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">run_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Ca_train</span><span class="p">[</span><span class="n">run_i</span><span class="p">,:],</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">c_</span><span class="p">[</span><span class="n">run_i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Ca_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Ca (mol/m^3)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Concentration of A in CSTR&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training plots&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">run_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">T_train</span><span class="p">[</span><span class="n">run_i</span><span class="p">,:],</span> <span class="s1">&#39;c-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">c_</span><span class="p">[</span><span class="n">run_i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">T_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Reactor Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">335</span><span class="p">,</span> <span class="mi">317</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">run_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">Tc_train</span><span class="p">[</span><span class="n">run_i</span><span class="p">,:],</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">c_</span><span class="p">[</span><span class="n">run_i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cooling T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Jacket Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">#####################</span>
+<span class="c1"># Convergence plots #</span>
+<span class="c1">#####################</span>
+
+<span class="k">def</span> <span class="nf">plot_convergence</span><span class="p">(</span><span class="n">Xdata</span><span class="p">,</span> <span class="n">best_Y</span><span class="p">,</span> <span class="n">Objfunc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Plots to evaluate the convergence of standard Bayesian optimization algorithms</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">## if f values are not given</span>
+    <span class="n">f_best</span>  <span class="o">=</span> <span class="mf">1e8</span>
+    <span class="k">if</span> <span class="n">best_Y</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> 
+        <span class="n">best_Y</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i_point</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Xdata</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">f_point</span> <span class="o">=</span> <span class="n">Objfunc</span><span class="p">(</span><span class="n">Xdata</span><span class="p">[</span><span class="n">i_point</span><span class="p">,:],</span> <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">f_point</span> <span class="o">&lt;</span> <span class="n">f_best</span><span class="p">:</span>
+                <span class="n">f_best</span> <span class="o">=</span> <span class="n">f_point</span> 
+            <span class="n">best_Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_best</span><span class="p">)</span>
+        <span class="n">best_Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">best_Y</span><span class="p">)</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">Xdata</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">aux</span> <span class="o">=</span> <span class="p">(</span><span class="n">Xdata</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">,:]</span><span class="o">-</span><span class="n">Xdata</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">aux</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1">## Distances between consecutive x&#39;s</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">distances</span><span class="p">,</span> <span class="s1">&#39;-ro&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;d(x[n], x[n-1])&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distance between consecutive x</span><span class="se">\&#39;</span><span class="s1">s&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Best objective value found over iterations</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)),</span> <span class="n">best_Y</span><span class="p">,</span><span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Value of the best selected sample&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Best y&#39;</span><span class="p">)</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cstr-simulation">
+<h2>CSTR simulation<a class="headerlink" href="#cstr-simulation" title="Permalink to this headline">#</a></h2>
+<p>Now let’s use our CSTR model to simulate the operation under some aleatoric conditions.</p>
+<p>First, let’s define the initial conditions and create a dictionary where to store the information of the simulation</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_res</span> <span class="o">=</span> <span class="p">{}</span> 
+<span class="c1"># Initial conditions for the states</span>
+<span class="n">x0</span>             <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>          <span class="o">=</span> <span class="mf">0.87725294608097</span>
+<span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>          <span class="o">=</span> <span class="mf">324.475443431599</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>let’s now define the time interval of the process and create some storing arrays for plotting</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Time interval (min)</span>
+<span class="n">n</span>             <span class="o">=</span> <span class="mi">101</span> <span class="c1"># number of intervals</span>
+<span class="n">tp</span>            <span class="o">=</span> <span class="mi">25</span> <span class="c1"># process time (min)</span>
+<span class="n">t</span>             <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tp</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+
+<span class="c1"># Store results for plotting</span>
+<span class="n">Ca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>      <span class="n">Ca</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">T</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>      <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>    
+<span class="n">Tc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>   
+
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Ca</span><span class="p">)</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> 
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Tc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>we will assume some noise level of the measurements</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># noise level</span>
+<span class="n">noise</span>             <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">noise</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and define lower and upper bounds on the input</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># control upper and lower bounds</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="mi">305</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="mi">295</span>
+<span class="n">Tc_ub</span>              <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">]</span>
+<span class="n">Tc_lb</span>              <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>let’s define the desired setpoints</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># desired setpoints</span>
+<span class="n">n_1</span>                <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">n_2</span>                <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">n_1</span>
+<span class="n">Ca_des</span>             <span class="o">=</span> <span class="p">[</span><span class="mf">0.8</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="mf">0.9</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_2</span><span class="p">)]</span>
+<span class="n">T_des</span>              <span class="o">=</span> <span class="p">[</span><span class="mi">330</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">320</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_2</span><span class="p">)]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ca_des</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">T_des</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>now, let’s create a function that performs the simulation</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">simulate_CSTR</span><span class="p">(</span><span class="n">u_traj</span><span class="p">,</span> <span class="n">data_simulation</span><span class="p">,</span> <span class="n">repetitions</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    u_traj: Trajectory of input values</span>
+<span class="sd">    data_simulation: Dictionary of simulation data</span>
+<span class="sd">    repetitions: Number of simulations to perform</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># loading process operations</span>
+    <span class="n">Ca</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">])</span> 
+    <span class="n">T</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">])</span> 
+    <span class="n">x0</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">])</span>
+    <span class="n">t</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">])</span>     
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">]</span> 
+    <span class="n">n</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span> 
+         
+    <span class="c1"># control preparation</span>
+    <span class="n">u_traj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_traj</span><span class="p">)</span>
+    <span class="n">u_traj</span> <span class="o">=</span> <span class="n">u_traj</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+    <span class="n">Tc</span>    <span class="o">=</span> <span class="n">u_traj</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+
+    <span class="c1"># creating lists</span>
+    <span class="n">Ca_dat</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span><span class="n">repetitions</span><span class="p">))</span>
+    <span class="n">T_dat</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span><span class="n">repetitions</span><span class="p">))</span>
+    <span class="n">Tc_dat</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">repetitions</span><span class="p">))</span>
+    <span class="n">u_mag_dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">repetitions</span><span class="p">))</span>  
+    <span class="n">u_cha_dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="n">repetitions</span><span class="p">))</span>
+
+    <span class="c1"># multiple repetitions</span>
+    <span class="k">for</span> <span class="n">rep_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
+        <span class="n">x</span>   <span class="o">=</span> <span class="n">x0</span>
+
+        <span class="c1"># main process simulation loop</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">ts</span>      <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="c1"># integrate system</span>
+            <span class="n">y</span>       <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">cstr</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">ts</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">],))</span>
+            <span class="c1"># adding stochastic behaviour </span>
+            <span class="n">s</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">Ca</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">noise</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">0.1</span>    
+            <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>  <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">noise</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">5</span>     
+            <span class="c1"># state update</span>
+            <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ca</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># data collection</span>
+        <span class="n">Ca_dat</span><span class="p">[:,</span><span class="n">rep_i</span><span class="p">]</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Ca</span><span class="p">)</span>
+        <span class="n">T_dat</span><span class="p">[:,</span><span class="n">rep_i</span><span class="p">]</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">Tc_dat</span><span class="p">[:,</span><span class="n">rep_i</span><span class="p">]</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Tc</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ca_dat</span><span class="p">,</span> <span class="n">T_dat</span><span class="p">,</span> <span class="n">Tc_dat</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The below plot shows the reactor simulated for some aleatory input. We assume
+process disturbances, and therefore simulate 10 realizations and plot the
+median along with the interval for all realizations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step cooling temperature to 295</span>
+<span class="n">u_example</span>          <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">u_example</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">30</span><span class="p">]</span>   <span class="o">=</span> <span class="mf">302.0</span>
+<span class="n">u_example</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">]</span> <span class="o">=</span> <span class="mf">295.0</span>
+<span class="n">u_example</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">:]</span>   <span class="o">=</span> <span class="mf">299.0</span>
+
+<span class="c1"># Simulation</span>
+<span class="n">Ca_dat</span><span class="p">,</span> <span class="n">T_dat</span><span class="p">,</span> <span class="n">Tc_dat</span> <span class="o">=</span> <span class="n">simulate_CSTR</span><span class="p">(</span><span class="n">u_example</span><span class="p">,</span> <span class="n">data_res</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Plot the results</span>
+<span class="n">plot_simulation</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span> <span class="n">T_dat</span><span class="p">,</span> <span class="n">Tc_dat</span><span class="p">,</span> <span class="n">data_res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/5e88e0c799b1ee61c78b8700799279f4252156de5ced8c6737299a943043775e.png" src="_images/5e88e0c799b1ee61c78b8700799279f4252156de5ced8c6737299a943043775e.png" />
+</div>
+</div>
+</section>
+<section id="pid-tuning-of-cstr-controller">
+<h2>PID tuning of CSTR controller ➿<a class="headerlink" href="#pid-tuning-of-cstr-controller" title="Permalink to this headline">#</a></h2>
+<p>Now, let’s use some data-driven optimization algorithms to tune the gains for the proportional-integral-derivative (PID) controllers. Here, we address the tuning of PID controllers as a black-box optimization problem.</p>
+<p>The optimization is as follows</p>
+<p><strong>PID tuning Algorithm</strong></p>
+<p><em>Initialization</em></p>
+<p>Collect <span class="math notranslate nohighlight">\(d\)</span> initial datapoints <span class="math notranslate nohighlight">\(\mathcal{D}=\{(\hat{f}^{(j)}=\sum_{k=0}^{k=T_f} (e(k))^2,~K_P^{(j)},K_I^{(j)},K_D^{(j)}) \}_{j=0}^{j=d}\)</span> by simulating <span class="math notranslate nohighlight">\(x(k+1) = f(x(\cdot),u(\cdot))\)</span> for different values of <span class="math notranslate nohighlight">\(K_P,K_I,K_D\)</span></p>
+<p><em>Main loop</em></p>
+<ol class="arabic simple">
+<li><p><em>Repeat</em></p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Build the surrogate model <span class="math notranslate nohighlight">\(\hat{f}_\mathcal{S}(K_P,K_I,K_D)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Optimize the surrogate <span class="math notranslate nohighlight">\(K_P^*,K_I^*,K_D^* = \arg \min_{K_P,K_I,K_D} \hat{f}_\mathcal{S}(K_P,K_I,K_D)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Simulate new values  <span class="math notranslate nohighlight">\( x(k+1) = f(x(k),u(K_P^*,K_I^*,K_D^*;x(k))), ~ k=0,...,T_f-1 \)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Compute <span class="math notranslate nohighlight">\(\hat{f}^{(j+1)}=\sum_{k=0}^{k=T_f} (e(k))^2\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Update: <span class="math notranslate nohighlight">\( \mathcal{D} \leftarrow \mathcal{D}+\{(\hat{f}^{(j+1)},~K_P^*,K_I^*,K_D^*) \}\)</span></p></li>
+<li><p>until stopping criterion is met.</p></li>
+</ol>
+<p>Remarks:</p>
+<ul class="simple">
+<li><p>The initial collection of <span class="math notranslate nohighlight">\(d\)</span> points is generally done by some space filling (e.g. <a class="reference external" href="https://en.wikipedia.org/wiki/Latin_hypercube_sampling">Latin Hypercube</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Sobol_sequence">Sobol Sequence</a>) procedure.</p></li>
+<li><p>Step two is generally done by some sort of least squares minimization <span class="math notranslate nohighlight">\(\min_{\hat{f}_\mathcal{S}}\sum_{j=0}^d(\hat{f}^{(j)}-\hat{f}_\mathcal{S}(K_P^{(j)},K_I^{(j)},K_D^{(j)}))^2\)</span></p></li>
+<li><p>In Step 4 it is common not to optimize <span class="math notranslate nohighlight">\(\hat{f}_\mathcal{S}\)</span> directly, but some adquisition function, for example, the Upper Confidence Bound in Bayesian optimization, where the mean, and some notion of the uncertainty are combined into an objective function that also explores the space.</p></li>
+</ul>
+<p>The example of the CSTR here is slightly more interesting, in that it has 2 state variables as set points, but the overall procedure followed is the same.</p>
+<p>Let’s create a function that computes the PID control action</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##################</span>
+<span class="c1"># PID controller #</span>
+<span class="c1">##################</span>
+
+<span class="k">def</span> <span class="nf">PID</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_setpoint</span><span class="p">,</span> <span class="n">e_history</span><span class="p">):</span>
+
+    <span class="n">Ks</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span>
+    <span class="n">Ks</span>    <span class="o">=</span> <span class="n">Ks</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+
+    <span class="c1"># K gains</span>
+    <span class="n">KpCa</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="n">KiCa</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="n">KdCa</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">KpT</span>  <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span> <span class="n">KiT</span>  <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="n">KdT</span>  <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span> 
+    <span class="n">Kb</span>   <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="c1"># setpoint error</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">x_setpoint</span> <span class="o">-</span> <span class="n">x</span>
+    <span class="c1"># control action</span>
+    <span class="n">u</span>  <span class="o">=</span> <span class="n">KpCa</span><span class="o">*</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">KiCa</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">e_history</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">KdCa</span><span class="o">*</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">e_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">u</span> <span class="o">+=</span> <span class="n">KpT</span> <span class="o">*</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">KiT</span> <span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">e_history</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">KdT</span> <span class="o">*</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">e_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">u</span> <span class="o">+=</span> <span class="n">Kb</span>
+    <span class="n">u</span>  <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]),</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">u</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and define the objective function as a combination of the</p>
+<ul class="simple">
+<li><p>overall error</p></li>
+<li><p>magnitud of control action</p></li>
+<li><p>magnitud of the control action change (from one step to another)</p></li>
+</ul>
+<p>This is a common practice in control problems. Arguably the most important part of the objective function (assuming no constraints) is the overall error from the current point to the tracking point, denotes as the error <span class="math notranslate nohighlight">\(e(k)\)</span>. However it is generally important to consider the magnitud of the control action <span class="math notranslate nohighlight">\(|u(k)|\)</span>, this is how much “fuel” you are using, and in many cases its monetary cost is important. In most cases, it is also important not to drastically change the control action from one time-step to the other <span class="math notranslate nohighlight">\(|u(k+1)-u(k)|\)</span>, this is due to a variety of reasons, from the maintenance perspective of valves and actuators to preference on a smooth trajectory. Additionally, both penalties (magnitud and change) make the problem numerically more stable.</p>
+<p>Therefore, the objective function presented here is as follows</p>
+<div class="math notranslate nohighlight">
+\[f =\sum_{k=0}^{k=T_f-1} w_e|e(k)| + w_u|u(k)| + w_{diff}|u(k+1)-u(k)|\]</div>
+<p>where <span class="math notranslate nohighlight">\(w_e,w_uc,w_{diff}\)</span> are weights that assign importance (or “adimensionalize”) the different elements of the objective function.</p>
+<p><em>Remarks</em>:</p>
+<ul class="simple">
+<li><p>We use the <span class="math notranslate nohighlight">\(\mathcal{l}_1\)</span> norm for the objective function, but an <span class="math notranslate nohighlight">\(\mathcal{l}_2\)</span> norm can also be used.</p></li>
+<li><p>The above is for a 1-dimensional problem in the errors and the controls, but this can be generalized to multiple dimensions (by weighing each dimension accordingly), the code below shows this example.</p></li>
+</ul>
+<p>Note that in the code below the objective function includes a simulation of the system, after which the different components of the objective function are computed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">J_ControlCSTR</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">data_res</span><span class="o">=</span><span class="n">data_res</span><span class="p">,</span> <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    
+    <span class="c1"># load data</span>
+    <span class="n">Ca</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">])</span>
+    <span class="n">T</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">])</span>
+    <span class="n">Tc</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">])</span>
+    <span class="n">t</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">])</span> 
+    <span class="n">x0</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">])</span>    
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># setpoints      </span>
+    <span class="n">Ca_des</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">];</span> <span class="n">T_des</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># upper and lower bounds</span>
+    <span class="n">Tc_ub</span>  <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">];</span>  <span class="n">Tc_lb</span>  <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]</span>
+
+    <span class="c1"># initiate</span>
+    <span class="n">x</span>         <span class="o">=</span> <span class="n">x0</span>
+    <span class="n">e_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Simulate CSTR with PID controller</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># delta t</span>
+        <span class="n">ts</span>      <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="c1"># desired setpoint</span>
+        <span class="n">x_sp</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Ca_des</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">T_des</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="c1"># compute control</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">PID</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_sp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">PID</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_sp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_history</span><span class="p">))</span>
+        <span class="c1"># simulate system</span>
+        <span class="n">y</span>         <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">cstr</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">ts</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">],))</span>
+        <span class="c1"># add process disturbance</span>
+        <span class="n">s</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">Ca</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">noise</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">0.1</span>    
+        <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>  <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">noise</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">5</span>     
+        <span class="c1"># state update</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ca</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># compute tracking error</span>
+        <span class="n">e_history</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x_sp</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+
+    <span class="c1"># == objective == #</span>
+    <span class="c1"># tracking error</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_history</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">0.2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_history</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">15</span>
+    <span class="c1"># penalize magnitud of control action</span>
+    <span class="n">u_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Tc</span><span class="p">[:]</span><span class="o">-</span><span class="n">Tc_lb</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span>
+    <span class="n">u_mag</span> <span class="o">=</span> <span class="n">u_mag</span><span class="o">/</span><span class="mi">10</span>
+    <span class="c1"># penalize change in control action</span>
+    <span class="n">u_cha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Tc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">Tc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">10</span>
+    <span class="n">u_cha</span> <span class="o">=</span> <span class="n">u_cha</span><span class="o">/</span><span class="mi">10</span>
+
+    <span class="c1"># collect data for plots</span>
+    <span class="k">if</span> <span class="n">collect_training_data</span><span class="p">:</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ca</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tc</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;err_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_mag_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_mag</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_cha_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_cha</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span>
+
+    <span class="c1"># sums</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="n">u_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u_mag</span><span class="p">)</span>
+    <span class="n">u_cha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u_cha</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">traj</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">Ca</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Tc</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">error</span> <span class="o">+</span> <span class="n">u_mag</span> <span class="o">+</span> <span class="n">u_cha</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order to pick intial starting points we create below a random search function</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#########################</span>
+<span class="c1"># --- Random search --- #</span>
+<span class="c1">#########################</span>
+
+<span class="c1"># (f, N_x: int, bounds: array[array[float]], N: int = 100) -&gt; array(N_X), float </span>
+<span class="k">def</span> <span class="nf">Random_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span> <span class="n">bounds_rs</span><span class="p">,</span> <span class="n">iter_rs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function is a naive optimization routine that randomly samples the </span>
+<span class="sd">    allowed space and returns the best value.</span>
+
+<span class="sd">    This is used to find a good starting point</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># arrays to store sampled points</span>
+    <span class="n">localx</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_p</span><span class="p">,</span><span class="n">iter_rs</span><span class="p">))</span>  <span class="c1"># points sampled</span>
+    <span class="n">localval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">iter_rs</span><span class="p">))</span>        <span class="c1"># function values sampled</span>
+    <span class="c1"># bounds</span>
+    <span class="n">bounds_range</span> <span class="o">=</span> <span class="n">bounds_rs</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bounds_rs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">bounds_bias</span>  <span class="o">=</span> <span class="n">bounds_rs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">sample_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iter_rs</span><span class="p">):</span>
+        <span class="n">x_trial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_p</span><span class="p">)</span><span class="o">*</span><span class="n">bounds_range</span> <span class="o">+</span> <span class="n">bounds_bias</span> <span class="c1"># sampling</span>
+        <span class="n">localx</span><span class="p">[:,</span><span class="n">sample_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_trial</span>
+        <span class="n">localval</span><span class="p">[</span><span class="n">sample_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_trial</span><span class="p">)</span> <span class="c1"># f</span>
+    <span class="c1"># choosing the best</span>
+    <span class="n">minindex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">localval</span><span class="p">)</span>
+    <span class="n">f_b</span>      <span class="o">=</span> <span class="n">localval</span><span class="p">[</span><span class="n">minindex</span><span class="p">]</span>
+    <span class="n">x_b</span>      <span class="o">=</span> <span class="n">localx</span><span class="p">[:,</span><span class="n">minindex</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">f_b</span><span class="p">,</span><span class="n">x_b</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="bobyqa-bound-optimization-by-quadratic-approximation">
+<h3>BOBYQA - Bound Optimization by Quadratic Approximation<a class="headerlink" href="#bobyqa-bound-optimization-by-quadratic-approximation" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="o">!</span>pip install Py-BOBYQA
+<span class="kn">import</span> <span class="nn">pybobyqa</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">opt_PyBOBYQA</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x_dim</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">iter_tot</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    More info:</span>
+<span class="sd">    https://numericalalgorithmsgroup.github.io/pybobyqa/build/html/userguide.html#a-simple-example</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># iterations to find good starting point</span>
+    <span class="n">n_rs</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="c1"># evaluate first point</span>
+    <span class="n">f_best</span><span class="p">,</span> <span class="n">x_best</span> <span class="o">=</span> <span class="n">Random_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x_dim</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">n_rs</span><span class="p">)</span>
+    <span class="n">iter_</span>          <span class="o">=</span> <span class="n">iter_tot</span> <span class="o">-</span> <span class="n">n_rs</span>
+
+    <span class="c1"># restructure bounds</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[:,</span><span class="mi">0</span><span class="p">];</span> <span class="n">b</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">pybobyqa_bounds</span>    <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">other_outputs</span>      <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">soln</span> <span class="o">=</span> <span class="n">pybobyqa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">seek_global_minimum</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                          <span class="n">objfun_has_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">user_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;restarts.use_restarts&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
+                                         <span class="s1">&#39;logging.save_diagnostic_info&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                         <span class="s1">&#39;logging.save_xk&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> 
+                          <span class="n">maxfun</span><span class="o">=</span><span class="n">iter_</span><span class="p">,</span> 
+                          <span class="n">bounds</span><span class="o">=</span><span class="n">pybobyqa_bounds</span><span class="p">,</span> 
+                          <span class="n">rhobeg</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    
+    <span class="n">other_outputs</span><span class="p">[</span><span class="s1">&#39;soln&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">soln</span>
+    <span class="n">other_outputs</span><span class="p">[</span><span class="s1">&#39;x_all&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">soln</span><span class="o">.</span><span class="n">diagnostic_info</span><span class="p">[</span><span class="s1">&#39;xk&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">soln</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">soln</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">other_outputs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that it is not immidiately clear what the bounds on <span class="math notranslate nohighlight">\(K_P,K_I,K_D\)</span> should be, and these are generally set as a comnbination of intuition, prior knowledge, and trial and error.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iter_tot</span> <span class="o">=</span>  <span class="mi">50</span>
+
+<span class="c1"># bounds</span>
+<span class="n">boundsK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="o">/</span><span class="mf">0.2</span><span class="p">]]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="o">/</span><span class="mi">15</span><span class="p">]]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[[</span><span class="n">Tc_lb</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="n">Tc_lb</span><span class="o">+</span><span class="mi">20</span><span class="p">]])</span>
+
+<span class="c1"># plot training data</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="p">[]</span> 
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;err_train&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_mag_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_cha_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">]</span>          <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">Kbobyqa</span><span class="p">,</span> <span class="n">f_opt</span><span class="p">,</span> <span class="n">other_outputs</span> <span class="o">=</span> <span class="n">opt_PyBOBYQA</span><span class="p">(</span><span class="n">J_ControlCSTR</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">boundsK</span><span class="p">,</span> <span class="n">iter_tot</span><span class="p">)</span>
+<span class="n">end_time</span>   <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;this optimization took &#39;</span><span class="p">,</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span><span class="s1">&#39; (s)&#39;</span><span class="p">)</span>
+
+<span class="n">plot_convergence</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">])[</span><span class="mi">5</span><span class="p">:],</span> <span class="kc">None</span><span class="p">,</span> <span class="n">J_ControlCSTR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>this optimization took  2.0488274097442627  (s)
+</pre></div>
+</div>
+<img alt="_images/a460158d7931a5b977ed0242b28e47adc169a31a764a15dfdb2f1740f535fc6d.png" src="_images/a460158d7931a5b977ed0242b28e47adc169a31a764a15dfdb2f1740f535fc6d.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_training</span><span class="p">(</span><span class="n">data_res</span><span class="p">,</span><span class="n">iter_tot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4458de2fd55650a068d56070e8db4633eea0511bdfef769101e2f1c474dd8b41.png" src="_images/4458de2fd55650a068d56070e8db4633eea0511bdfef769101e2f1c474dd8b41.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reps</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">Ca_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">T_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">Tc_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">):</span>
+  <span class="n">Ca_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">T_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">Tc_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">J_ControlCSTR</span><span class="p">(</span><span class="n">Kbobyqa</span><span class="p">,</span> 
+                                                                <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                                                <span class="n">traj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Plot the results</span>
+<span class="n">plot_simulation</span><span class="p">(</span><span class="n">Ca_eval</span><span class="p">,</span> <span class="n">T_eval</span><span class="p">,</span> <span class="n">Tc_eval</span><span class="p">,</span> <span class="n">data_res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f4fcdea1837679e72ca2da38d4cec72c39d36d9d49c191d2fd08b55fc666a42f.png" src="_images/f4fcdea1837679e72ca2da38d4cec72c39d36d9d49c191d2fd08b55fc666a42f.png" />
+</div>
+</div>
+</section>
+<section id="bo-bayesian-optimization">
+<h3>BO - Bayesian Optimization<a class="headerlink" href="#bo-bayesian-optimization" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="o">!</span>pip install gpyopt
+
+<span class="kn">import</span> <span class="nn">GPyOpt</span>
+<span class="kn">from</span> <span class="nn">GPyOpt.methods</span> <span class="kn">import</span> <span class="n">BayesianOptimization</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">opt_GPyOpt</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x_dim</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">iter_tot</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    params: parameters that define the rbf model</span>
+<span class="sd">    X:      matrix of previous datapoints</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">bounds_GPyOpt</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;var_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;continuous&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;domain&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])}</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">))]</span>
+
+    <span class="n">myBopt</span> <span class="o">=</span> <span class="n">GPyOpt</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">BayesianOptimization</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">bounds_GPyOpt</span><span class="p">)</span>
+    <span class="n">myBopt</span><span class="o">.</span><span class="n">run_optimization</span><span class="p">(</span><span class="n">max_iter</span> <span class="o">=</span> <span class="n">iter_tot</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">myBopt</span><span class="o">.</span><span class="n">x_opt</span><span class="p">,</span> <span class="n">myBopt</span><span class="o">.</span><span class="n">fx_opt</span><span class="p">,</span> <span class="n">myBopt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iter_tot</span> <span class="o">=</span>  <span class="mi">50</span>
+
+<span class="c1"># bounds</span>
+<span class="n">boundsK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="o">/</span><span class="mf">0.2</span><span class="p">]]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="o">/</span><span class="mi">15</span><span class="p">]]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[[</span><span class="n">Tc_lb</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="n">Tc_lb</span><span class="o">+</span><span class="mi">20</span><span class="p">]])</span>
+<span class="c1"># plot training data</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="p">[]</span> 
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;err_train&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_mag_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_cha_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">]</span>          <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">KBOpt</span><span class="p">,</span> <span class="n">f_opt</span><span class="p">,</span> <span class="n">other_outputs</span> <span class="o">=</span> <span class="n">opt_GPyOpt</span><span class="p">(</span><span class="n">J_ControlCSTR</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">boundsK</span><span class="p">,</span> <span class="n">iter_tot</span><span class="p">)</span>
+<span class="n">end_time</span>   <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;this optimization took &#39;</span><span class="p">,</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span><span class="s1">&#39; (s)&#39;</span><span class="p">)</span>
+
+<span class="n">evals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">plot_convergence</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">evals</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">J_ControlCSTR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>this optimization took  35.1505012512207  (s)
+</pre></div>
+</div>
+<img alt="_images/4d29614ec6e9c04461d99b57b3f967f80a3d2e1a4ab14a288beb890836971b46.png" src="_images/4d29614ec6e9c04461d99b57b3f967f80a3d2e1a4ab14a288beb890836971b46.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_training</span><span class="p">(</span><span class="n">data_res</span><span class="p">,</span> <span class="n">iter_tot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/31939cbce41edda696f98adccaa237c235577ea3abccd3192ef331d740c812a0.png" src="_images/31939cbce41edda696f98adccaa237c235577ea3abccd3192ef331d740c812a0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reps</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">Ca_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">T_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">Tc_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">):</span>
+  <span class="n">Ca_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">T_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">Tc_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">J_ControlCSTR</span><span class="p">(</span><span class="n">KBOpt</span><span class="p">,</span> 
+                                                                <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                                                <span class="n">traj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Plot the results</span>
+<span class="n">plot_simulation</span><span class="p">(</span><span class="n">Ca_eval</span><span class="p">,</span> <span class="n">T_eval</span><span class="p">,</span> <span class="n">Tc_eval</span><span class="p">,</span> <span class="n">data_res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b53d7582cac3fb20758bb380a555b33cc3ef6dc77012a772e137b06e74105a28.png" src="_images/b53d7582cac3fb20758bb380a555b33cc3ef6dc77012a772e137b06e74105a28.png" />
+</div>
+</div>
+</section>
+<section id="entmoot-ensemble-tree-model-optimization">
+<h3>EntMooT - Ensemble Tree Model Optimization<a class="headerlink" href="#entmoot-ensemble-tree-model-optimization" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="o">!</span>pip install gurobipy
+    <span class="o">!</span>pip install git+https://github.com/cog-imperial/entmoot
+
+<span class="kn">from</span> <span class="nn">entmoot.optimizer.optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">opt_ENTMOOT</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x_dim</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">iter_tot</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    params: parameters that define the rbf model</span>
+<span class="sd">    X:      matrix of previous datapoints</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span>
+                    <span class="n">base_estimator</span><span class="o">=</span><span class="s2">&quot;ENTING&quot;</span><span class="p">,</span>
+                    <span class="n">n_initial_points</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">iter_tot</span><span class="o">*</span><span class="mf">.2</span><span class="p">),</span>
+                    <span class="n">initial_point_generator</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>
+                    <span class="n">acq_func</span><span class="o">=</span><span class="s2">&quot;LCB&quot;</span><span class="p">,</span>
+                    <span class="n">acq_optimizer</span><span class="o">=</span><span class="s2">&quot;sampling&quot;</span><span class="p">,</span>
+                    <span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                    <span class="n">model_queue_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">base_estimator_kwargs</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;lgbm_params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;min_child_samples&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+    <span class="c1"># run optimizer for 20 iterations</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="n">iter_tot</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span><span class="p">,</span> <span class="n">res</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iter_tot</span> <span class="o">=</span>  <span class="mi">50</span>
+
+<span class="c1"># bounds</span>
+<span class="n">boundsK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="o">/</span><span class="mf">0.2</span><span class="p">]]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="o">/</span><span class="mi">15</span><span class="p">]]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[[</span><span class="n">Tc_lb</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="n">Tc_lb</span><span class="o">+</span><span class="mi">20</span><span class="p">]])</span>
+<span class="c1"># plot training data</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="p">[]</span> 
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;err_train&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_mag_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_cha_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">]</span>          <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">KentMoot</span><span class="p">,</span> <span class="n">f_opt</span><span class="p">,</span> <span class="n">other_outputs</span> <span class="o">=</span> <span class="n">opt_ENTMOOT</span><span class="p">(</span><span class="n">J_ControlCSTR</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">boundsK</span><span class="p">,</span> <span class="n">iter_tot</span><span class="p">)</span>
+<span class="n">end_time</span>   <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;this optimization took &#39;</span><span class="p">,</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span><span class="s1">&#39; (s)&#39;</span><span class="p">)</span>
+
+<span class="c1">#evals = np.array(data_res[&#39;Ks&#39;]).shape[0]</span>
+<span class="n">plot_convergence</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ks&#39;</span><span class="p">]),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">J_ControlCSTR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                           | 0/50 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|████████▎                                                                          | 5/50 [00:00&lt;00:01, 40.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20%|████████████████▍                                                                 | 10/50 [00:00&lt;00:01, 39.28it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 28%|██████████████████████▉                                                           | 14/50 [00:02&lt;00:10,  3.57it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 34%|███████████████████████████▉                                                      | 17/50 [00:04&lt;00:13,  2.52it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 38%|███████████████████████████████▏                                                  | 19/50 [00:06&lt;00:15,  2.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 40%|████████████████████████████████▊                                                 | 20/50 [00:07&lt;00:15,  1.95it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 42%|██████████████████████████████████▍                                               | 21/50 [00:07&lt;00:15,  1.83it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 44%|████████████████████████████████████                                              | 22/50 [00:08&lt;00:16,  1.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 46%|█████████████████████████████████████▋                                            | 23/50 [00:09&lt;00:16,  1.60it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 48%|███████████████████████████████████████▎                                          | 24/50 [00:10&lt;00:16,  1.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████████████████████████████████████████                                         | 25/50 [00:10&lt;00:17,  1.47it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 52%|██████████████████████████████████████████▋                                       | 26/50 [00:11&lt;00:17,  1.34it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 54%|████████████████████████████████████████████▎                                     | 27/50 [00:12&lt;00:17,  1.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 56%|█████████████████████████████████████████████▉                                    | 28/50 [00:13&lt;00:16,  1.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 58%|███████████████████████████████████████████████▌                                  | 29/50 [00:14&lt;00:15,  1.34it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 60%|█████████████████████████████████████████████████▏                                | 30/50 [00:14&lt;00:14,  1.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 62%|██████████████████████████████████████████████████▊                               | 31/50 [00:15&lt;00:14,  1.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 64%|████████████████████████████████████████████████████▍                             | 32/50 [00:16&lt;00:13,  1.36it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 66%|██████████████████████████████████████████████████████                            | 33/50 [00:17&lt;00:12,  1.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 68%|███████████████████████████████████████████████████████▊                          | 34/50 [00:17&lt;00:11,  1.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 70%|█████████████████████████████████████████████████████████▍                        | 35/50 [00:18&lt;00:11,  1.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 72%|███████████████████████████████████████████████████████████                       | 36/50 [00:19&lt;00:10,  1.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 74%|████████████████████████████████████████████████████████████▋                     | 37/50 [00:20&lt;00:09,  1.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 76%|██████████████████████████████████████████████████████████████▎                   | 38/50 [00:20&lt;00:09,  1.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 78%|███████████████████████████████████████████████████████████████▉                  | 39/50 [00:21&lt;00:08,  1.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 80%|█████████████████████████████████████████████████████████████████▌                | 40/50 [00:22&lt;00:07,  1.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 82%|███████████████████████████████████████████████████████████████████▏              | 41/50 [00:23&lt;00:06,  1.30it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 84%|████████████████████████████████████████████████████████████████████▉             | 42/50 [00:23&lt;00:06,  1.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 86%|██████████████████████████████████████████████████████████████████████▌           | 43/50 [00:24&lt;00:05,  1.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 88%|████████████████████████████████████████████████████████████████████████▏         | 44/50 [00:25&lt;00:04,  1.27it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 90%|█████████████████████████████████████████████████████████████████████████▊        | 45/50 [00:26&lt;00:03,  1.27it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 92%|███████████████████████████████████████████████████████████████████████████▍      | 46/50 [00:27&lt;00:03,  1.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 94%|█████████████████████████████████████████████████████████████████████████████     | 47/50 [00:28&lt;00:02,  1.18it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 96%|██████████████████████████████████████████████████████████████████████████████▋   | 48/50 [00:28&lt;00:01,  1.20it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 98%|████████████████████████████████████████████████████████████████████████████████▎ | 49/50 [00:29&lt;00:00,  1.21it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████████████████████████████████████████████████| 50/50 [00:30&lt;00:00,  1.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████████████████████████████████████████████████████████████████████████████| 50/50 [00:30&lt;00:00,  1.64it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>this optimization took  30.688970804214478  (s)
+</pre></div>
+</div>
+<img alt="_images/ba9cb094eebd8a53331f2f6506d60cb1a04ee1740946ef4df4dae4930f4ae433.png" src="_images/ba9cb094eebd8a53331f2f6506d60cb1a04ee1740946ef4df4dae4930f4ae433.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_training</span><span class="p">(</span><span class="n">data_res</span><span class="p">,</span><span class="n">iter_tot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1d79f87b04039569caef0616c820fe7c624502cbf1bc4f95384e88ee7ae380aa.png" src="_images/1d79f87b04039569caef0616c820fe7c624502cbf1bc4f95384e88ee7ae380aa.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reps</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">Ca_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">T_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">Tc_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">):</span>
+  <span class="n">Ca_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">T_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">Tc_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">J_ControlCSTR</span><span class="p">(</span><span class="n">KentMoot</span><span class="p">,</span> 
+                                                                <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                                                <span class="n">traj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Plot the results</span>
+<span class="n">plot_simulation</span><span class="p">(</span><span class="n">Ca_eval</span><span class="p">,</span> <span class="n">T_eval</span><span class="p">,</span> <span class="n">Tc_eval</span><span class="p">,</span> <span class="n">data_res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1f9e3b6857a6e4b679195241fc1ecc4844908d8841b5fa6ed3284c38136b0dfe.png" src="_images/1f9e3b6857a6e4b679195241fc1ecc4844908d8841b5fa6ed3284c38136b0dfe.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="final-remarks">
+<h2>Final remarks<a class="headerlink" href="#final-remarks" title="Permalink to this headline">#</a></h2>
+<p>This notebook presents three different data-driven optimization methods for PID tuning. We suggest that you try out these methods in your own problems to get a feel for them.</p>
+<p>Some rules of thumb (which can be easily disproven) are as follows: BOBYQA is faster than EntMooT which is faster than Bayesian optimization. However, if the samples allowed is low, say lower than 50 (either because of computational, time, or monetary limitations), Bayesian optimization is likely to perform the best, followed by EntMooT, followed by BOBYQA. As the number of possible evaluations increase, this order is reversed.</p>
+<p>All three algortihms presented here have many hyperparameters (have a look at their documentation!) and can be extremely efficient if used with enough knowledge and practice.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_Hybrid_CSTR.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">5. Hybrid model for CSTR 🔆</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="07_RL_PID.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">7. Reinforcement learning for PID tuning 🐶</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-driven-optimization">Data-driven optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pid-controller">PID controller</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cstr-model">CSTR model 💻</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cstr-simulation">CSTR simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pid-tuning-of-cstr-controller">PID tuning of CSTR controller ➿</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bobyqa-bound-optimization-by-quadratic-approximation">BOBYQA - Bound Optimization by Quadratic Approximation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bo-bayesian-optimization">BO - Bayesian Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#entmoot-ensemble-tree-model-optimization">EntMooT - Ensemble Tree Model Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-remarks">Final remarks</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Edgar Ivan Sanchez Medina, Antonio del Rio Chanona and Caroline Ganzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

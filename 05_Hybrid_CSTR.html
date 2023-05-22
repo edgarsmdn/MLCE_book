@@ -1,0 +1,1389 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>5. Hybrid model for CSTR 🔆 &#8212; Machine Learning in Chemical Engineering</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '05_Hybrid_CSTR';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. PID tuning via data-driven optimization 🔩" href="06_PID_tuning.html" />
+    <link rel="prev" title="4. Deep Neural Networks for VLE prediction 🌐" href="04_DNN_VLE.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_Overview.html">An overview of the course 🔭</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_Introduction_Python.html">1. Introduction to Python 🐍</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_DNN_VLE.html">4. Deep Neural Networks for VLE prediction 🌐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="07_RL_PID.html">7. Reinforcement learning for PID tuning 🐶</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F05_Hybrid_CSTR.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/05_Hybrid_CSTR.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>5. Hybrid model for CSTR 🔆</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-principles-model-part-for-cstr">First-principles model part for CSTR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#serial-model-construction">Serial model construction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-description">Problem description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-equations-and-solution-procedure">Sensitivity equations and solution procedure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loss-function-and-sensitivity-equations-for-hybrid-cstr-model">Loss function and sensitivity equations for hybrid CSTR model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#differentiation-autograd">Differentiation &amp; autograd</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-autograd">Exercise - autograd ❗❗</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hybrid-model-for-cstr">
+<h1>5. Hybrid model for CSTR 🔆<a class="headerlink" href="#hybrid-model-for-cstr" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/05_Hybrid_CSTR.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<p>This Notebook was initially prepared by <a class="reference external" href="https://www.linkedin.com/in/marcus-wenzel-356a34184/?originalSubdomain=de">Marcus Wenzel</a> and few modifications have been made by us.</p>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>We will build a hybrid model for a reactor</p></li>
+<li><p>We will train the model using sensitivity equations and autodiff</p></li>
+</ul>
+</section>
+<section id="a-quick-reminder">
+<h2>A quick reminder ✅<a class="headerlink" href="#a-quick-reminder" title="Permalink to this headline">#</a></h2>
+<p><strong>Data-driven models</strong> are also known as black-box models, or machine learning-based, empirical models. <strong>Mechanistic models</strong> are also called white-box models, or knowledge-based, first-principles, or phenomenological models. <strong>Hybrid</strong>, or grey-box models models combine understanding of physical/chemical/biological processes in mechanistic models with modelling unknown phenomena via data-driven approaches [<span id="id1">[<a class="reference internal" href="#id11" title="Jarka Glassey and Moritz Von Stosch. Hybrid modeling in process industries. CRC Press, 2018.">GVS18</a>, <a class="reference internal" href="#id13" title="Kevin McBride, Edgar Ivan Sanchez Medina, and Kai Sundmacher. Hybrid semi-parametric modeling in separation processes: a review. Chemie Ingenieur Technik, 92(7):842–855, 2020.">MSMS20</a>, <a class="reference internal" href="#id12" title="Moritz Von Stosch, Rui Oliveira, Joana Peres, and Sebastião Feyo de Azevedo. Hybrid semi-parametric modeling in process systems engineering: past, present and future. Computers &amp; Chemical Engineering, 60:86–101, 2014.">VSOPdA14</a>]</span>].</p>
+<p>Hybrid models aim to balance the advantages and disadvantages of mechanistic and data-driven models. Fundamental knowledge introduces structure to data-driven models, so not all interactions have to be learned by the model. ML-based models introduce a statistical element to knowledge-based models, so not all interactions have to be explained by first-principles.</p>
+<p>Advantages of hybrid models include: Lower data requirements, improved understanding of the system, and better extrapolation compared to purely data-driven models; higher estimation/prediction accuracy, more efficient model development compared to purely mechanistic models.</p>
+</section>
+<section id="first-principles-model-part-for-cstr">
+<h2>First-principles model part for CSTR<a class="headerlink" href="#first-principles-model-part-for-cstr" title="Permalink to this headline">#</a></h2>
+<p>We model a continuous stirred tank reactor (CSTR) with the following liquid-phase reaction:
+$<span class="math notranslate nohighlight">\(
+A + B \rightleftarrows X
+\)</span>$</p>
+<p>The reactor is fed by a feed of flowrate <span class="math notranslate nohighlight">\(F_{in}\)</span> and concentrations <span class="math notranslate nohighlight">\(C_{i, in}\)</span> with <span class="math notranslate nohighlight">\(i\)</span> denoting species <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(X\)</span>. The reactor has constant volume <span class="math notranslate nohighlight">\(V\)</span> and is assumed to be perfectly mixed, with an average residence time <span class="math notranslate nohighlight">\(\tau\)</span>. The concentrations in the reactor are denoted by <span class="math notranslate nohighlight">\(C_{i}\)</span>. A stream with constant flowrate <span class="math notranslate nohighlight">\(F=F_{in}\)</span> exits the reactor:</p>
+<figure class="align-center" id="id16">
+<a class="reference internal image-reference" href="_images/CSTR_vars_2.png"><img alt="cstr" src="_images/CSTR_vars_2.png" style="width: 40%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Schematic representation of the CSTR considered here</span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Let’s say we use the following reactor model:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm{d}N_A}{\mathrm{d}t} = C_{i,in}F_{in} - C_{i}F - \nu_i rV
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\Leftrightarrow \frac{\mathrm{d}C_A}{\mathrm{d}t} = \frac{C_{A,in} - C_A}{\tau} - r
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm{d}C_B}{\mathrm{d}t} = \frac{C_{B,in} - C_B}{\tau} - r
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm{d}C_X}{\mathrm{d}t} = \frac{C_{X,in} - C_X}{\tau} + r
+\]</div>
+<p>The changes in concentration are a result of material added and withdrawn from the reactor as well as created or consumed by the reaction with stochiometric coefficients <span class="math notranslate nohighlight">\(\nu_i\)</span> and reaction rate <span class="math notranslate nohighlight">\(r\)</span>. We assume an average residence time of <span class="math notranslate nohighlight">\(\tau= \frac{V}{F} = 100s\)</span>. The inlet concentrations of substance <span class="math notranslate nohighlight">\(i\)</span> into the reactor are given by</p>
+<div class="math notranslate nohighlight">
+\[
+C_{A,in} = 0.7\,\mathrm{kmol/m^3}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+C_{B,in} = 0.3\,\mathrm{kmol/m^3}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+C_{X,in} = 0\,\mathrm{kmol/m^3}
+\]</div>
+<p>For solving the differential equation system, we also need to know the initial concentration of each substance inside the reactor, denoted as <span class="math notranslate nohighlight">\(C_{i,0}\)</span>. From the data it is known that the experiment was started with the following initial concentrations:</p>
+<div class="math notranslate nohighlight">
+\[
+C_{A,0} = 0.5\,\mathrm{kmol/m^3}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+C_{B,0} = 0.5\,\mathrm{kmol/m^3}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+C_{X,0} = 0\,\mathrm{kmol/m^3}
+\]</div>
+<p>Time-dependent experimental measurements for all concentrations are available:</p>
+<figure class="align-center" id="id17">
+<a class="reference internal image-reference" href="_images/CSTR_experimental.png"><img alt="cstr_measurements" src="_images/CSTR_experimental.png" style="width: 60%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">CSTR measurements of the concentrations.</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The task is to construct a <strong>serial hybrid model</strong>, in which the reaction rate <span class="math notranslate nohighlight">\(r\)</span> is described by a data-driven model. In this particular example, a <strong>neural network</strong> will be used.</p>
+</section>
+<section id="serial-model-construction">
+<h2>Serial model construction<a class="headerlink" href="#serial-model-construction" title="Permalink to this headline">#</a></h2>
+<section id="problem-description">
+<h3>Problem description<a class="headerlink" href="#problem-description" title="Permalink to this headline">#</a></h3>
+<p>The problem with constructing a serial hybrid model, as exemplified above, is that <em>the data-driven model cannot be trained independently of the differential equation system</em> that describes the system (mechanistic part of the hybrid model). The neural network has to learn the function <span class="math notranslate nohighlight">\(r=f(C)\)</span> but, of course, we do not have values for <span class="math notranslate nohighlight">\(r\)</span> which we could use to train the model. One way to solve this problem is by using <strong>sensitivity equations</strong>. This approach will be discussed in the following.</p>
+</section>
+<section id="sensitivity-equations-and-solution-procedure">
+<h3>Sensitivity equations and solution procedure<a class="headerlink" href="#sensitivity-equations-and-solution-procedure" title="Permalink to this headline">#</a></h3>
+<p>We can describe the differential equation system as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm{d}y}{\mathrm{d}t} = f(y, u,\phi(y,w))
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(y\)</span> are states of the system, <span class="math notranslate nohighlight">\(u\)</span> are system inputs and <span class="math notranslate nohighlight">\(\phi(y,w)\)</span> denotes a data-driven model that describes a part of the mechanistic model with the use of the states <span class="math notranslate nohighlight">\(y\)</span> and a set of parameter values <span class="math notranslate nohighlight">\(w\)</span>. In the case of a neural network, the parameter vector <span class="math notranslate nohighlight">\(w\)</span> includes all the weights and biases.</p>
+<p>In order to train any kind of model, we need a <strong>loss or cost function</strong> (denoted here by <span class="math notranslate nohighlight">\(J\)</span>) to estimate the quality of our model predictions. Often times, the sum of squares of the deviations between the model predictions and the data is used as an objective for parameter estimation:</p>
+<div class="math notranslate nohighlight">
+\[
+J = 0.5 \sum_{i=1}^N\left(y_i - y_{i, \text{exp}}\right)^2,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(y\)</span> are the set of model predictions corresponding to the <span class="math notranslate nohighlight">\(N\)</span> measurement points <span class="math notranslate nohighlight">\(y_\text{i,exp}\)</span>. The model predictions depend on <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(w\)</span>, i.e. <span class="math notranslate nohighlight">\(y=f(u,w)\)</span>.</p>
+<p>Usually, when training a neural network, the gradient of the loss function with respect to the network parameters is used for optimization. The gradient of the loss function with respect to a single parameter <span class="math notranslate nohighlight">\(w_j\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial J}{\partial w_j} = \sum_{i=1}^N\left(y_i - y_{i, \text{exp}}\right)\frac{\partial y}{\partial w_j}.
+\]</div>
+<p>As can be seen, the gradient depends on <span class="math notranslate nohighlight">\(\frac{\partial y}{\partial w_j}\)</span>, i.e. the sensitivities of the system states with respect to the parameters (the weights and biases characterizing the neural network). Training of the neural network is then achieved by iteratively updating the parameters according to</p>
+<div class="math notranslate nohighlight">
+\[
+w_j^{n+1} = w_j^{n} - g \frac{\partial J}{\partial w_j^{n}},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(w_j^{n+1}\)</span> is the updated parameter that is calculated from the current parameter <span class="math notranslate nohighlight">\(w_j^{n}\)</span> using the gradient <span class="math notranslate nohighlight">\(\frac{\partial J}{\partial w_j^{n}}\)</span> and a learning rate (step size) <span class="math notranslate nohighlight">\(g\)</span>.</p>
+<p>The problem could be solved once we have the sensitivities <span class="math notranslate nohighlight">\(\frac{\partial y}{\partial w_j}\)</span>. Since the mechanistic part of the model is given by a differential equation system, calculating these sensitivities is a bit more complicated than for an algebraic model. Using local sensitivity analysis of the ODE system and denoting the sensitivities <span class="math notranslate nohighlight">\(\frac{\partial y}{\partial w_j}\)</span> as <span class="math notranslate nohighlight">\(s_j\)</span>, the sensitivities can be described by</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm{d}s_j}{\mathrm{d}t} = \frac{\partial f}{\partial y}s_j + \frac{\partial f}{\partial w_j}.
+\]</div>
+<p>This equation is a differential equation for the sensitivities. Since <span class="math notranslate nohighlight">\(f\)</span> depends on the system states, the differential equations for the sensitivities need to be integrated simultaneously with the ODE system of the mechanistic part.</p>
+</section>
+<section id="loss-function-and-sensitivity-equations-for-hybrid-cstr-model">
+<h3>Loss function and sensitivity equations for hybrid CSTR model<a class="headerlink" href="#loss-function-and-sensitivity-equations-for-hybrid-cstr-model" title="Permalink to this headline">#</a></h3>
+<p>For the reactor example above, the loss function is defined as</p>
+<div class="math notranslate nohighlight">
+\[
+J = 0.5\left[ \sum_{i=1}^N\left(C_{A,i} - C_{A,i,\text{exp}}\right)^2 + \sum_{i=1}^N\left(C_{B,i} - C_{B,i,\text{exp}}\right)^2 + \sum_{i=1}^N\left(C_{X,i} - C_{X,i,\text{exp}}\right)^2\right],
+\]</div>
+<p>if we assume that we have measurements for all components at each point <span class="math notranslate nohighlight">\(i\)</span>. Then, the gradient of the loss function with respect to the parameters <span class="math notranslate nohighlight">\(w\)</span> is given as</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial J}{\partial w_j} = \sum_{i=1}^N\left(C_{A,i} - C_{A,i,\text{exp}}\right)\frac{\partial C_{A,i}}{\partial w_j} + \sum_{i=1}^N\left(C_{B,i} - C_{B,i,\text{exp}}\right)\frac{\partial C_{B,i}}{\partial w_j} + \sum_{i=1}^N\left(C_{X,i} - C_{X,i,\text{exp}}\right)\frac{\partial C_{X,i}}{\partial w_j},
+\]</div>
+<p>since the concentrations <span class="math notranslate nohighlight">\(C_A\)</span>, <span class="math notranslate nohighlight">\(C_B\)</span> and <span class="math notranslate nohighlight">\(C_X\)</span> are all functions of the parameters of the neural network (weights and biases). The sensitivities are calculated by combining the sensitivity equations with the model definition, according to the following ODE system for each parameter <span class="math notranslate nohighlight">\(w_j\)</span>, :</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\mathrm{d}}{\mathrm{d}t}\begin{bmatrix}
+  \frac{\partial C_{A}}{\partial w_j}\\
+  \frac{\partial C_{B}}{\partial w_j}\\
+  \frac{\partial C_{X}}{\partial w_j}\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+  -\frac{1}{\tau}-\frac{\partial r}{\partial c_A} &amp; -\frac{\partial r}{\partial c_B} &amp; -\frac{\partial r}{\partial c_X}\\
+  -\frac{\partial r}{\partial c_A} &amp; -\frac{1}{\tau}-\frac{\partial r}{\partial c_B} &amp; -\frac{\partial r}{\partial c_X} \\
+  +\frac{\partial r}{\partial c_A} &amp; +\frac{\partial r}{\partial c_B} &amp; -\frac{1}{\tau}+\frac{\partial r}{\partial c_X} \\
+\end{bmatrix}
+\begin{bmatrix}
+  \frac{\partial c_{A}}{\partial w_j}\\
+  \frac{\partial c_{B}}{\partial w_j}\\
+  \frac{\partial c_{X}}{\partial w_j}\\
+\end{bmatrix}
++
+\begin{bmatrix}
+  -\frac{\partial r}{\partial w_j}\\
+  -\frac{\partial r}{\partial w_j}\\
+  +\frac{\partial r}{\partial w_j}\\
+\end{bmatrix}
+\end{split}\]</div>
+<p>Hence, for <span class="math notranslate nohighlight">\(p\)</span> parameters and <span class="math notranslate nohighlight">\(l\)</span> system states, there are <span class="math notranslate nohighlight">\(p*l\)</span> sensitivity equations to be integrated additionally to the <span class="math notranslate nohighlight">\(l\)</span> system equations. If a neural network with 3 input nodes, 10 hidden nodes and 1 output node is used, the total number of parameters is <span class="math notranslate nohighlight">\(3*10+10+10*1+1=51\)</span> parameters for three states (<span class="math notranslate nohighlight">\(C_A\)</span>, <span class="math notranslate nohighlight">\(C_B\)</span> and <span class="math notranslate nohighlight">\(C_X\)</span>). Thus, there would be <span class="math notranslate nohighlight">\(3*51=153\)</span> sensitivity equations to be integrated, which quickly becomes computationally intensive.</p>
+</section>
+</section>
+<section id="differentiation-autograd">
+<h2>Differentiation &amp; autograd<a class="headerlink" href="#differentiation-autograd" title="Permalink to this headline">#</a></h2>
+<p>In order to train and run the model, we will need to compute derivates. Automatic differentiation (autodiff) is an algorithm for the fast calculation of accurate derivatives. We will use autograd, the implementation of autodiff in the pytorch package.</p>
+<p>Let’s see how it works:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="o">!</span>pip install autograd
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autograd</span>
+<span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s define a function and differentiate it with autograd:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ex_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mf">3.</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mf">10.</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mf">4.</span>
+    <span class="c1">#y = np.tanh(x)</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="n">ex_deriv</span> <span class="o">=</span> <span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">ex_function</span><span class="p">)</span>
+
+<span class="nb">input</span> <span class="o">=</span> <span class="mf">3.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;value of the function: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex_function</span><span class="p">(</span><span class="nb">input</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;value of the derivative: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex_deriv</span><span class="p">(</span><span class="nb">input</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>value of the function: -26.0
+value of the derivative: -19.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note: Autograd required inputs to be <code class="docutils literal notranslate"><span class="pre">float</span></code> (<code class="docutils literal notranslate"><span class="pre">int</span></code> will not work!).</p>
+<p>We can show this for ranges:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deriv1</span> <span class="o">=</span> <span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">ex_function</span><span class="p">)</span>
+<span class="n">deriv2</span> <span class="o">=</span> <span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">deriv1</span><span class="p">)</span>
+<span class="n">deriv3</span> <span class="o">=</span> <span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">deriv2</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">y3</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ex_function</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">y1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">deriv1</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">y2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">deriv2</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">y3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">deriv3</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;f&#39;(x)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="mf">0.7</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;f&#39;&#39;(x)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;f&#39;&#39;&#39;(x)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="mf">0.3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="c1">#f.legend(loc=(0.75,0.2))</span>
+<span class="n">f</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;center right&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">0.25</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;f(x)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;f(x)&#39;)
+</pre></div>
+</div>
+<img alt="_images/40e9596d570bad49f1248a63969e68586c5df3e969abd09b6725fde8b8d6a57f.png" src="_images/40e9596d570bad49f1248a63969e68586c5df3e969abd09b6725fde8b8d6a57f.png" />
+</div>
+</div>
+<section id="exercise-autograd">
+<h3>Exercise - autograd ❗❗<a class="headerlink" href="#exercise-autograd" title="Permalink to this headline">#</a></h3>
+<p>Just to practice: implement another function and calculate its derivatives using autograd. Plot them similarly to the above example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">#</a></h2>
+<p>Let’s first import the relevant packages:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autograd</span> <span class="kn">import</span> <span class="n">jacobian</span>
+<span class="kn">from</span> <span class="nn">autograd.misc.optimizers</span> <span class="kn">import</span> <span class="n">adam</span>
+<span class="kn">from</span> <span class="nn">autograd.scipy.integrate</span> <span class="kn">import</span> <span class="n">odeint</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we build the neural network. The first function generates random numbers in the shape needed to initialize the neural network. The second function is handed the parameters describing the network as well as an input, and returns the prediction of the network.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initialize random number generator for repeatable results</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">init_random_params</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Build a list of weights and biases, one for each layer in the net.</span>
+<span class="sd">    layers is a list with the number of nodes in each layer. Minimum number of layers is three (input, hidden </span>
+<span class="sd">    and output) scale is a constant factor to scale the random values (down or up) if necessary&quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">weight_mat_elem</span> <span class="o">=</span> <span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">*</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">bias_vec_elem</span> <span class="o">=</span> <span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">weight_mat_elem</span><span class="o">+</span><span class="n">bias_vec_elem</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">params</span><span class="o">*</span><span class="n">scale</span>
+
+<span class="k">def</span> <span class="nf">neural_net_predict</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implements a (deep) neural network for regression.</span>
+<span class="sd">       params is a list of weights and biases.</span>
+<span class="sd">       inputs is a matrix of input values.</span>
+<span class="sd">       returns network prediction.&quot;&quot;&quot;</span>
+    <span class="c1"># Make sure that params is a vector</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="c1"># set separator value for easier indexing of the parameters and assigning them to weights and biases </span>
+    <span class="c1"># for each layer</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># loop over all layers</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># calculate weight matrix</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">sep</span><span class="p">:</span><span class="n">sep</span><span class="o">+</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">*</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># calculate bias vector</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">sep</span><span class="o">+</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">*</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span><span class="n">sep</span><span class="o">+</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">*</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                   <span class="o">+</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="c1"># set new separator value</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">*</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">layer_sizes</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># calculate output as weighted sum of inputs plus bias</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="c1"># apply activation function and assign the result as the input to the next layer </span>
+        <span class="c1"># (note that this has no effect on the output layer)</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">outputs</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">outputs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now initialized the model parameters:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># system parameters</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c1"># inlet concentrations</span>
+<span class="n">c_Ain</span> <span class="o">=</span> <span class="mf">0.7</span>
+<span class="n">c_Bin</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="n">c_Xin</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># initial conditions for the concentrations in the reactor</span>
+<span class="n">c_A0</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">c_B0</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">c_X0</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># end time for integration</span>
+<span class="n">t_end</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">t_span</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we implement the mechanistic part of the model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define system equations</span>
+<span class="k">def</span> <span class="nf">dcdt</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mechanistic part of the hybrid model (ODE system describing the time-dependent </span>
+<span class="sd">    concentrations in the reactor)&quot;&quot;&quot;</span>
+    <span class="c1"># disassemble input vector</span>
+    <span class="n">c_A</span><span class="p">,</span> <span class="n">c_B</span><span class="p">,</span> <span class="n">c_X</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="c1"># calculate reaction rates by neural network prediction</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">neural_net_predict</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="c1">#r = 0.08*c_A**0.7*c_B**1.3 # true underlying reaction rate</span>
+    <span class="c1"># system equations</span>
+    <span class="n">dcdt</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c_Ain</span><span class="o">-</span><span class="n">c_A</span><span class="p">)</span><span class="o">/</span><span class="n">tau</span> <span class="o">-</span> <span class="n">r</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">c_Bin</span><span class="o">-</span><span class="n">c_B</span><span class="p">)</span><span class="o">/</span><span class="n">tau</span> <span class="o">-</span> <span class="n">r</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">c_Xin</span><span class="o">-</span><span class="n">c_X</span><span class="p">)</span><span class="o">/</span><span class="n">tau</span> <span class="o">+</span> <span class="n">r</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dcdt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we use the autograd package to calculate the jacobian with respect to the system states and the parameters, which we’ll need for the sensitivity equations:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate system jacobian and parameter derivatives by automatic differentiation with autograd</span>
+<span class="n">dfdc</span> <span class="o">=</span> <span class="n">autograd</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">dcdt</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>    <span class="c1"># system jacobian</span>
+<span class="n">dfdp</span> <span class="o">=</span> <span class="n">autograd</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">dcdt</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>    <span class="c1"># parameter derivatives</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We write a function that takes in the system variables <span class="math notranslate nohighlight">\(y\)</span> at time <span class="math notranslate nohighlight">\(t\)</span> and calculates the sensitivities:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># differential equation system</span>
+<span class="k">def</span> <span class="nf">DiffEqs</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Hybrid model including the ODE system for the concentrations as well as the sensitivities </span>
+<span class="sd">    that are used for training the neural network part of the model&quot;&quot;&quot;</span>
+    <span class="c1"># disassemble input vector</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+    <span class="c1"># evaluate system jacobian at current point</span>
+    <span class="n">dfdc_eval</span> <span class="o">=</span> <span class="n">dfdc</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+    <span class="c1"># evaluate parameter derivatives at current point</span>
+    <span class="n">dfdp_eval</span> <span class="o">=</span> <span class="n">dfdp</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span> <span class="c1"># Shape: (3, 1, 16)</span>
+    
+    <span class="c1"># define sensitivities for all parameters</span>
+    <span class="n">dcdp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="c1"># preallocate memory for sensitivities</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_p</span><span class="p">):</span>  <span class="c1"># loop over all parameters to construct the corresponding sensitivity equations</span>
+        <span class="n">dcdp</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">len_c</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">len_c</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dfdc_eval</span> <span class="o">@</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">len_c</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">len_c</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">+</span> <span class="n">dfdp_eval</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> 
+        <span class="c1"># construct sensitivities (see https://docs.sciml.ai/v4.0/analysis/sensitivity.html#Example-solving-an-</span>
+        <span class="c1"># ODELocalSensitivityProblem-1)</span>
+        <span class="c1"># [c1/w1, c2/w1, c3/w1, c1/w2, ...]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">dcdt</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">dcdp</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For training the network, the following parameters need to be specified:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Training parameters</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mf">0.0005</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.001</span>
+
+<span class="c1"># set neural network size</span>
+<span class="n">layer_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1"># no. of nodes in input layer, hidden layer(s) and output layer</span>
+
+<span class="c1"># initialize parameter vector for neural network or load saved parameters</span>
+<span class="n">init_params</span> <span class="o">=</span> <span class="n">init_random_params</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we specify the initial value of the variables:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># assemble initial value vector</span>
+<span class="n">c0</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_A0</span><span class="p">,</span> <span class="n">c_B0</span><span class="p">,</span> <span class="n">c_X0</span><span class="p">]</span>
+<span class="n">len_c</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c0</span><span class="p">)</span>
+<span class="n">len_p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">init_params</span><span class="p">)</span>
+<span class="n">s0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">len_p</span><span class="o">*</span><span class="n">len_c</span><span class="p">))</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">c0</span><span class="p">,</span><span class="n">s0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s import the training data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/CSTR_ODE_data.txt&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;references/CSTR_ODE_data.txt&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+<span class="n">c_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following defines the objective function, also known as loss/risk/error function. First, the model is run, then the difference between experimental data and model prediction is calculated as objective value:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Objective function (sum of squared errors between measurements and model predictions)&quot;&quot;&quot;</span>
+    <span class="c1"># calculate hybrid model in forward direction with odeint</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">DiffEqs</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">t_span</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">params</span><span class="p">,))</span>
+    <span class="c1"># disassemble results</span>
+    <span class="n">c_pred</span> <span class="o">=</span> <span class="n">sol</span><span class="p">[:,:</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># predicted concentrations</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">((</span><span class="n">c_pred</span> <span class="o">-</span> <span class="n">c_exp</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">c_pred</span> <span class="o">-</span> <span class="n">c_exp</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order to train the model, we require the gradient of the objective with respect to the parameters:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">objective_grad</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates the gradient of the objective function with respect to the network parameters&quot;&quot;&quot;</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">DiffEqs</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">t_span</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">params</span><span class="p">,))</span>
+    <span class="c1"># disassemble results</span>
+    <span class="n">c_pred</span> <span class="o">=</span> <span class="n">sol</span><span class="p">[:,:</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># predicted concentrations</span>
+    <span class="n">sens</span> <span class="o">=</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:]</span>   <span class="c1"># sensititvities 16*3=48 -&gt; c1/w1, c2/w1, c3/w1, c1/w2.....</span>
+    <span class="c1"># calculate gradients of the loss function</span>
+    <span class="n">loss_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">len_p</span><span class="p">)</span> <span class="c1"># set vector size</span>
+    <span class="k">for</span> <span class="n">comp_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_c</span><span class="p">):</span>
+        <span class="c1"># For loop is running for each concentration and all parameters</span>
+        <span class="n">loss_grad</span> <span class="o">+=</span> <span class="n">sens</span><span class="p">[:,</span><span class="n">comp_idx</span><span class="p">::</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">c_pred</span><span class="p">[:,</span><span class="n">comp_idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">c_exp</span><span class="p">[:,</span><span class="n">comp_idx</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">loss_grad</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, the following function allows us to print the status of the model during training:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">iter</span><span class="p">,</span> <span class="n">gradient</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Callback function gives informative output during optimization&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">iter</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;step </span><span class="si">{0:5d}</span><span class="s1">: </span><span class="si">{1:1.3e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">objective</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">iter</span><span class="p">)))</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;Params&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let’s train the model with adam! Remember, adam is a gradient descent method with an adaptive learning rate. It uses  both the previous gradients (momentum) and their squares (RMSProp) to calculate the next iteration.</p>
+<p>Note: the code will take a few minutes to run.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optimize the network parameters</span>
+<span class="n">optimized_params</span> <span class="o">=</span> <span class="n">adam</span><span class="p">(</span><span class="n">objective_grad</span><span class="p">,</span> <span class="n">init_params</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">num_iters</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step     0: 4.279e+00
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    10: 4.804e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    20: 5.815e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    30: 4.494e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    40: 3.714e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    50: 3.808e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    60: 3.715e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    70: 3.713e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    80: 3.696e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step    90: 3.695e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   100: 3.689e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   110: 3.685e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   120: 3.681e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   130: 3.676e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   140: 3.672e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   150: 3.667e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   160: 3.662e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   170: 3.656e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   180: 3.650e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   190: 3.644e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   200: 3.637e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   210: 3.630e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   220: 3.622e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   230: 3.614e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   240: 3.605e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   250: 3.596e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   260: 3.586e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   270: 3.575e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   280: 3.563e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   290: 3.550e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   300: 3.536e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   310: 3.521e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   320: 3.505e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   330: 3.487e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   340: 3.468e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   350: 3.447e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   360: 3.425e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   370: 3.401e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   380: 3.375e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   390: 3.347e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   400: 3.317e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   410: 3.284e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   420: 3.250e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   430: 3.212e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   440: 3.173e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   450: 3.130e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   460: 3.085e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   470: 3.037e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   480: 2.986e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   490: 2.932e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   500: 2.876e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   510: 2.816e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   520: 2.754e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   530: 2.689e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   540: 2.622e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   550: 2.552e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   560: 2.480e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   570: 2.407e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   580: 2.331e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   590: 2.254e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   600: 2.176e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   610: 2.097e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   620: 2.017e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   630: 1.937e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   640: 1.857e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   650: 1.778e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   660: 1.699e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   670: 1.622e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   680: 1.545e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   690: 1.470e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   700: 1.397e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   710: 1.325e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   720: 1.256e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   730: 1.189e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   740: 1.125e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   750: 1.062e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   760: 1.003e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   770: 9.456e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   780: 8.910e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   790: 8.389e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   800: 7.895e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   810: 7.425e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   820: 6.979e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   830: 6.557e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   840: 6.159e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   850: 5.782e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   860: 5.427e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   870: 5.093e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   880: 4.778e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   890: 4.483e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   900: 4.205e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   910: 3.943e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   920: 3.698e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   930: 3.469e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   940: 3.253e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   950: 3.051e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   960: 2.862e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   970: 2.685e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   980: 2.519e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>step   990: 2.364e-02
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s compare model solutions with the initial parameters vs. the optimized parameters. We need to run the model forward in time, first with the initial parameters, then with the parameters optimized in training:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sol_init</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">DiffEqs</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">t_span</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">init_params</span><span class="p">,))</span>
+<span class="n">sol_opt</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">DiffEqs</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">t_span</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">optimized_params</span><span class="p">,))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then we plot the trajectories for the three components, for the untrained model vs. the trained model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot system trajectories</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_span</span><span class="p">,</span> <span class="n">sol_init</span><span class="p">[:,:</span><span class="n">len_c</span><span class="p">],</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_prop_cycle</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_span</span><span class="p">,</span> <span class="n">sol_opt</span><span class="p">[:,:</span><span class="n">len_c</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_prop_cycle</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_span</span><span class="p">,</span> <span class="n">c_exp</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s1">&#39;initial c_A&#39;</span><span class="p">,</span> <span class="s1">&#39;initial c_B&#39;</span><span class="p">,</span> <span class="s1">&#39;initial c_X&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;final c_A&#39;</span><span class="p">,</span> <span class="s1">&#39;final c_B&#39;</span><span class="p">,</span> <span class="s1">&#39;final c_X&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># make a legend</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c482facb5f7dc11b2b85dcb2cf7069ee097bf0f17f35ab9a01adf5a52808db0d.png" src="_images/c482facb5f7dc11b2b85dcb2cf7069ee097bf0f17f35ab9a01adf5a52808db0d.png" />
+</div>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div class="docutils container" id="id2">
+<dl class="citation">
+<dt class="label" id="id11"><span class="brackets"><a class="fn-backref" href="#id1">GVS18</a></span></dt>
+<dd><p>Jarka Glassey and Moritz Von Stosch. <em>Hybrid modeling in process industries</em>. CRC Press, 2018.</p>
+</dd>
+<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id1">MSMS20</a></span></dt>
+<dd><p>Kevin McBride, Edgar Ivan Sanchez Medina, and Kai Sundmacher. Hybrid semi-parametric modeling in separation processes: a review. <em>Chemie Ingenieur Technik</em>, 92(7):842–855, 2020.</p>
+</dd>
+<dt class="label" id="id12"><span class="brackets"><a class="fn-backref" href="#id1">VSOPdA14</a></span></dt>
+<dd><p>Moritz Von Stosch, Rui Oliveira, Joana Peres, and Sebastião Feyo de Azevedo. Hybrid semi-parametric modeling in process systems engineering: past, present and future. <em>Computers &amp; Chemical Engineering</em>, 60:86–101, 2014.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04_DNN_VLE.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">4. Deep Neural Networks for VLE prediction 🌐</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06_PID_tuning.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">6. PID tuning via data-driven optimization 🔩</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-principles-model-part-for-cstr">First-principles model part for CSTR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#serial-model-construction">Serial model construction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-description">Problem description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-equations-and-solution-procedure">Sensitivity equations and solution procedure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loss-function-and-sensitivity-equations-for-hybrid-cstr-model">Loss function and sensitivity equations for hybrid CSTR model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#differentiation-autograd">Differentiation &amp; autograd</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-autograd">Exercise - autograd ❗❗</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Edgar Ivan Sanchez Medina, Antonio del Rio Chanona and Caroline Ganzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1695 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>8. Process monitoring using PCA 📐 &#8212; Machine Learning in Chemical Engineering</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script type="application/vnd.jupyter.widget-state+json">{"state": {"09250db2976f4181806d603f6da6b88d": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_9d6a576591a84a41a7870a667f6df73c", "IPY_MODEL_a3480cf78ac04ac4af988cce7c5bf7c5", "IPY_MODEL_f546b1bf451f4f92a5c33f5355604958"], "layout": "IPY_MODEL_a2af3ca22aa54174b5476384e4ef98e8"}}, "12adc235331648db83c0b068f78bb9c5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "57391ddbbae548ffb825dd9959252e3c": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "58ff60fcbcda4afbbd6a6ebefb134bdc": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "6eeb0b473c7b47bd9e95e8b81406190b": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "8cf76dd1194f45faa7fd75861085c02a": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "9765e42273584eb7a8cc4089dbd12267": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "9d6a576591a84a41a7870a667f6df73c": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_8cf76dd1194f45faa7fd75861085c02a", "placeholder": "\u200b", "style": "IPY_MODEL_12adc235331648db83c0b068f78bb9c5", "value": "100%"}}, "a2af3ca22aa54174b5476384e4ef98e8": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a3480cf78ac04ac4af988cce7c5bf7c5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_57391ddbbae548ffb825dd9959252e3c", "max": 22.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_6eeb0b473c7b47bd9e95e8b81406190b", "value": 22.0}}, "f546b1bf451f4f92a5c33f5355604958": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_9765e42273584eb7a8cc4089dbd12267", "placeholder": "\u200b", "style": "IPY_MODEL_58ff60fcbcda4afbbd6a6ebefb134bdc", "value": " 22/22 [00:01&lt;00:00, 13.07it/s]"}}}, "version_major": 2, "version_minor": 0}</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '08_PCA';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Acknowledgements 🙏" href="Acknowledgements.html" />
+    <link rel="prev" title="7. Reinforcement learning for PID tuning 🐶" href="07_RL_PID.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_Overview.html">An overview of the course 🔭</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_Introduction_Python.html">1. Introduction to Python 🐍</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_DNN_VLE.html">4. Deep Neural Networks for VLE prediction 🌐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_Hybrid_CSTR.html">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="07_RL_PID.html">7. Reinforcement learning for PID tuning 🐶</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">8. Process monitoring using PCA 📐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F08_PCA.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/08_PCA.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>8. Process monitoring using PCA 📐</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization"><em>1.Normalization</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-matrix"><em>2. Covariance matrix</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eigendecomposition"><em>3. Eigendecomposition</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#principal-components"><em>4. Principal components</em></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tennessee-eastman-process">Tennessee Eastman process 🏭</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#process-faults"><strong>Process faults</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#process-variables">Process variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#t-2-and-q-indices"><span class="math notranslate nohighlight">\(T^2\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> indices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fault-detection">Fault detection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="process-monitoring-using-pca">
+<h1>8. Process monitoring using PCA 📐<a class="headerlink" href="#process-monitoring-using-pca" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/08_PCA.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>We will review the steps for PCA with an illustrative 2D example</p></li>
+<li><p>We will use PCA for process monitoring, specifically for fault detection.</p></li>
+<li><p>We will review the <span class="math notranslate nohighlight">\(T^2\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> statistics for process monitoring</p></li>
+</ul>
+</section>
+<section id="a-quick-reminder">
+<h2>A quick reminder ✅<a class="headerlink" href="#a-quick-reminder" title="Permalink to this headline">#</a></h2>
+<p>Process monitoring aims to guarantee the effectiveness of planned operations by furnishing information that identifies and highlights any deviations in behavior. The four procedures associated with process monitoring are: fault detection, fault identification, fault diagnosis, and process recovery.</p>
+<ul class="simple">
+<li><p><strong>Fault detection</strong>: determining whether a fault has occurred</p></li>
+<li><p><strong>Fault identification</strong>: identifying the variables most relevant to diagnosing the fault</p></li>
+<li><p><strong>Fault diagnosis</strong>: determining the cause of the observed</p></li>
+<li><p><strong>Process recovery</strong>: emoving the effect of the fault</p></li>
+</ul>
+<p>For fault detection, some measures are established based on statistical theory or systems theory. A threshold can be placed on some of these measures, and a fault is detected whenever one of the measures is evaluated outside the limit.</p>
+<p>Unsupervised learning models help in extracting information that is useful for process monitoring and this becomes very valuable for the process engineers and operators.</p>
+<p><strong>Principal Component Analysis</strong> (PCA) is a popular technique used in process monitoring. It is a dimensionality reduction method that projects the original data into a lower dimension while retaining important information. The components in PCA are new variables that are a combination of the original variables. The first component captures the largest amount of variation in the data, and each subsequent component captures as much remaining variation as possible. This provides us with a hierarchical coordinate system.</p>
+<p>PCA can be viewed as the statistical interpretation of Singular Value Decomosition. Here we will review the “standard” PCA procedure.</p>
+<p>Given a dataset with <span class="math notranslate nohighlight">\(n_d\)</span> datapoints <span class="math notranslate nohighlight">\(\mathcal{D}=\{ {\bf x}^{(1)},...,{\bf x}^{(n_d)} \}\)</span>, where each data point contains <span class="math notranslate nohighlight">\(n_x\)</span> descriptors <span class="math notranslate nohighlight">\({\bf x}^{(i)} \in \mathbb{R}^{n_x}\)</span>, which is a column vector. If <span class="math notranslate nohighlight">\({\bf x}\)</span> were measurements from a chemical process each <span class="math notranslate nohighlight">\(x_i\)</span> from <span class="math notranslate nohighlight">\({\bf x}=[x_1,...,x_{n_x}]^T\)</span> would be a descriptor of that process such as temperature, preassure, concentrations…</p>
+<p>We can stack the transpose of datapoints as rows in a matrix to form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X = \begin{bmatrix}
+    ({\bf x}^{(1)})^T \\ ({\bf x}^{(2)})^T \\ \vdots \\ ({\bf x}^{(n_d)})^T 
+\end{bmatrix} =
+\begin{bmatrix}
+    x^{(1)}_{1}, x^{(1)}_{2}&amp; ...  &amp; x^{(1)}_{n_x}  \\
+    x^{(2)}_{1}, x^{(2)}_{2}&amp; ...  &amp;x^{(2)}_{n_x} \\
+    \vdots ~\quad  \vdots &amp; \ddots  &amp; \vdots  \\
+    x^{(n_d)}_{1}, x^{(n_d)}_{2}&amp; ... &amp; x^{(n_d)}_{n_x} 
+\end{bmatrix} \qquad
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(X \in \mathbb{R}^{n_d \times n_x}\)</span>, typically, in chemical engineering <span class="math notranslate nohighlight">\(n_d &gt;&gt; n_x\)</span>.</p>
+<p><strong>1) Standardize the data</strong></p>
+<p>We define <span class="math notranslate nohighlight">\(\overline{x}_j = \frac{1}{n_d} \sum_{i=1}^{n_d} x_j^{(i)}\)</span> as the mean value, and <span class="math notranslate nohighlight">\(\sigma_j = \sqrt{ \frac{\sum_{i=1}^{n_d} (x_j^{(i)} - \overline{x}_j)^2}{n_d-1}}\)</span>  as the standard deviation for each dimension <span class="math notranslate nohighlight">\(j\)</span>. Then we define a new standardized data matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X_s = \begin{bmatrix}
+    (x^{(1)}_{1} - \overline{x}_1)/\sigma_1, (x^{(1)}_{2} - \overline{x}_2)/\sigma_2&amp; ...  &amp; (x^{(1)}_{n_x} - \overline{x}_{n_x})/\sigma_{n_x}  \\
+    (x^{(2)}_{1} - \overline{x}_1)/\sigma_1, (x^{(2)}_{2} - \overline{x}_2)/\sigma_2&amp; ...  &amp; (x^{(2)}_{n_x} - \overline{x}_{n_x})/\sigma_{n_x} \\
+    \vdots \qquad \qquad  \vdots &amp; \ddots  &amp; \vdots  \\
+    (x^{(n_d)}_{1} - \overline{x}_1)/\sigma_1, (x^{(n_d)}_{2} - \overline{x}_2)/\sigma_2&amp; ... &amp; (x^{(n_d)}_{n_x} - \overline{x}_{n_x})/\sigma_{n_x} 
+\end{bmatrix} \qquad
+\end{split}\]</div>
+<p><strong>2) Compute the covariance matrix</strong></p>
+<p>We can then compute the covariance matrix by:</p>
+<p><span class="math notranslate nohighlight">\(X_c = X_s^TX_s\)</span></p>
+<p>Notice that this is equivalent to computing the covariance <span class="math notranslate nohighlight">\(\sigma^2_{j,k} = \frac{1}{(n_d-1)^2} \sum_{i=1}^{n_d} \frac{1}{2} (x_{j}^{(i)} - \overline{x}_j)^T(x_{k}^{(i)} - \overline{x}_k) \)</span> for each two dimensions and then having the matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X_c = \begin{bmatrix}
+    \sigma^2_{1,1}, \sigma^2_{1,2}&amp; ...  &amp; \sigma^2_{1,n_x}  \\
+    \sigma^2_{2,1}, \sigma^2_{2,2}&amp; ...  &amp; \sigma^2_{2,n_x} \\
+    \vdots \qquad  \vdots &amp; \ddots  &amp; \vdots  \\
+    \sigma^2_{n_x,1}, \sigma^2_{n_x,2}&amp; ...  &amp; \sigma^2_{n_x,n_x} 
+\end{bmatrix}
+\end{split}\]</div>
+<p><strong>3) Compute the singular values</strong></p>
+<p>Now we obtain the eigenvalues and eigenvectors for <span class="math notranslate nohighlight">\(X_c\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(X_c {\bf v}_j = {\bf v}_j \lambda_j \)</span></p>
+<p>Assuming we concatenate all eigenvectors in a matrix <span class="math notranslate nohighlight">\(V_c\)</span>, and we have a diagonal matrix of eigenvalues <span class="math notranslate nohighlight">\(\Lambda\)</span> we have:</p>
+<p><span class="math notranslate nohighlight">\(X_c V_c = V_c \Lambda \)</span></p>
+<p>such that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Lambda = \begin{bmatrix}
+    \lambda_1, &amp; 0 ,&amp; ..., &amp; 0 \\
+    0, &amp; \lambda_2 ,&amp; ..., &amp; 0 \\
+    \vdots &amp; \vdots &amp; \ddots &amp; 0 \\
+    0, &amp; 0 ,&amp; ..., &amp; \lambda_{n_x}
+\end{bmatrix}
+\end{split}\]</div>
+<p>where all <span class="math notranslate nohighlight">\(\lambda \geq0\)</span> and, again, by definition we assume <span class="math notranslate nohighlight">\(\lambda_1 \geq \lambda_2 \geq ... \geq \lambda_{n_x} \geq0\)</span>.</p>
+<p>Eigenvectors are the “axis” of the transformation represented by a matrix. On the other hand, the eigenvalues are the amount that eleigenvectors scale up or down when passing through the matrix.</p>
+<p><strong>4) Choose the <span class="math notranslate nohighlight">\(k\)</span> principal components</strong></p>
+<p>We then choose the <span class="math notranslate nohighlight">\(k\)</span> eigenvectors with the largest eigenvalues as the principal components</p>
+<p>Let’s try to reproduce these steps for an illustrative example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linalg</span> <span class="k">as</span> <span class="n">LA</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s generate some synthetic observation for this example</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="mi">500</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and visualize the data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e1be75bef873ca81a3baeeaad455888306ef3dba2805016dd804f3441769d84c.png" src="_images/e1be75bef873ca81a3baeeaad455888306ef3dba2805016dd804f3441769d84c.png" />
+</div>
+</div>
+<p>we see that <span class="math notranslate nohighlight">\(x_1\)</span> varies much more than <span class="math notranslate nohighlight">\(x_2\)</span>. This, however, might be deceiving, and due to a unit mismatch. We next normalize the data to remove this possible issue.</p>
+<section id="normalization">
+<h3><em>1.Normalization</em><a class="headerlink" href="#normalization" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_std</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_norm</span>  <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">-</span><span class="n">X_mean</span><span class="p">)</span><span class="o">/</span><span class="n">X_std</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_1 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_2 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f9b461e175d0a35899852c9723ef47e68a7abf70899c644bfab55a43ec07dfa8.png" src="_images/f9b461e175d0a35899852c9723ef47e68a7abf70899c644bfab55a43ec07dfa8.png" />
+</div>
+</div>
+<p>Now we can appreciate a much more interesting distribution of our data. Next we will measure the variability of our data.</p>
+</section>
+<section id="covariance-matrix">
+<h3><em>2. Covariance matrix</em><a class="headerlink" href="#covariance-matrix" title="Permalink to this headline">#</a></h3>
+<p>Intuitively, the covariance matrix generalizes the notion of variance <span class="math notranslate nohighlight">\( \sigma^2\)</span> to multiple dimensions. Our example (a two-dimensional space), cannot be characterized completely by a single number (like <span class="math notranslate nohighlight">\(\sigma\)</span>), nor only by the variances of <span class="math notranslate nohighlight">\( x_1 \)</span> and <span class="math notranslate nohighlight">\( x_2 \)</span> (<span class="math notranslate nohighlight">\(\sigma_1\)</span> and <span class="math notranslate nohighlight">\(\sigma_2\)</span>), as they do not contain all the necessary information. For this, we also need the information of how <span class="math notranslate nohighlight">\( x_1 \)</span> varies with respect to <span class="math notranslate nohighlight">\( x_2 \)</span>, which we can be representd by a matrix of size <span class="math notranslate nohighlight">\( D \times D = 2 \times 2\)</span> as follows:</p>
+<p><span class="math notranslate nohighlight">\(cov(X) = 
+\begin{bmatrix}
+    \sigma^2_{1,1}  &amp; \sigma^2_{1,2}  \\
+    \sigma^2_{2,1}  &amp; \sigma^2_{2,2}
+\end{bmatrix}\)</span></p>
+<p>where:</p>
+<p><span class="math notranslate nohighlight">\(\sigma^2_{i,k} =  \frac{\sum_{i=1}^{M} (x_{i,j}-\mu_j)(x_{i,k}-\mu_k)}{M-1}\)</span></p>
+<p>If <span class="math notranslate nohighlight">\(j=k\)</span>,  <span class="math notranslate nohighlight">\(\sigma^2_{j,j} = \sigma^2_{j}\)</span> then this is the variance of dimension <span class="math notranslate nohighlight">\(j\)</span>, which is the square of the standard deviation that we defined during the normalization of the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we calculate the covariance matrix. Notice that the mean = 0.</span>
+<span class="n">Cov_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">X_norm</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">point_</span>  <span class="o">=</span> <span class="n">X_norm</span><span class="p">[</span><span class="n">point</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">Cov_M</span>   <span class="o">=</span> <span class="n">Cov_M</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">point_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">point_</span><span class="p">)</span>
+<span class="n">Cov_M</span> <span class="o">=</span> <span class="n">Cov_M</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">X_norm</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> 
+
+<span class="c1"># We calculate the covariance matrix taking advantage of numpy&#39;s vectorization</span>
+<span class="n">Cov_M2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">X_norm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X_norm</span><span class="p">)</span><span class="o">/</span><span class="n">X_norm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">,</span> <span class="n">y_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">Cov_M2</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Covariance Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b4e1ccd17202de5837656057960832263f5d1037a38ddeee31a0db4449dfe7b8.png" src="_images/b4e1ccd17202de5837656057960832263f5d1037a38ddeee31a0db4449dfe7b8.png" />
+</div>
+</div>
+</section>
+<section id="eigendecomposition">
+<h3><em>3. Eigendecomposition</em><a class="headerlink" href="#eigendecomposition" title="Permalink to this headline">#</a></h3>
+<p>To simplify the notation, let us define <span class="math notranslate nohighlight">\( cov (X) = A \)</span>. Now, we obtain the eigenvalues and eigenvectors for the covariance matrix:</p>
+<p><span class="math notranslate nohighlight">\(Av=\lambda v\)</span></p>
+<p>Where <span class="math notranslate nohighlight">\( v\in \mathbb {R}^D \)</span> is an <strong>eigenvector</strong>, which has the same dimension as the sides of our covariance matrix <span class="math notranslate nohighlight">\(A\)</span>. In our example <span class="math notranslate nohighlight">\( D = 2 \)</span>. On the other hand <span class="math notranslate nohighlight">\( \lambda \in \mathbb {R} \)</span> is a scalar, and is the corresponding <strong>eigenvalue</strong>.</p>
+<p>Let us remember that <strong>matrices</strong> are <strong>linear transformations</strong> that act on vectors. This is, given a vector <span class="math notranslate nohighlight">\(v\)</span>, and a matrix <span class="math notranslate nohighlight">\(A\)</span>, we can apply <span class="math notranslate nohighlight">\(A\)</span> to <span class="math notranslate nohighlight">\(v\)</span> and obtain <span class="math notranslate nohighlight">\(b\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(Av = b\)</span></p>
+<p><strong>Eigenvectors</strong> are the “axis” of the transformation represented by a matrix. Remember that a matrix changes the direction and magnitud of any vector that it is applied too, except for its  eigenvectors. When a matrix is applied to its eigenvector, the eigenvector does not change its direction (as would any other vector when the matrix is applied to it). On the other hand, the <strong>eigenvalues</strong> are the amount that eleigenvectors scale up or down when passing through the matrix. As shown in <span class="math notranslate nohighlight">\(Av=\lambda v\)</span>.</p>
+<p>Let us now remember that the covariance matrix defines how scattered and correlated (or “tilted”) our data is. So if we want to represent the covariance matrix with a vector and its magnitude (to decrease the dimensionality of the data), we should simply find the vector that points in the direction of the greatest “change” of the data. This direction happens to be the <strong>eigenvector</strong> with the larges <strong>eigenvalue</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eigenVal</span><span class="p">,</span> <span class="n">eigenVec</span> <span class="o">=</span> <span class="n">LA</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">Cov_M</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;eigenvalue 1 = &quot;</span><span class="p">,</span><span class="n">eigenVal</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;   eigenvector 1 = &quot;</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;eigenvalue 2 = &quot;</span><span class="p">,</span><span class="n">eigenVal</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;   eigenvector 2 = &quot;</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>eigenvalue 1 =  0.3516355542325875    eigenvector 1 =  [-0.70710678  0.70710678]
+eigenvalue 2 =  1.6483644457674138    eigenvector 2 =  [-0.70710678 -0.70710678]
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now plot the eigenvectors weighted by their respective eigenvalue.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">eigenVal</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="mi">0</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">eigenVal</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EV 1&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">eigenVal</span><span class="p">[</span><span class="mi">1</span><span class="p">]],[</span><span class="mi">0</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">eigenVal</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EV 2&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_1 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_2 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/74d3f176448e66ab4910e21c75a15e735252bc505454e7650f41cbad6f96166e.png" src="_images/74d3f176448e66ab4910e21c75a15e735252bc505454e7650f41cbad6f96166e.png" />
+</div>
+</div>
+</section>
+<section id="principal-components">
+<h3><em>4. Principal components</em><a class="headerlink" href="#principal-components" title="Permalink to this headline">#</a></h3>
+<p>We are interested in obtaining the principal components of our data. The principal components are those which capture the highest variation of the data, the rest, which do not present so much variation can be discarded.</p>
+<p>Therefore, a natural option is to choose the main eigenvectors as  components. By main eigenvalues we refer to the ones with the highest eigenvalues. Therefore we choose <span class="math notranslate nohighlight">\(k\)</span> eigenvectors, where <span class="math notranslate nohighlight">\(k&lt;D\)</span>. In our example <span class="math notranslate nohighlight">\( D = 2 \)</span>, so we choose <span class="math notranslate nohighlight">\( k = 1 \)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">eigenVal</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">P_vec</span>   <span class="o">=</span> <span class="n">eigenVec</span><span class="p">[:,</span><span class="n">max_idx</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P_vec = &#39;</span><span class="p">,</span><span class="n">P_vec</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>P_vec =  [-0.70710678 -0.70710678]
+</pre></div>
+</div>
+</div>
+</div>
+<p>After computing the eigenvector, we project our data into this new reduced space. In oder words, our full data was in <span class="math notranslate nohighlight">\( X \in \mathbb{R}^{D \times M} \)</span> and we will project it onto a space in <span class="math notranslate nohighlight">\( X \in\mathbb{R}^{k \times M} \)</span>, thus reducing the dimensionality from <span class="math notranslate nohighlight">\( D \)</span> to <span class="math notranslate nohighlight">\( k \)</span>. Our objective is then to project our original space of 2 dimensions in which our data (<span class="math notranslate nohighlight">\( D = 2 \)</span>) was located to the space of 1 dimension (<span class="math notranslate nohighlight">\( k = 1 \)</span>) <strong>described</strong> by our eigenvector of greater relevance in the variation of the data.</p>
+<p>In the below figure we can see a line (which is our new 1-dimensional space) onto which we wish to project our data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*-</span><span class="mi">10</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">],</span>
+         <span class="p">[</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*-</span><span class="mi">10</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">],</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> 
+         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1D-space&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_1 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_2 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/207282c41fccaa834a5456e451a3066d0e8f7e0f2c9a1d24ea12c7961689cf06.png" src="_images/207282c41fccaa834a5456e451a3066d0e8f7e0f2c9a1d24ea12c7961689cf06.png" />
+</div>
+</div>
+<p>Following from the above, we wish to project datapoints <span class="math notranslate nohighlight">\(x\)</span> onto the space of an eigenvector <span class="math notranslate nohighlight">\(v\)</span>. More precisely, we wish to project datapoints which are in a 2-dimensional space onto a 1-dimensional space (which is spanned by the eigenvector with the largest eigenvalue).</p>
+<p>For one point <span class="math notranslate nohighlight">\(x\)</span> and the eigenvector <span class="math notranslate nohighlight">\(v\)</span> this is done by:
+<span class="math notranslate nohighlight">\(\frac{vv^T}{||v||^2}~x\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(v^T\)</span> means the transpose of vector <span class="math notranslate nohighlight">\(v\)</span>, and <span class="math notranslate nohighlight">\(||v||\)</span> is the Euclidean norm of vector <span class="math notranslate nohighlight">\(v\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(^*\)</span> This is assuming an inner product in the Euclidean space</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># -- Projecting the data into the 1-dimensional space -- #</span>
+
+<span class="c1"># -- Taking advantage of numpy&#39;s vectorization we can project the whole matrix -- #</span>
+<span class="n">P_vec</span>  <span class="o">=</span> <span class="n">P_vec</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">P_vec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># reshaping for easier handling</span>
+<span class="n">Y_1D</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">P_vec</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">X_norm</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>     <span class="c1"># projecting into 1D</span>
+<span class="n">Y_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">P_vec</span><span class="p">,</span><span class="n">Y_1D</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>         <span class="c1"># projecting 1D back into 2D</span>
+
+<span class="c1"># Note: P_vec has norm 1, so there is no need to compute the norm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize the data projected onto the 1-dimensional space below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Y_norm</span><span class="p">[:],</span><span class="n">Y_norm</span><span class="p">[:],</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*-</span><span class="mi">10</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">],[</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*-</span><span class="mi">10</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">],</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1D-space&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_1 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_2 \quad normalized $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1ce72945bf89448354eddb18ee742ea76e798b43e98f4114c12cc7abe01ab90e.png" src="_images/1ce72945bf89448354eddb18ee742ea76e798b43e98f4114c12cc7abe01ab90e.png" />
+</div>
+</div>
+<p>Now, <a class="reference external" href="https://scikit-learn.org/stable/">scikit-learn</a> has a very handy <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html#sklearn.decomposition.PCA">PCA implementation</a> for this that we can use as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span> <span class="c1">#import PCA from sklearn</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>             <span class="c1"># define how many principal components we wish to reduce our system to</span>
+<span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_norm</span><span class="p">)</span>                       <span class="c1"># obtain the components and its eigenvalues</span>
+<span class="n">X_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_norm</span><span class="p">)</span>         <span class="c1"># apply dimensionality reduction</span>
+<span class="n">Y_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">X_pca</span><span class="p">)</span>  <span class="c1"># get the data back on its original space</span>
+
+<span class="c1"># visualize</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Y_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">Y_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*-</span><span class="mi">10</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">],[</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*-</span><span class="mi">10</span><span class="p">,</span><span class="n">eigenVec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">max_idx</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">],</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1D-space&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X_norm</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_1 \quad normalizada $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_2 \quad normalizada $&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/15830d4214c4cb73276e682f58df200abc4d822b3edaafc55fec461e0b2c7265.png" src="_images/15830d4214c4cb73276e682f58df200abc4d822b3edaafc55fec461e0b2c7265.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="tennessee-eastman-process">
+<h2>Tennessee Eastman process 🏭<a class="headerlink" href="#tennessee-eastman-process" title="Permalink to this headline">#</a></h2>
+<p>In this notebook we will illustrate the capabilities of some unsupervised learning techniques that perform dimensionality reduction applied to the task of process monitoring. The case-study that we are going to use is the called Tennessee Eastman process (TEP) [<span id="id1">[<a class="reference internal" href="#id16" title="James J Downs and Ernest F Vogel. A plant-wide industrial process control problem. Computers &amp; chemical engineering, 17(3):245–255, 1993.">DV93</a>]</span>]. The data collected here corresponds to simulated data and it is widely used in the process monitoring community. Initially, TEP was created by the company <a class="reference external" href="https://www.eastman.com/en">Eastman</a> to provide a realistic scenerario in which to test different process monitoring methods.</p>
+<p>In the following we will provide a short explanation of the process. If you like to have a more detailed explanation overall read Chapter 8 of [<span id="id2">[<a class="reference internal" href="#id17" title="Evan L. Russell, Leo H. Chiang, and Richard D. Braatz. Data-driven Methods for Fault Detection and Diagnosis in Chemical Processes. Springer London, 2000.">RCB00</a>]</span>].</p>
+<p>The process consist of five major units:</p>
+<ul class="simple">
+<li><p>Reactor</p></li>
+<li><p>Condenser</p></li>
+<li><p>Compressor</p></li>
+<li><p>Separator</p></li>
+<li><p>Stripper</p></li>
+</ul>
+<p>and it contains eight components: the gaseous reactants <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(C\)</span>, <span class="math notranslate nohighlight">\(D\)</span> and <span class="math notranslate nohighlight">\(E\)</span> that are fed into the reactor along the inert <span class="math notranslate nohighlight">\(B\)</span> to produce the liquids <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(H\)</span>. The product <span class="math notranslate nohighlight">\(F\)</span> is an unwanted byproduct.</p>
+<div class="math notranslate nohighlight">
+\[
+A(g) + C(g) + D(g) → G(liq)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+A(g) + C(g) + E(g) → H(liq)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+A(g) + E(g) → F(liq)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+3D(g) → 2F(liq)
+\]</div>
+<p>The reactor product stream is then cooled using the condenser and fed to a flash separator. A recycle is implemented via the compressor with the necessary purge to prevent accumulation of <span class="math notranslate nohighlight">\(B\)</span> and <span class="math notranslate nohighlight">\(F\)</span>. Finally, the liquid outlet of the separator is fed into a stripper for further separation. See the figure below for a schematic reresentation of the flowsheet.</p>
+<figure class="align-center" id="id18">
+<a class="reference internal image-reference" href="_images/TEP_flowsheet.png"><img alt="cstr" src="_images/TEP_flowsheet.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Schematic representation of the Tennessee Eastman process flowsheet. Modified from [<span id="id3">[<a class="reference internal" href="#id17" title="Evan L. Russell, Leo H. Chiang, and Richard D. Braatz. Data-driven Methods for Fault Detection and Diagnosis in Chemical Processes. Springer London, 2000.">RCB00</a>]</span>].</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The dataset contains 41 measured states and 11 manipulated variables. Some variables are sampled every 3 minutes, 6 minutes or 15 minutes. And all measurements include Gaussian noise.</p>
+<p>The data contains 21 faults, out of which 16 are known (Faults 1-15 and 21). Some faults are caused by step changes in some process variables, while others are associated with a random variability increase. A slow drift in the reaction kinetics and sticking valves are other causes of the faults.</p>
+<p>Let’s import the data corresponding to the 21 faulty simulations (i.e., files 01 to 21) and the data for the normal operation (i.e., files with 00) using some for-loops and store it into a dictionary.</p>
+<section id="process-faults">
+<h3><strong>Process faults</strong><a class="headerlink" href="#process-faults" title="Permalink to this headline">#</a></h3>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>00</p></td>
+<td><p>Normal operation</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>01</p></td>
+<td><p>A/C Feed Ratio, B Composition Constant (Stream 4)</p></td>
+<td><p>Step</p></td>
+</tr>
+<tr class="row-even"><td><p>02</p></td>
+<td><p>B Composition, A/C Ratio Constant (Stream 4)</p></td>
+<td><p>Step</p></td>
+</tr>
+<tr class="row-odd"><td><p>03</p></td>
+<td><p>D Feed Temperature (Stream 2)</p></td>
+<td><p>Step</p></td>
+</tr>
+<tr class="row-even"><td><p>04</p></td>
+<td><p>Reactor Cooling Water Inlet Temperature</p></td>
+<td><p>Step</p></td>
+</tr>
+<tr class="row-odd"><td><p>05</p></td>
+<td><p>Condenser Cooling Water Inlet Temperature</p></td>
+<td><p>Step</p></td>
+</tr>
+<tr class="row-even"><td><p>06</p></td>
+<td><p>A Feed Loss (Stream 1)</p></td>
+<td><p>Step</p></td>
+</tr>
+<tr class="row-odd"><td><p>07</p></td>
+<td><p>C Header Pressure Loss - Reduced Availability (Stream 4)</p></td>
+<td><p>Step</p></td>
+</tr>
+<tr class="row-even"><td><p>08</p></td>
+<td><p>A, B, C Feed Composition (Stream 4)</p></td>
+<td><p>Random Variation</p></td>
+</tr>
+<tr class="row-odd"><td><p>09</p></td>
+<td><p>D Feed Temperature (Stream 2)</p></td>
+<td><p>Random Variation</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>C Feed Temperature (Stream 4)</p></td>
+<td><p>Random Variation</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>Reactor Cooling Water Inlet Temperature</p></td>
+<td><p>Random Variation</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>Condenser Cooling Water Inlet Temperature</p></td>
+<td><p>Random Variation</p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p>Reaction Kinetics</p></td>
+<td><p>Slow Drift</p></td>
+</tr>
+<tr class="row-even"><td><p>14</p></td>
+<td><p>Reactor Cooling Water Valve</p></td>
+<td><p>Valve Sticking</p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p>Condenser Cooling Water Valve</p></td>
+<td><p>Valve Sticking</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>Unknown</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>17</p></td>
+<td><p>Unknown</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>18</p></td>
+<td><p>Unknown</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>19</p></td>
+<td><p>Unknown</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>20</p></td>
+<td><p>Unknown</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>21</p></td>
+<td><p>Unknown</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p>As you can suspect from the code below, the data has already being splitted into training and test.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">22</span><span class="p">)):</span>
+  <span class="n">i_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i_str</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">term</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="o">+</span><span class="n">i_str</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">term</span> <span class="o">=</span> <span class="n">i_str</span>
+  <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;_te&#39;</span><span class="p">]:</span>
+    <span class="n">term</span> <span class="o">=</span> <span class="n">term</span> <span class="o">+</span> <span class="n">split</span>
+    <span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+      <span class="n">data_dict</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/d&#39;</span> 
+                               <span class="o">+</span> <span class="n">term</span> <span class="o">+</span> <span class="s1">&#39;.dat&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">data_dict</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;references/d&#39;</span><span class="o">+</span> <span class="n">term</span> <span class="o">+</span> <span class="s1">&#39;.dat&#39;</span><span class="p">)</span>
+<span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "09250db2976f4181806d603f6da6b88d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(500, 52)
+</pre></div>
+</div>
+</div>
+</div>
+<p>each dataset is reported in the form of a matrix where the 52 columns correspond to the 41 process measurements + 11 manipulated variables according to the following tables</p>
+</section>
+<section id="process-variables">
+<h3>Process variables<a class="headerlink" href="#process-variables" title="Permalink to this headline">#</a></h3>
+<p><strong>Process Measurements (3 minutes)</strong></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Column</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>A Feed  (stream 1)</p></td>
+<td><p>kscmh</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>D Feed  (stream 2)</p></td>
+<td><p>kg/hr</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>E Feed  (stream 3)</p></td>
+<td><p>kg/hr</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>A and C Feed  (stream 4)</p></td>
+<td><p>kscmh</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Recycle Flow  (stream 8)</p></td>
+<td><p>kscmh</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Reactor Feed Rate  (stream 6)</p></td>
+<td><p>kscmh</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Reactor Pressure</p></td>
+<td><p>kPa gauge</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Reactor Level</p></td>
+<td><p>%</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Reactor Temperature</p></td>
+<td><p>Deg C</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Purge Rate (stream 9)</p></td>
+<td><p>kscmh</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Product Sep Temp</p></td>
+<td><p>Deg C</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>Product Sep Level</p></td>
+<td><p>%</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>Prod Sep Pressure</p></td>
+<td><p>kPa gauge</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>Prod Sep Underflow (stream 10)</p></td>
+<td><p>m3/hr</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>Stripper Level</p></td>
+<td><p>%</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>Stripper Pressure</p></td>
+<td><p>kPa gauge</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p>Stripper Underflow (stream 11)</p></td>
+<td><p>m3/hr</p></td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><p>Stripper Temperature</p></td>
+<td><p>Deg C</p></td>
+</tr>
+<tr class="row-even"><td><p>19</p></td>
+<td><p>Stripper Steam Flow</p></td>
+<td><p>kg/hr</p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>Compressor Work</p></td>
+<td><p>kW</p></td>
+</tr>
+<tr class="row-even"><td><p>21</p></td>
+<td><p>Reactor Cooling Water Outlet Temp</p></td>
+<td><p>Deg C</p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>Separator Cooling Water Outlet Temp</p></td>
+<td><p>Deg C</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reactor feed analysis (6 minutes)</strong></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Column</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>23</p></td>
+<td><p>Component A</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>24</p></td>
+<td><p>Component B</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-even"><td><p>25</p></td>
+<td><p>Component C</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>26</p></td>
+<td><p>Component D</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-even"><td><p>27</p></td>
+<td><p>Component E</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>28</p></td>
+<td><p>Component F</p></td>
+<td><p>% mol</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Purge gas analysis (6 minutes)</strong></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Column</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>29</p></td>
+<td><p>Component A</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>30</p></td>
+<td><p>Component B</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-even"><td><p>31</p></td>
+<td><p>Component C</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>32</p></td>
+<td><p>Component D</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-even"><td><p>33</p></td>
+<td><p>Component E</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>34</p></td>
+<td><p>Component F</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-even"><td><p>35</p></td>
+<td><p>Component G</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>36</p></td>
+<td><p>Component H</p></td>
+<td><p>% mol</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Product analaysis (15 minutes)</strong></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Column</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>37</p></td>
+<td><p>Component D</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>38</p></td>
+<td><p>Component E</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-even"><td><p>39</p></td>
+<td><p>Component F</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-odd"><td><p>40</p></td>
+<td><p>Component G</p></td>
+<td><p>% mol</p></td>
+</tr>
+<tr class="row-even"><td><p>41</p></td>
+<td><p>Component H</p></td>
+<td><p>% mol</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Manipulated variables</strong></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Column</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>42</p></td>
+<td><p>D Feed Flow (stream 2)</p></td>
+</tr>
+<tr class="row-odd"><td><p>43</p></td>
+<td><p>E Feed Flow (stream 3)</p></td>
+</tr>
+<tr class="row-even"><td><p>44</p></td>
+<td><p>A Feed Flow (stream 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>45</p></td>
+<td><p>A and C Feed Flow (stream 4)</p></td>
+</tr>
+<tr class="row-even"><td><p>46</p></td>
+<td><p>Compressor Recycle Valve</p></td>
+</tr>
+<tr class="row-odd"><td><p>47</p></td>
+<td><p>Purge Valve (stream 9)</p></td>
+</tr>
+<tr class="row-even"><td><p>48</p></td>
+<td><p>Separator Pot Liquid Flow (stream 10)</p></td>
+</tr>
+<tr class="row-odd"><td><p>49</p></td>
+<td><p>Stripper Liquid Product Flow (stream 11)</p></td>
+</tr>
+<tr class="row-even"><td><p>50</p></td>
+<td><p>Stripper Steam Valve</p></td>
+</tr>
+<tr class="row-odd"><td><p>51</p></td>
+<td><p>Reactor Cooling Water Flow</p></td>
+</tr>
+<tr class="row-even"><td><p>52</p></td>
+<td><p>Condenser Cooling Water Flow</p></td>
+</tr>
+</tbody>
+</table>
+<p>For instance, let’s observe the profile under normal conditions of the reactor pressure</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">][:,</span><span class="n">var</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Reactor pressure (kPa)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Normal operation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">2680</span><span class="p">,</span> <span class="mi">2730</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.0, 500.0)
+</pre></div>
+</div>
+<img alt="_images/231ebc5351811f6b69b4122ed7a3584192f2e0b28141178b321f2cf1f1155728.png" src="_images/231ebc5351811f6b69b4122ed7a3584192f2e0b28141178b321f2cf1f1155728.png" />
+</div>
+</div>
+<p>If you observe, during normal operation the reactor pressure is kept around 2750 kPa.</p>
+<p>Let’s compare this to the profile under faulty conditions caused by an step change in the composition of the inert species <span class="math notranslate nohighlight">\(B\)</span> in the inlet stream (Fault 02).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;02&#39;</span><span class="p">][:,</span><span class="n">var</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Reactor pressure (kPa)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Faulty operation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">2680</span><span class="p">,</span> <span class="mi">2730</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.0, 500.0)
+</pre></div>
+</div>
+<img alt="_images/82749c76cc9729fd5790d888117ffa48ebf16a461219c62d85be897649df8540.png" src="_images/82749c76cc9729fd5790d888117ffa48ebf16a461219c62d85be897649df8540.png" />
+</div>
+</div>
+<p>The disturbance is apparent! The pressure in the reactor increases and then slowly comes back due to the control system that it has. This univariate method for process monitoring is closely related to the so-called <a class="reference external" href="https://en.wikipedia.org/wiki/Shewhart_individuals_control_chart">Shewhart charts</a>.</p>
+<p>However, this method ignore the correlation between the process variables. In other words, some faults required the use of multivariate statistics because the fault might not become evident in the univariate cases of all process variables (i.e., all process variables individually might appear to be within normal ranges), but rather in the combination of several of them.</p>
+</section>
+<section id="t-2-and-q-indices">
+<h3><span class="math notranslate nohighlight">\(T^2\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> indices<a class="headerlink" href="#t-2-and-q-indices" title="Permalink to this headline">#</a></h3>
+<p>Let’s consider the above matrix of observations <span class="math notranslate nohighlight">\(X\)</span>. The sample covariance matrix is</p>
+<div class="math notranslate nohighlight">
+\[
+S = \frac{1}{n_d-1}X^TX
+\]</div>
+<p>and the eigenvalue decomposition of this matrix is</p>
+<div class="math notranslate nohighlight">
+\[
+S = V \Lambda V^T 
+\]</div>
+<p>if we assume that <span class="math notranslate nohighlight">\(S\)</span> is invertible and using the definition</p>
+<div class="math notranslate nohighlight">
+\[
+\bf{z} = \Lambda^{-1/2}V^T\bf{x}
+\]</div>
+<p>we can define the <a class="reference external" href="https://en.wikipedia.org/wiki/Hotelling%27s_T-squared_distribution">Hotelling’s <span class="math notranslate nohighlight">\(T^2\)</span> index</a></p>
+<div class="math notranslate nohighlight">
+\[
+T^2 = \bf{z}^T\bf{z}
+\]</div>
+<p>The <span class="math notranslate nohighlight">\(T^2\)</span> index is a measure of how different an observation <span class="math notranslate nohighlight">\(\bf{x}\)</span> is from the mean of the multivariate distribution. It takes into account the direction of the data and the variability along different directions. This allows a scalar threshold to characterize the variability of the data in the entire observation space. By comparing the <span class="math notranslate nohighlight">\(T^2\)</span> index to a threshold value, we can determine if the observation is significantly different from the expected conditions and in this way use it for detecting faults. This threshold value can be determined automatically based on the level of significance we choose, using probability distributions. One significant threshold can be calculated as</p>
+<div class="math notranslate nohighlight">
+\[
+T^2_\alpha = \frac{(n_x)(n_d-1)(n_d+1)}{n_d(n_d-n_x}F_\alpha (n_x, n_d-n_x)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(F_\alpha\)</span> being the upper 100<span class="math notranslate nohighlight">\(\alpha\)</span>% critical point of the <a class="reference external" href="https://en.wikipedia.org/wiki/F-distribution">F-distribution</a> with the indicated degrees of freedom.</p>
+<p>Heuristically, the required number of observations to use <span class="math notranslate nohighlight">\(T^2\)</span> as a process monitoring tool is approximately 10 times the dimensionality of the input space. This motivates the use of dimensionality reduction in the context of process monitoring.</p>
+<p>Another important reason for employing dimensionality reduction techniques, perhaps the most significant one, is that the <span class="math notranslate nohighlight">\(T^2\)</span> index may not accurately represent the behavior of the process in the directions corresponding to smaller singular values. The inaccuracies in these smaller singular values have a substantial impact on the calculated <span class="math notranslate nohighlight">\(T^2\)</span> index due to the inversion of their squared values. Moreover, these smaller singular values are susceptible to errors since they often possess low signal-to-noise ratios. Consequently, it is advisable in such cases to retain only the eigenvectors associated with the larger singular values when computing the <span class="math notranslate nohighlight">\(T^2\)</span> statistic.</p>
+<p>This sensitivity of the <span class="math notranslate nohighlight">\(T^2\)</span> statistic to the smaller singular values also motivates the use of the <span class="math notranslate nohighlight">\(Q\)</span> index  which can be computed as</p>
+<div class="math notranslate nohighlight">
+\[
+Q = R^TR
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(R=X-\hat{X}\)</span> is the residual matrix measuring the discrepancy between the observation in the original space and the observation reconstructed from the reduced space (i.e., the observation reconstructed using the reduced number of principal components). If a data point has a large <span class="math notranslate nohighlight">\(Q\)</span> value, it suggests that the model is not able to adequately explain that observation, indicating an unusual pattern in the data. The threshold used for <span class="math notranslate nohighlight">\(Q\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[
+Q_\alpha = \theta_1 \left( \frac{h_0 c_{\alpha} (2\theta_2)^{1/2}}{\theta_1} + 1 + \frac{\theta_2 h_0 (h_0-1)}{\theta_1^2} \right)^{1/h_0}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta_i = \sum_{j=n_x+1}^{n_x}\lambda_j^{2 i}\)</span> and <span class="math notranslate nohighlight">\(h_0=1-\frac{2\theta_1 \theta_3}{3 \theta_2^2}\)</span></p>
+<p>Since <span class="math notranslate nohighlight">\(T^2\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> detect different types of faults, they are both used together as process monitoring tools!</p>
+</section>
+<section id="fault-detection">
+<h3>Fault detection<a class="headerlink" href="#fault-detection" title="Permalink to this headline">#</a></h3>
+<p>Let’s now jump into using these two indices for fault detection. We are going to consider here Fault 1 which is caused by an step change in the <span class="math notranslate nohighlight">\(A/C\)</span> feed ratio in stream 4. This results in a decrease in the <span class="math notranslate nohighlight">\(A\)</span> feed in the recycle stream 5 and the control system reacts to increase the <span class="math notranslate nohighlight">\(A\)</span> feed in stream 1.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;A Feed (stream 1) [kscmh]&#39;</span>
+<span class="n">ylim</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">][:,</span><span class="n">var</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Normal operation&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">][:,</span><span class="n">var</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Faulty operation&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6c2cf04474a09991824e64b5079ecf6a23411cee97d4685e1a7f9edb5dde3044.png" src="_images/6c2cf04474a09991824e64b5079ecf6a23411cee97d4685e1a7f9edb5dde3044.png" />
+</div>
+</div>
+<p>This control response results that the concentration of <span class="math notranslate nohighlight">\(A\)</span> in stream 6 reaches steady-state after enough time</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="mi">23</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Concentration of A in stream 6 (% mol)&#39;</span>
+<span class="n">ylim</span> <span class="o">=</span> <span class="p">[</span><span class="mi">28</span><span class="p">,</span> <span class="mi">35</span><span class="p">]</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">][:,</span><span class="n">var</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Normal operation&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">][:,</span><span class="n">var</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Faulty operation&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7dcb30b043bfeada74fa589d166264917ab78ca0e424e12bef62c7977ad60739.png" src="_images/7dcb30b043bfeada74fa589d166264917ab78ca0e424e12bef62c7977ad60739.png" />
+</div>
+</div>
+<p>Let’s see if we can detect this faults automatically using the <span class="math notranslate nohighlight">\(T^2\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> indices in the reduced space</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fault</span> <span class="o">=</span> <span class="s1">&#39;01&#39;</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">][:,:</span><span class="mi">22</span><span class="p">],</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;00&#39;</span><span class="p">][:,</span><span class="mi">41</span><span class="p">:]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_train_norm</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">()</span>
+<span class="n">X_PCA</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">)</span>                       
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now visualize the cumulative explained variance by the principal components</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cum_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cum_var</span><span class="p">,</span> <span class="s1">&#39;ko&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cumulative variance explained (%)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of principal component&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0, &#39;Number of principal component&#39;)
+</pre></div>
+</div>
+<img alt="_images/9266fa93ef2d6f4d73a3cc18240f73bd1838869f1bd2833dc7384ddf1547d336.png" src="_images/9266fa93ef2d6f4d73a3cc18240f73bd1838869f1bd2833dc7384ddf1547d336.png" />
+</div>
+</div>
+<p>Let’s for now select the number of principal components that account for the 90% of the variance</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_pcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">cum_var</span> <span class="o">&gt;=</span> <span class="mi">90</span><span class="p">)</span> <span class="o">+</span><span class="mi">1</span>
+<span class="n">n_pcs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17
+</pre></div>
+</div>
+</div>
+</div>
+<p>This means that the first 15 principal componets explain 90% of the variance. This translates to a dimensionality reduction from 52 to 15 by only missing 10% of the “information”. Quite impressive right?</p>
+<p>Let’s now extract the first 15 principal components</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="n">X_PCA</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n_pcs</span><span class="p">]</span>
+<span class="n">T</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(500, 17)
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is equivalent as doing</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">)</span>
+<span class="n">T_train</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">)</span>
+<span class="n">T_train</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(500, 17)
+</pre></div>
+</div>
+</div>
+</div>
+<p>we can reconstruct the observations from the reduced space like this</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data_dict</span><span class="p">[</span><span class="n">fault</span><span class="o">+</span><span class="s1">&#39;_te&#39;</span><span class="p">][:,:</span><span class="mi">22</span><span class="p">],</span><span class="n">data_dict</span><span class="p">[</span><span class="n">fault</span><span class="o">+</span><span class="s1">&#39;_te&#39;</span><span class="p">][:,</span><span class="mi">41</span><span class="p">:]))</span>
+<span class="n">X_test_norm</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">T_test</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test_norm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_test_norm_reconstruct</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">T_test</span><span class="p">)</span>
+<span class="n">X_test_norm_reconstruct</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(960, 33)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now create functions for the <span class="math notranslate nohighlight">\(T^2\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> statistics</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">f</span><span class="p">,</span> <span class="n">norm</span>
+
+<span class="k">def</span> <span class="nf">compute_T2</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="c1"># Calculate the covariance matrix</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">T_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">T_train</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">T_train</span><span class="p">)</span>
+
+    <span class="c1"># Perform eigenvalue decomposition</span>
+    <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+    <span class="c1"># Sort eigenvalues in descending order</span>
+    <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">eigenvalues</span> <span class="o">=</span> <span class="n">eigenvalues</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+    <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">eigenvectors</span><span class="p">[:,</span> <span class="n">sorted_indices</span><span class="p">]</span>
+
+    <span class="c1"># Compute z scores</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">))),</span> <span class="n">eigenvectors</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="c1"># Calculate T^2 statistic</span>
+    <span class="n">T2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">z</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Threshold for T2</span>
+    <span class="n">n_d</span><span class="p">,</span> <span class="n">n_x</span> <span class="o">=</span> <span class="n">T_train</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">T2_alpha</span> <span class="o">=</span> <span class="n">n_x</span><span class="o">*</span><span class="p">(</span><span class="n">n_d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n_d</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">n_d</span><span class="o">*</span><span class="p">(</span><span class="n">n_d</span><span class="o">-</span><span class="n">n_x</span><span class="p">))</span><span class="o">*</span><span class="n">f</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_d</span><span class="o">-</span><span class="n">n_x</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">T2</span><span class="p">,</span> <span class="n">T2_alpha</span>
+
+
+<span class="k">def</span> <span class="nf">compute_Q</span><span class="p">(</span><span class="n">X_norm</span><span class="p">,</span> <span class="n">X_reconstruct</span><span class="p">):</span>
+    <span class="c1"># Compute the residual matrix</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">X_norm</span> <span class="o">-</span> <span class="n">X_reconstruct</span>
+
+    <span class="c1"># Compute Q statistic</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Threshold for Q</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">X_train_norm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_train_norm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X_train_norm</span><span class="p">)</span>
+    <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+    <span class="n">n_x</span> <span class="o">=</span> <span class="n">T_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n_d</span> <span class="o">=</span> <span class="n">eigenvalues</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span>
+
+    <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">[</span><span class="n">n_x</span><span class="p">:</span><span class="n">n_d</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">[</span><span class="n">n_x</span><span class="p">:</span><span class="n">n_d</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">theta3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">[</span><span class="n">n_x</span><span class="p">:</span><span class="n">n_d</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">h0</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">theta1</span><span class="o">*</span><span class="n">theta3</span><span class="o">/</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">theta2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">c_alpha</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">Q_alpha</span> <span class="o">=</span> <span class="n">theta1</span><span class="o">*</span><span class="p">(</span><span class="n">h0</span><span class="o">*</span><span class="n">c_alpha</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">theta2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="o">/</span><span class="n">theta1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">theta2</span><span class="o">*</span><span class="n">h0</span><span class="o">*</span><span class="p">(</span><span class="n">h0</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">theta1</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">h0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Q_alpha</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T2</span><span class="p">,</span> <span class="n">T2_alpha</span> <span class="o">=</span> <span class="n">compute_T2</span><span class="p">(</span><span class="n">T_test</span><span class="p">)</span>
+<span class="n">Q</span><span class="p">,</span> <span class="n">Q_alpha</span> <span class="o">=</span> <span class="n">compute_Q</span><span class="p">(</span><span class="n">X_test_norm</span><span class="p">,</span> <span class="n">X_test_norm_reconstruct</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">T2_alpha</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$T^2$ index&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$T^2$ index&#39;)
+</pre></div>
+</div>
+<img alt="_images/1f982eea9f985746ddc7c2c240af424cf3a3f2919ee7a6a5a19dc88815a34f87.png" src="_images/1f982eea9f985746ddc7c2c240af424cf3a3f2919ee7a6a5a19dc88815a34f87.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">T2_alpha</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Q index&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Q index&#39;)
+</pre></div>
+</div>
+<img alt="_images/f330f91200ddbd02d95be7a346b855a386cbb3daf17b8afe242094ead52a7134.png" src="_images/f330f91200ddbd02d95be7a346b855a386cbb3daf17b8afe242094ead52a7134.png" />
+</div>
+</div>
+<p>We can clearly detect the fault happening around the 200 sample!</p>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div class="docutils container" id="id4">
+<dl class="citation">
+<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id1">DV93</a></span></dt>
+<dd><p>James J Downs and Ernest F Vogel. A plant-wide industrial process control problem. <em>Computers &amp; chemical engineering</em>, 17(3):245–255, 1993.</p>
+</dd>
+<dt class="label" id="id17"><span class="brackets">RCB00</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>)</span></dt>
+<dd><p>Evan L. Russell, Leo H. Chiang, and Richard D. Braatz. <em>Data-driven Methods for Fault Detection and Diagnosis in Chemical Processes</em>. Springer London, 2000.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_RL_PID.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">7. Reinforcement learning for PID tuning 🐶</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Acknowledgements.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Acknowledgements 🙏</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization"><em>1.Normalization</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-matrix"><em>2. Covariance matrix</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eigendecomposition"><em>3. Eigendecomposition</em></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#principal-components"><em>4. Principal components</em></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tennessee-eastman-process">Tennessee Eastman process 🏭</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#process-faults"><strong>Process faults</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#process-variables">Process variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#t-2-and-q-indices"><span class="math notranslate nohighlight">\(T^2\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> indices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fault-detection">Fault detection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Edgar Ivan Sanchez Medina, Antonio del Rio Chanona and Caroline Ganzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
