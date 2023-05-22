@@ -19,7 +19,9 @@ parts:
   - caption: Data-driven optimization
     chapters:
     - file: 06_PID_tuning
-  #- caption: Reinforcement learning
+  - caption: Reinforcement learning
+    chapters:
+    - file: 07_RL_PID
   - caption: Unsupervised learning
     chapters:
     - file: 08_PCA

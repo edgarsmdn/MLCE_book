@@ -69,7 +69,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Acknowledgements 🙏" href="Acknowledgements.html" />
-    <link rel="prev" title="6. PID tuning via data-driven optimization 🔩" href="06_PID_tuning.html" />
+    <link rel="prev" title="7. Reinforcement learning for PID tuning 🐶" href="07_RL_PID.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -178,6 +178,10 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="07_RL_PID.html">7. Reinforcement learning for PID tuning 🐶</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
 <ul class="current nav bd-sidenav">
@@ -770,7 +774,7 @@ A(g) + E(g) → F(liq)
 <figure class="align-center" id="id18">
 <a class="reference internal image-reference" href="_images/TEP_flowsheet.png"><img alt="cstr" src="_images/TEP_flowsheet.png" style="width: 80%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Schematic representation of the Tennessee Eastman process flowsheet. Modified from [<span id="id3">[<a class="reference internal" href="#id17" title="Evan L. Russell, Leo H. Chiang, and Richard D. Braatz. Data-driven Methods for Fault Detection and Diagnosis in Chemical Processes. Springer London, 2000.">RCB00</a>]</span>].</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Schematic representation of the Tennessee Eastman process flowsheet. Modified from [<span id="id3">[<a class="reference internal" href="#id17" title="Evan L. Russell, Leo H. Chiang, and Richard D. Braatz. Data-driven Methods for Fault Detection and Diagnosis in Chemical Processes. Springer London, 2000.">RCB00</a>]</span>].</span><a class="headerlink" href="#id18" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The dataset contains 41 measured states and 11 manipulated variables. Some variables are sampled every 3 minutes, 6 minutes or 15 minutes. And all measurements include Gaussian noise.</p>
@@ -1587,12 +1591,12 @@ Q_\alpha = \theta_1 \left( \frac{h_0 c_{\alpha} (2\theta_2)^{1/2}}{\theta_1} + 1
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="06_PID_tuning.html"
+       href="07_RL_PID.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">6. PID tuning via data-driven optimization 🔩</p>
+        <p class="prev-next-title">7. Reinforcement learning for PID tuning 🐶</p>
       </div>
     </a>
     <a class="right-next"

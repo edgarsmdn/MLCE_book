@@ -1,0 +1,1735 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>7. Reinforcement learning for PID tuning 🐶 &#8212; Machine Learning in Chemical Engineering</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '07_RL_PID';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="8. Process monitoring using PCA 📐" href="08_PCA.html" />
+    <link rel="prev" title="6. PID tuning via data-driven optimization 🔩" href="06_PID_tuning.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_Overview.html">An overview of the course 🔭</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_Introduction_Python.html">1. Introduction to Python 🐍</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_DNN_VLE.html">4. Deep Neural Networks for VLE prediction 🌐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_Hybrid_CSTR.html">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Reinforcement learning for PID tuning 🐶</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F07_RL_PID.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/07_RL_PID.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>7. Reinforcement learning for PID tuning 🐶</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-policy-search">Stochastic Policy Search 🎲</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#policy-network">Policy network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remarks-on-stochastic-policy-search">Remarks on stochastic policy search</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#policy-gradients">Policy Gradients 🗻</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Policy network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-action-selection">Control action selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-episodes-one-epoc-training-step">Multiple episodes - one epoc/training step</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reinforce-algorithm">Reinforce algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-reinforce-algorithm">Apply the Reinforce algorithm</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extra-material-on-rl-for-chemeng">Extra material on RL for ChemEng 🤓</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="reinforcement-learning-for-pid-tuning">
+<h1>7. Reinforcement learning for PID tuning 🐶<a class="headerlink" href="#reinforcement-learning-for-pid-tuning" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/07_RL_PID.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>In this tutorial we are going to use the same CSTR example as in <a class="reference external" href="https://edgarsmdn.github.io/MLCE_book/06_PID_tuning.html">tutorial notebook 6</a>. Therefore, it is a great idea to first look at tutorial 6 to have the complete context.</p>
+</div>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Perform PID tuning using reinforcement learning</p></li>
+<li><p>Revise the concept of transfer learning</p></li>
+<li><p>Revise the concept of policy gradients</p></li>
+</ul>
+</section>
+<section id="a-quick-reminder">
+<h2>A quick reminder ✅<a class="headerlink" href="#a-quick-reminder" title="Permalink to this headline">#</a></h2>
+<p>Reinforcement Learning (RL) is an area of machine learning concerned with how intelligent agents ought to take actions in an environment in order to maximize the notion of cumulative reward.</p>
+<p>RL algorithms are particularly well suited to address sequential decision making problems under uncertainty, for example, they are generally applied to solve problems in a Markov decision process (MDP) setting. A control problem (just like reactor control) is a sequential decision making problem under uncertainty, where at every time-step the controller (agent in the RL context) must take an optimal (control) action, and it is hindered by process disturbances (uncertainty). There are many types of reinforcement leanring algorithms, in this notebook tutorial we will focus on <strong>policy optimization</strong> algorithms.</p>
+<p>We can define an RL agent as a controller that given a state <span class="math notranslate nohighlight">\({\bf x}\)</span> outputs the optimal action <span class="math notranslate nohighlight">\({\bf u}\)</span></p>
+<div class="math notranslate nohighlight">
+\[{\bf u}:=\pi({\bf x})\]</div>
+<p>If the controller <span class="math notranslate nohighlight">\(\pi(\cdot)\)</span> is parametrized, say by neural network weights <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span>, we can write</p>
+<div class="math notranslate nohighlight">
+\[{\bf u}:=\pi({\bf x};\boldsymbol{\theta})\]</div>
+<p>where <span class="math notranslate nohighlight">\({\bf \theta}\)</span> are parameters determined <em>a priori</em>. We could define the PID controller in this same fashion:</p>
+<div class="math notranslate nohighlight">
+\[u:=\text{PID}(x;K_P,K_I,K_D)\]</div>
+<p>In many cases, to fullfil the exploration - exploitation dilemma or in games, stochastic policies are used, which instead of outputting a single action <span class="math notranslate nohighlight">\({\bf u}\)</span>, output a distributions over actions <span class="math notranslate nohighlight">\(p({\bf x};\boldsymbol{\theta})\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[{\bf u} \sim p({\bf x};\boldsymbol{\theta})\]</div>
+<p>In practice, it is common to have a neural network output the moments (mean and variance), and to then draw an action from the distribution parametrized by this mean and variance</p>
+<div class="math notranslate nohighlight">
+\[ \boldsymbol{ \mu }, \boldsymbol{ \Sigma } := p({\bf x};\boldsymbol{\theta})\]</div>
+<div class="math notranslate nohighlight">
+\[{\bf u} \sim \mathcal{N}(\boldsymbol{ \mu }, \boldsymbol{ \Sigma })\]</div>
+<p>You can find a Taxonomy of RL Algorithms below.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="_images/algorithms.PNG"><img alt="kNN" src="_images/algorithms.PNG" style="width: 100%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">A broad classification of reinforcement learning algorithms. <a class="reference external" href="https://spinningup.openai.com/en/latest/spinningup/rl_intro2.html">source</a></span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">Ffunctional</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">odeint</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="n">grid</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The code below corresponds to the CSTR model and parameters of tutorial 6.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#@title CSTR code from tutorial 6</span>
+
+<span class="n">eps</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+
+<span class="c1">###############</span>
+<span class="c1">#  CSTR model #</span>
+<span class="c1">###############</span>
+
+<span class="c1"># Taken from http://apmonitor.com/do/index.php/Main/NonlinearControl</span>
+
+<span class="k">def</span> <span class="nf">cstr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
+
+    <span class="c1"># ==  Inputs == #</span>
+    <span class="n">Tc</span>  <span class="o">=</span> <span class="n">u</span>   <span class="c1"># Temperature of cooling jacket (K)</span>
+
+    <span class="c1"># == States == #</span>
+    <span class="n">Ca</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Concentration of A in CSTR (mol/m^3)</span>
+    <span class="n">T</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Temperature in CSTR (K)</span>
+
+    <span class="c1"># == Process parameters == #</span>
+    <span class="n">Tf</span>     <span class="o">=</span> <span class="mi">350</span>    <span class="c1"># Feed temperature (K)</span>
+    <span class="n">q</span>      <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># Volumetric Flowrate (m^3/sec)</span>
+    <span class="n">Caf</span>    <span class="o">=</span> <span class="mi">1</span>      <span class="c1"># Feed Concentration (mol/m^3)</span>
+    <span class="n">V</span>      <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># Volume of CSTR (m^3)</span>
+    <span class="n">rho</span>    <span class="o">=</span> <span class="mi">1000</span>   <span class="c1"># Density of A-B Mixture (kg/m^3)</span>
+    <span class="n">Cp</span>     <span class="o">=</span> <span class="mf">0.239</span>  <span class="c1"># Heat capacity of A-B Mixture (J/kg-K)</span>
+    <span class="n">mdelH</span>  <span class="o">=</span> <span class="mf">5e4</span>    <span class="c1"># Heat of reaction for A-&gt;B (J/mol)</span>
+    <span class="n">EoverR</span> <span class="o">=</span> <span class="mi">8750</span>   <span class="c1"># E -Activation energy (J/mol), R -Constant = 8.31451 J/mol-K</span>
+    <span class="n">k0</span>     <span class="o">=</span> <span class="mf">7.2e10</span> <span class="c1"># Pre-exponential factor (1/sec)</span>
+    <span class="n">UA</span>     <span class="o">=</span> <span class="mf">5e4</span>    <span class="c1"># U -Heat Transfer Coefficient (W/m^2-K) A -Area - (m^2)</span>
+    
+    <span class="c1"># == Equations == #</span>
+    <span class="n">rA</span>     <span class="o">=</span> <span class="n">k0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">EoverR</span><span class="o">/</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="n">Ca</span> <span class="c1"># reaction rate</span>
+    <span class="n">dCadt</span>  <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="n">V</span><span class="o">*</span><span class="p">(</span><span class="n">Caf</span> <span class="o">-</span> <span class="n">Ca</span><span class="p">)</span> <span class="o">-</span> <span class="n">rA</span>     <span class="c1"># Calculate concentration derivative</span>
+    <span class="n">dTdt</span>   <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="n">V</span><span class="o">*</span><span class="p">(</span><span class="n">Tf</span> <span class="o">-</span> <span class="n">T</span><span class="p">)</span> \
+              <span class="o">+</span> <span class="n">mdelH</span><span class="o">/</span><span class="p">(</span><span class="n">rho</span><span class="o">*</span><span class="n">Cp</span><span class="p">)</span><span class="o">*</span><span class="n">rA</span> \
+              <span class="o">+</span> <span class="n">UA</span><span class="o">/</span><span class="n">V</span><span class="o">/</span><span class="n">rho</span><span class="o">/</span><span class="n">Cp</span><span class="o">*</span><span class="p">(</span><span class="n">Tc</span><span class="o">-</span><span class="n">T</span><span class="p">)</span>   <span class="c1"># Calculate temperature derivative</span>
+
+    <span class="c1"># == Return xdot == #</span>
+    <span class="n">xdot</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">xdot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dCadt</span>
+    <span class="n">xdot</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dTdt</span>
+    <span class="k">return</span> <span class="n">xdot</span>
+
+<span class="n">data_res</span> <span class="o">=</span> <span class="p">{}</span> 
+<span class="c1"># Initial conditions for the states</span>
+<span class="n">x0</span>             <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>          <span class="o">=</span> <span class="mf">0.87725294608097</span>
+<span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>          <span class="o">=</span> <span class="mf">324.475443431599</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x0</span>
+
+<span class="c1"># Time interval (min)</span>
+<span class="n">n</span>             <span class="o">=</span> <span class="mi">101</span> <span class="c1"># number of intervals</span>
+<span class="n">tp</span>            <span class="o">=</span> <span class="mi">25</span> <span class="c1"># process time (min)</span>
+<span class="n">t</span>             <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tp</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+
+<span class="c1"># Store results for plotting</span>
+<span class="n">Ca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>      <span class="n">Ca</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">T</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>      <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>    
+<span class="n">Tc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>   
+
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Ca</span><span class="p">)</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> 
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Tc</span><span class="p">)</span>
+
+<span class="c1"># noise level</span>
+<span class="n">noise</span>             <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">noise</span>
+
+<span class="c1"># control upper and lower bounds</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="mi">305</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="mi">295</span>
+<span class="n">Tc_ub</span>              <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">]</span>
+<span class="n">Tc_lb</span>              <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]</span>
+
+<span class="c1"># desired setpoints</span>
+<span class="n">n_1</span>                <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">n_2</span>                <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">n_1</span>
+<span class="n">Ca_des</span>             <span class="o">=</span> <span class="p">[</span><span class="mf">0.8</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="mf">0.9</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_2</span><span class="p">)]</span>
+<span class="n">T_des</span>              <span class="o">=</span> <span class="p">[</span><span class="mi">330</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">320</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_2</span><span class="p">)]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ca_des</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">T_des</span>
+
+<span class="c1">##################</span>
+<span class="c1"># PID controller #</span>
+<span class="c1">##################</span>
+
+<span class="k">def</span> <span class="nf">PID</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_setpoint</span><span class="p">,</span> <span class="n">e_history</span><span class="p">):</span>
+
+    <span class="n">Ks</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span>
+    <span class="n">Ks</span>    <span class="o">=</span> <span class="n">Ks</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+
+    <span class="c1"># K gains</span>
+    <span class="n">KpCa</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="n">KiCa</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="n">KdCa</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">KpT</span>  <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span> <span class="n">KiT</span>  <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="n">KdT</span>  <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span> 
+    <span class="n">Kb</span>   <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="c1"># setpoint error</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">x_setpoint</span> <span class="o">-</span> <span class="n">x</span>
+    <span class="c1"># control action</span>
+    <span class="n">u</span>  <span class="o">=</span> <span class="n">KpCa</span><span class="o">*</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">KiCa</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">e_history</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">KdCa</span><span class="o">*</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">e_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">u</span> <span class="o">+=</span> <span class="n">KpT</span> <span class="o">*</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">KiT</span> <span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">e_history</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">KdT</span> <span class="o">*</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">e_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">u</span> <span class="o">+=</span> <span class="n">Kb</span>
+    <span class="n">u</span>  <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]),</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">u</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#@title Ploting routines</span>
+
+<span class="c1">####################################</span>
+<span class="c1"># plot control actions performance #</span>
+<span class="c1">####################################</span>
+
+<span class="k">def</span> <span class="nf">plot_simulation</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span> <span class="n">T_dat</span><span class="p">,</span> <span class="n">Tc_dat</span><span class="p">,</span> <span class="n">data_simulation</span><span class="p">):</span>    
+    
+    <span class="n">Ca_des</span> <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">]</span>
+    <span class="n">T_des</span> <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Ca_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> 
+                           <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Ca_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Ca (mol/m^3)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Concentration of A in CSTR&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">T_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;c-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">T_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">T_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> 
+                           <span class="n">color</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">T_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Reactor Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Tc_dat</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cooling T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Jacket Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">##################</span>
+<span class="c1"># Training plots #</span>
+<span class="c1">##################</span>
+
+<span class="k">def</span> <span class="nf">plot_training</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">,</span> <span class="n">repetitions</span><span class="p">):</span>
+    <span class="n">t</span>        <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> 
+    <span class="n">Ca_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">])</span>
+    <span class="n">T_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">])</span>
+    <span class="n">Tc_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">])</span>
+    <span class="n">Ca_des</span>   <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">]</span>
+    <span class="n">T_des</span>    <span class="o">=</span> <span class="n">data_simulation</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>
+
+    <span class="n">c_</span>    <span class="o">=</span> <span class="p">[(</span><span class="n">repetitions</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">/</span><span class="n">repetitions</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">)]</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">run_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Ca_train</span><span class="p">[</span><span class="n">run_i</span><span class="p">,:],</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">c_</span><span class="p">[</span><span class="n">run_i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Ca_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Ca (mol/m^3)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Concentration of A in CSTR&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training plots&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">run_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">T_train</span><span class="p">[</span><span class="n">run_i</span><span class="p">,:],</span> <span class="s1">&#39;c-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">c_</span><span class="p">[</span><span class="n">run_i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">T_des</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Reactor Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">335</span><span class="p">,</span> <span class="mi">317</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">run_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetitions</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">Tc_train</span><span class="p">[</span><span class="n">run_i</span><span class="p">,:],</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">c_</span><span class="p">[</span><span class="n">run_i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cooling T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (min)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Jacket Temperature&#39;</span><span class="p">],</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">#####################</span>
+<span class="c1"># Convergence plots #</span>
+<span class="c1">#####################</span>
+
+<span class="k">def</span> <span class="nf">plot_convergence</span><span class="p">(</span><span class="n">Xdata</span><span class="p">,</span> <span class="n">best_Y</span><span class="p">,</span> <span class="n">Objfunc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Plots to evaluate the convergence of standard Bayesian optimization algorithms</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">## if f values are not given</span>
+    <span class="n">f_best</span>  <span class="o">=</span> <span class="mf">1e8</span>
+    <span class="k">if</span> <span class="n">best_Y</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> 
+        <span class="n">best_Y</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i_point</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Xdata</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">f_point</span> <span class="o">=</span> <span class="n">Objfunc</span><span class="p">(</span><span class="n">Xdata</span><span class="p">[</span><span class="n">i_point</span><span class="p">,:],</span> <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">f_point</span> <span class="o">&lt;</span> <span class="n">f_best</span><span class="p">:</span>
+                <span class="n">f_best</span> <span class="o">=</span> <span class="n">f_point</span> 
+            <span class="n">best_Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_best</span><span class="p">)</span>
+        <span class="n">best_Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">best_Y</span><span class="p">)</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">Xdata</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">aux</span> <span class="o">=</span> <span class="p">(</span><span class="n">Xdata</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">,:]</span><span class="o">-</span><span class="n">Xdata</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">aux</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1">## Distances between consecutive x&#39;s</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">distances</span><span class="p">,</span> <span class="s1">&#39;-ro&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;d(x[n], x[n-1])&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distance between consecutive x</span><span class="se">\&#39;</span><span class="s1">s&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Best objective value found over iterations</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)),</span> <span class="n">best_Y</span><span class="p">,</span><span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Value of the best selected sample&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Best y&#39;</span><span class="p">)</span>
+    <span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="stochastic-policy-search">
+<h2>Stochastic Policy Search 🎲<a class="headerlink" href="#stochastic-policy-search" title="Permalink to this headline">#</a></h2>
+<section id="policy-network">
+<h3>Policy network<a class="headerlink" href="#policy-network" title="Permalink to this headline">#</a></h3>
+<p>In the same way as we used data-driven optimization to tune the gains <span class="math notranslate nohighlight">\(K_P,K_I,K_D\)</span> in the PID controllers (cf. <a class="reference external" href="https://edgarsmdn.github.io/MLCE_book/06_PID_tuning.html">tutorial notebook 6</a>), we can use the same approach to tune (or train) the parameters (or weights) <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span> of a neural network.</p>
+<p>There is research that suggest that evolutionary (or stochastic search in general) algorithms can be as good (or better in some contexts) than traditional techniques, for more details see <a class="reference external" href="https://openai.com/research/evolution-strategies">Evolution Strategies as a Scalable Alternative to Reinforcement Learning</a>, the paper can be found <a class="reference external" href="https://arxiv.org/abs/1703.03864">here</a>.</p>
+<p>The difference here, with respect to the controller tuning that we perform on <a class="reference external" href="https://edgarsmdn.github.io/MLCE_book/06_PID_tuning.html">tutorial notebook 6</a> is that the neural networks have many parameters and the number of iterations needed are relatively high, and therefore, model/surrogate-based data-driven optimization methods do not scale as well and might not be the best choice. Therefore, stochastic search optimization methods (e.g. genetic algorithms, particle swarm optimization) can be a good alternative. You can check some pedagogical implementations <a class="reference external" href="https://edgarsmdn.github.io/projects/stochastic_optimization_algorithms/">here</a>.</p>
+<p>In the following section we build a relatively simple neural network controller in PyTorch</p>
+<div class="math notranslate nohighlight">
+\[{\bf u}:=\pi({\bf x};\boldsymbol{\theta})\]</div>
+<p>and hard code a simple stochastic search algorithm (it is a combination of random search and local random search) to manipulate the weights <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span>, evaluate the performance of the current weight values, and iterate.</p>
+<p><strong>Neural Network Controller Training Algorithm</strong></p>
+<p><em>Initialization</em></p>
+<p>Collect <span class="math notranslate nohighlight">\(d\)</span> initial datapoints <span class="math notranslate nohighlight">\(\mathcal{D}=\{(\hat{f}^{(j)}=\sum_{k=0}^{k=T_f} (e(k))^2,~ \boldsymbol{\theta}^{(j)}) \}_{j=0}^{j=d}\)</span> by simulating <span class="math notranslate nohighlight">\(x(k+1) = f(x(\cdot),u(\cdot))\)</span> for different values of <span class="math notranslate nohighlight">\(\boldsymbol{\theta}^{(j)}\)</span>, set a small radious of search <span class="math notranslate nohighlight">\(r\)</span></p>
+<p><em>Main loop</em></p>
+<ol class="arabic simple">
+<li><p><em>Repeat</em></p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Choose best current known parameter value <span class="math notranslate nohighlight">\(\boldsymbol{\theta}^*\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Sample <span class="math notranslate nohighlight">\(n_s\)</span> values around <span class="math notranslate nohighlight">\(\boldsymbol{\theta}^*\)</span>, that are at most some distance <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(\bar{\boldsymbol{\theta}}^{(0)},...,\bar{\boldsymbol{\theta}}^{(n_s)}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Simulate new values  <span class="math notranslate nohighlight">\( x(k+1) = f(x(k),u(\bar{\boldsymbol{\theta}}^{(i)};x(k))), ~ k=0,...,T_f-1, i=0,...,n_s \)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> Compute <span class="math notranslate nohighlight">\(\hat{f}^{(i)}=\sum_{k=0}^{k=T_f} (e(k))^2, i=0,...,n_s\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(~~~~~~\)</span> <strong>if</strong> <span class="math notranslate nohighlight">\(\bar{\boldsymbol{\theta}}^{\text{best}}\)</span> is better than <span class="math notranslate nohighlight">\(\boldsymbol{\theta}^*\)</span>, then <span class="math notranslate nohighlight">\( \boldsymbol{\theta}^* \leftarrow \bar{\boldsymbol{\theta}}^{\text{best}}\)</span>, <strong>else</strong> <span class="math notranslate nohighlight">\( r \leftarrow r\gamma\)</span>, where <span class="math notranslate nohighlight">\( 0 &lt; \gamma &lt;1 \)</span></p></li>
+<li><p>until stopping criterion is met.</p></li>
+</ol>
+<p>Remarks:</p>
+<ul class="simple">
+<li><p>The initial collection of <span class="math notranslate nohighlight">\(d\)</span> points is generally done by some space filling (e.g. <a class="reference external" href="https://en.wikipedia.org/wiki/Latin_hypercube_sampling">Latin Hypercube</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Sobol_sequence">Sobol Sequence</a>) procedure.</p></li>
+</ul>
+<p>First, let’s create a neural network in PyTorch that has two hidden layers, one being double the size of the input layer and the other double the size of the output layer. We will use the activation functions <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.LeakyReLU.html">LeakyReLU</a> and <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU6.html">ReLU6</a>. If you want a more gentle introduction to neural nets in Pytorch, check the <a class="reference external" href="https://edgarsmdn.github.io/MLCE_book/04_DNN_VLE.html">tutorial notebook 4</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##################</span>
+<span class="c1"># Policy Network #</span>
+<span class="c1">##################</span>
+
+<span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="c1"># in current form this is a linear function (wouldn&#39;t expect great performance here)</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">Net</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span>    <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float</span>
+
+    <span class="c1"># Unpack the dictionary </span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">args</span>     <span class="o">=</span> <span class="n">kwargs</span>
+
+    <span class="c1"># Get info of machine</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> 
+    <span class="bp">self</span><span class="o">.</span><span class="n">device</span>   <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Define ANN topology </span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;input_size&#39;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_sz</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;output_size&#39;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hs1</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="o">*</span><span class="mi">2</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hs2</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_sz</span><span class="o">*</span><span class="mi">2</span> 
+
+    <span class="c1"># Define layers </span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hs1</span> <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hs1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hs2</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hs2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_sz</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1">#x = torch.tensor(x.view(1,1,-1)).float() # re-shape tensor</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Ffunctional</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Ffunctional</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden2</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Ffunctional</span><span class="o">.</span><span class="n">relu6</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>   <span class="c1"># range (0,6)</span>
+
+    <span class="k">return</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We normalize the inputs and states</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># normalization for states and actions </span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;x_norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">.8</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],[</span><span class="mf">.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span><span class="mf">.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">]])</span> <span class="c1"># [mean],[range]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="o">/</span><span class="mi">6</span><span class="p">],[</span><span class="mi">295</span><span class="p">]])</span>                   <span class="c1"># [range/6],[bias]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s create the objective function for the policy network.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Notice the difference between this objective function and the objective function use in <a class="reference external" href="https://edgarsmdn.github.io/MLCE_book/04_DNN_VLE.html">tutorial 6</a>. We have included a conditional to switch between algorithms.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">J_PolicyCSTR</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">data_res</span><span class="o">=</span><span class="n">data_res</span><span class="p">,</span> <span class="n">policy_alg</span><span class="o">=</span><span class="s1">&#39;PID&#39;</span><span class="p">,</span> 
+                 <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">episode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    
+    <span class="c1"># load data</span>
+    <span class="n">Ca</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">])</span>
+    <span class="n">T</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">])</span>
+    <span class="n">Tc</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">])</span>
+    <span class="n">t</span>     <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">])</span> 
+    <span class="n">x0</span>    <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">])</span>    
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># setpoints      </span>
+    <span class="n">Ca_des</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_des&#39;</span><span class="p">];</span> <span class="n">T_des</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_des&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># upper and lower bounds</span>
+    <span class="n">Tc_ub</span>  <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_ub&#39;</span><span class="p">];</span>  <span class="n">Tc_lb</span>  <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_lb&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># normalized states and actions</span>
+    <span class="n">x_norm</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;x_norm&#39;</span><span class="p">];</span> <span class="n">u_norm</span> <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_norm&#39;</span><span class="p">];</span>
+
+    <span class="c1"># initiate</span>
+    <span class="n">x</span>         <span class="o">=</span> <span class="n">x0</span>
+    <span class="n">e_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># log probs</span>
+    <span class="k">if</span> <span class="n">policy_alg</span> <span class="o">==</span> <span class="s1">&#39;PG_RL&#39;</span><span class="p">:</span>
+      <span class="n">log_probs</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+    
+    <span class="c1"># Simulate CSTR</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># delta t</span>
+        <span class="n">ts</span>      <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="c1"># desired setpoint</span>
+        <span class="n">x_sp</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Ca_des</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">T_des</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+
+        <span class="c1">#### PID ####</span>
+        <span class="k">if</span> <span class="n">policy_alg</span> <span class="o">==</span> <span class="s1">&#39;PID&#39;</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">PID</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_sp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+          <span class="k">else</span><span class="p">:</span>
+            <span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">PID</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_sp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_history</span><span class="p">))</span>
+
+        <span class="c1"># --------------&gt; New compared to tutorial 6 &lt;-------------------</span>
+        <span class="c1">#### Stochastic Policy Search ####</span>
+        <span class="k">elif</span> <span class="n">policy_alg</span> <span class="o">==</span> <span class="s1">&#39;SPS_RL&#39;</span><span class="p">:</span>
+          <span class="n">xk</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">x_sp</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+          <span class="c1"># state preprocesing</span>
+          <span class="n">xknorm</span>       <span class="o">=</span> <span class="p">(</span><span class="n">xk</span><span class="o">-</span><span class="n">x_norm</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">x_norm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+          <span class="n">xknorm_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">xknorm</span><span class="p">)</span>
+          <span class="c1"># compute u_k from policy</span>
+          <span class="n">mean_uk</span>      <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">xknorm_torch</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+          <span class="n">u_k</span>          <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">mean_uk</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+          <span class="n">u_k</span>          <span class="o">=</span> <span class="n">u_k</span><span class="o">*</span><span class="n">u_norm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">u_norm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+          <span class="n">u_k</span>          <span class="o">=</span> <span class="n">u_k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+          <span class="n">u_k</span>          <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">u_k</span><span class="p">,</span> <span class="n">Tc_lb</span><span class="p">),</span> <span class="n">Tc_ub</span><span class="p">)</span>
+          <span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>        <span class="o">=</span> <span class="n">u_k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1">#### Policy Gradients #### </span>
+        <span class="c1"># See next section for the explanation on Policy gradients!</span>
+        <span class="k">elif</span> <span class="n">policy_alg</span> <span class="o">==</span> <span class="s1">&#39;PG_RL&#39;</span><span class="p">:</span>
+          <span class="n">xk</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">x_sp</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+          <span class="c1"># state preprocesing</span>
+          <span class="n">xknorm</span>       <span class="o">=</span> <span class="p">(</span><span class="n">xk</span><span class="o">-</span><span class="n">x_norm</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">x_norm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+          <span class="n">xknorm_torch</span> <span class="o">=</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">xknorm</span><span class="p">)</span>
+          <span class="c1"># compute u_k distribution</span>
+          <span class="n">m</span><span class="p">,</span> <span class="n">s</span>                      <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">xknorm_torch</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+          <span class="n">s</span>                         <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">eps</span>
+          <span class="n">mean_uk</span><span class="p">,</span> <span class="n">std_uk</span>           <span class="o">=</span> <span class="n">mean_std</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+          <span class="n">u_k</span><span class="p">,</span> <span class="n">logprob_k</span><span class="p">,</span> <span class="n">entropy_k</span> <span class="o">=</span> <span class="n">select_action</span><span class="p">(</span><span class="n">mean_uk</span><span class="p">,</span> <span class="n">std_uk</span><span class="p">)</span>
+          <span class="n">u_k</span>                       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">u_k</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="p">(</span><span class="n">nu</span><span class="p">))</span>
+          <span class="c1"># hard bounds on inputs</span>
+          <span class="n">u_k</span>                       <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">u_k</span><span class="p">,</span> <span class="n">Tc_lb</span><span class="p">),</span> <span class="n">Tc_ub</span><span class="p">)</span>
+          <span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>                     <span class="o">=</span> <span class="n">u_k</span>
+          <span class="n">log_probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">logprob_k</span>
+        <span class="c1"># ----------------------------------------------------------------</span>
+
+        <span class="c1"># simulate system</span>
+        <span class="n">y</span>            <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">cstr</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">ts</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">Tc</span><span class="p">[</span><span class="n">i</span><span class="p">],))</span>
+        <span class="c1"># add process disturbance</span>
+        <span class="n">s</span>            <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">Ca</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>      <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">noise</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">0.1</span>    
+        <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>       <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">noise</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">5</span>     
+        <span class="c1"># state update</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>         <span class="o">=</span> <span class="n">Ca</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>         <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># compute tracking error</span>
+        <span class="n">e_history</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x_sp</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+
+    <span class="c1"># == objective == #</span>
+    <span class="c1"># tracking error</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_history</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">0.2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">e_history</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">15</span>
+    <span class="c1"># penalize magnitud of control action</span>
+    <span class="n">u_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Tc</span><span class="p">[:]</span><span class="o">-</span><span class="n">Tc_lb</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span>
+    <span class="n">u_mag</span> <span class="o">=</span> <span class="n">u_mag</span><span class="o">/</span><span class="mi">10</span>
+    <span class="c1"># penalize change in control action</span>
+    <span class="n">u_cha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Tc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">Tc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">10</span>
+    <span class="n">u_cha</span> <span class="o">=</span> <span class="n">u_cha</span><span class="o">/</span><span class="mi">10</span>
+
+    <span class="c1"># collect data for plots</span>
+    <span class="k">if</span> <span class="n">collect_training_data</span><span class="p">:</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ca</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tc</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;err_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_mag_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_mag</span><span class="p">)</span>
+        <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_cha_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_cha</span><span class="p">)</span>
+
+    <span class="c1"># sums</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="n">u_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u_mag</span><span class="p">)</span>
+    <span class="n">u_cha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u_cha</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">episode</span><span class="p">:</span>
+      <span class="c1"># See next section for the explanation on Policy gradients!</span>
+      <span class="n">sum_logprob</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">log_probs</span><span class="p">)</span>
+      <span class="n">reward</span>      <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">error</span> <span class="o">+</span> <span class="n">u_mag</span> <span class="o">+</span> <span class="n">u_cha</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">reward</span><span class="p">,</span> <span class="n">sum_logprob</span>
+    
+    <span class="k">if</span> <span class="n">traj</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">Ca</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Tc</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">error</span> <span class="o">+</span> <span class="n">u_mag</span> <span class="o">+</span> <span class="n">u_cha</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As mentioned above, we are going to use a stochastic search algorithm that combines random search with local random search to optimize the policy network.</p>
+<p>The code below has two main elements:</p>
+<p><strong>Random Search Step</strong>: During this step neural network weights are sampled uniformely (given some bounds). Each set of parameters is evaluated (a simulation is run), and the parameter set that performed best is passed to the next step.</p>
+<p>An illustration of how Random Search would look in a 2-dimensional space is shown below</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="_images/random_search.PNG"><img alt="kNN" src="_images/random_search.PNG" style="width: 75%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">An illustration of the random search algorithm. <a class="reference external" href="https://commons.wikimedia.org/wiki/File:Hyperparameter_Optimization_using_Random_Search.svg">source</a></span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p><strong>Local Search Step</strong>: This step starts from the best parameter values found by the <em>Random Search Step</em>. Subsequently it does a random search close by the best value found (hence termed stocastic local search). Additionally, if after some number of interations a better function value has not been found (also via simulating the system), the radius of search is reduced.</p>
+<p>An illustration of how Local search would look in a 2-dimensional space is shown below</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="_images/local_random_search.PNG"><img alt="kNN" src="_images/local_random_search.PNG" style="width: 70%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">An illustration of the local search algorithm.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>By combining a ‘global search’ strategy (Random search) and a ‘local search’ strategy (Local search) we balance exploration and exploitation which is a key concept in reinforcement learning.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#######################</span>
+<span class="c1"># auxiliary functions #</span>
+<span class="c1">#######################</span>
+
+<span class="k">def</span> <span class="nf">sample_uniform_params</span><span class="p">(</span><span class="n">params_prev</span><span class="p">,</span> <span class="n">param_max</span><span class="p">,</span> <span class="n">param_min</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">param_max</span> <span class="o">-</span> <span class="n">param_min</span><span class="p">)</span> <span class="o">+</span> <span class="n">param_min</span> \
+              <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params_prev</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>              
+    <span class="k">return</span> <span class="n">params</span>
+
+<span class="k">def</span> <span class="nf">sample_local_params</span><span class="p">(</span><span class="n">params_prev</span><span class="p">,</span> <span class="n">param_max</span><span class="p">,</span> <span class="n">param_min</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">param_max</span> <span class="o">-</span> <span class="n">param_min</span><span class="p">)</span> <span class="o">+</span> <span class="n">param_min</span> <span class="o">+</span> <span class="n">v</span> \
+              <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params_prev</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>              
+    <span class="k">return</span> <span class="n">params</span>
+
+<span class="c1">#################################</span>
+<span class="c1"># Generalized policy search </span>
+<span class="c1">#################################</span>
+
+<span class="k">def</span> <span class="nf">Generalized_policy_search</span><span class="p">(</span><span class="n">shrink_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">evals_shrink</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                              <span class="n">evals</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">ratio_ls_rs</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Tailores to address function: J_BB_bioprocess(model, dt, x0, Umax, n_run, n_steps)</span>
+<span class="sd">    bounds: np.array([150,7])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># adapt evaluations    </span>
+    <span class="n">evals_rs</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">evals</span><span class="o">*</span><span class="n">ratio_ls_rs</span><span class="p">)</span>
+    <span class="n">evals_ls</span> <span class="o">=</span> <span class="n">evals</span> <span class="o">-</span> <span class="n">evals_rs</span>
+
+    <span class="c1"># problem initialisation</span>
+    <span class="n">nu</span>        <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">nx</span>        <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">hyparams</span>  <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;input_size&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;output_size&#39;</span><span class="p">:</span> <span class="n">nu</span><span class="p">}</span> <span class="c1"># include setpoints +2</span>
+    <span class="n">n_steps</span>   <span class="o">=</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
+
+    <span class="c1">#######################</span>
+    <span class="c1"># policy initialization</span>
+    <span class="c1">#######################</span>
+
+    <span class="n">policy_net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">(</span><span class="o">**</span><span class="n">hyparams</span><span class="p">)</span>
+    <span class="n">params</span>     <span class="o">=</span> <span class="n">policy_net</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+    <span class="n">param_max</span>  <span class="o">=</span> <span class="mi">5</span><span class="c1"># 1.5</span>
+    <span class="n">param_min</span>  <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="c1">#-1.5</span>
+
+    <span class="c1"># == initialise rewards == #</span>
+    <span class="n">best_reward</span> <span class="o">=</span> <span class="mf">1e8</span>
+    <span class="n">best_policy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> 
+
+    <span class="c1">###############</span>
+    <span class="c1"># Random search</span>
+    <span class="c1">###############</span>
+
+    <span class="k">for</span> <span class="n">policy_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">evals_rs</span><span class="p">):</span>
+        <span class="c1"># == Random Search in policy == #</span>
+        <span class="c1"># sample a random policy</span>
+        <span class="n">NNparams_RS</span>  <span class="o">=</span> <span class="n">sample_uniform_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">param_max</span><span class="p">,</span> <span class="n">param_min</span><span class="p">)</span>
+        <span class="c1"># consrict policy to be evaluated</span>
+        <span class="n">policy_net</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">NNparams_RS</span><span class="p">)</span>
+        <span class="c1"># evaluate policy</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">J_PolicyCSTR</span><span class="p">(</span><span class="n">policy_net</span><span class="p">,</span> <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                              <span class="n">policy_alg</span><span class="o">=</span><span class="s1">&#39;SPS_RL&#39;</span><span class="p">)</span>
+        <span class="c1"># benchmark reward ==&gt; min &quot;&lt;&quot;</span>
+        <span class="k">if</span> <span class="n">reward</span> <span class="o">&lt;</span> <span class="n">best_reward</span><span class="p">:</span>
+            <span class="n">best_reward</span> <span class="o">=</span> <span class="n">reward</span>
+            <span class="n">best_policy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">NNparams_RS</span><span class="p">)</span>          
+
+    <span class="c1">###############</span>
+    <span class="c1"># local search</span>
+    <span class="c1">###############</span>
+
+    <span class="c1"># define max radius</span>
+    <span class="n">r0</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">param_min</span><span class="p">,</span> <span class="n">param_max</span><span class="p">])</span><span class="o">*</span><span class="n">radius</span>
+
+    <span class="c1"># initialization</span>
+    <span class="n">iter_i</span>  <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">fail_i</span>  <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="n">iter_i</span> <span class="o">&lt;</span> <span class="n">evals_ls</span><span class="p">:</span>
+
+        <span class="c1"># shrink radius</span>
+        <span class="k">if</span> <span class="n">fail_i</span> <span class="o">&gt;=</span> <span class="n">evals_shrink</span><span class="p">:</span>
+            <span class="n">fail_i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span><span class="o">*</span><span class="n">shrink_ratio</span>
+            <span class="n">r0</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">param_min</span><span class="p">,</span> <span class="n">param_max</span><span class="p">])</span><span class="o">*</span><span class="n">radius</span>
+
+        <span class="c1"># new parameters</span>
+        <span class="n">NNparams_LS</span> <span class="o">=</span> <span class="n">sample_local_params</span><span class="p">(</span><span class="n">best_policy</span><span class="p">,</span> <span class="n">r0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># == bounds adjustment == #</span>
+        
+        <span class="c1"># evaluate new agent</span>
+        <span class="n">policy_net</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">NNparams_LS</span><span class="p">)</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">J_PolicyCSTR</span><span class="p">(</span><span class="n">policy_net</span><span class="p">,</span> <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                              <span class="n">policy_alg</span><span class="o">=</span><span class="s1">&#39;SPS_RL&#39;</span><span class="p">)</span> 
+
+        <span class="c1"># choose the == Min == value      </span>
+        <span class="k">if</span> <span class="n">reward</span> <span class="o">&lt;</span> <span class="n">best_reward</span><span class="p">:</span>
+            <span class="n">best_reward</span> <span class="o">=</span> <span class="n">reward</span>
+            <span class="n">best_policy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">NNparams_LS</span><span class="p">)</span>
+            <span class="n">fail_i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fail_i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># iteration counter</span>
+        <span class="n">iter_i</span> <span class="o">+=</span> <span class="mi">1</span>  
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;final reward = &#39;</span><span class="p">,</span><span class="n">best_reward</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;radius = &#39;</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">best_policy</span><span class="p">,</span> <span class="n">best_reward</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># data for plots</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="p">[]</span> 
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;err_train&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_mag_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_cha_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># problem parameters</span>
+<span class="n">e_tot</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">e_shr</span> <span class="o">=</span> <span class="n">e_tot</span><span class="o">/</span><span class="mi">30</span>
+
+<span class="c1"># Policy optimization</span>
+<span class="n">best_policy</span><span class="p">,</span> <span class="n">best_reward</span> <span class="o">=</span> \
+<span class="n">Generalized_policy_search</span><span class="p">(</span><span class="n">shrink_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">evals_shrink</span><span class="o">=</span><span class="n">e_shr</span><span class="p">,</span>
+                          <span class="n">evals</span><span class="o">=</span><span class="n">e_tot</span><span class="p">,</span> <span class="n">ratio_ls_rs</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>final reward =  15.47116813471445
+radius =  0.010941898913151246
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_training</span><span class="p">(</span><span class="n">data_res</span><span class="p">,</span> <span class="n">e_tot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6bd00fabe5f46fb8f05bba7d6c84cf334696d6253d7a424f61bb2ab149af682e.png" src="_images/6bd00fabe5f46fb8f05bba7d6c84cf334696d6253d7a424f61bb2ab149af682e.png" />
+</div>
+</div>
+<p>Notice that the ‘input size’ below has an extra +2. This is because we must pass the information to the policy network about the setpoint (given that our setpoint will change). Therefore, we give 2 extra inputs to our policy network, one for each setpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span>            <span class="o">=</span> <span class="mi">2</span>
+<span class="n">nu</span>            <span class="o">=</span> <span class="mi">1</span>
+<span class="n">hyparams</span>      <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;input_size&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;output_size&#39;</span><span class="p">:</span> <span class="n">nu</span><span class="p">}</span> <span class="c1"># include setpoints +2</span>
+<span class="n">policy_net_SPS_RL</span> <span class="o">=</span> <span class="n">Net</span><span class="p">(</span><span class="o">**</span><span class="n">hyparams</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">policy_net_SPS_RL</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">best_policy</span><span class="p">)</span>
+
+<span class="n">reps</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">Ca_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">T_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">Tc_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">):</span>
+  <span class="n">Ca_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">T_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">Tc_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">J_PolicyCSTR</span><span class="p">(</span><span class="n">policy_net_SPS_RL</span><span class="p">,</span>
+                                                               <span class="n">policy_alg</span><span class="o">=</span><span class="s1">&#39;SPS_RL&#39;</span><span class="p">,</span> 
+                                                                <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                                                <span class="n">traj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Plot the results</span>
+<span class="n">plot_simulation</span><span class="p">(</span><span class="n">Ca_eval</span><span class="p">,</span> <span class="n">T_eval</span><span class="p">,</span> <span class="n">Tc_eval</span><span class="p">,</span> <span class="n">data_res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/df28edef4bb53ae15ef14b8f2aa32fb11b5ad40e36ade7c505b1784520ae9c73.png" src="_images/df28edef4bb53ae15ef14b8f2aa32fb11b5ad40e36ade7c505b1784520ae9c73.png" />
+</div>
+</div>
+</section>
+<section id="remarks-on-stochastic-policy-search">
+<h3>Remarks on stochastic policy search<a class="headerlink" href="#remarks-on-stochastic-policy-search" title="Permalink to this headline">#</a></h3>
+<p>As it can be observed from the simple example above Stochastic local search methods work well in practice and are much easier to implement that other techniques (such as policy gradients). In general, as we move to large parameter spaces, for example neural networks with millions of parameters, their performance will deteriorate, and a policy gradient-like approach will be more desireable.</p>
+</section>
+</section>
+<section id="policy-gradients">
+<h2>Policy Gradients 🗻<a class="headerlink" href="#policy-gradients" title="Permalink to this headline">#</a></h2>
+<p>Policy gradient methods rely on the <a class="reference external" href="https://link.springer.com/article/10.1007/BF00992696">Policy Gradient Theorem</a> which allows to retrieve the gradient of the expected objective function with respect to policy parameters (neural network weights) <span class="math notranslate nohighlight">\(\nabla_\theta \mathbb{E}_{\pi_\theta}[f(\pi_\theta)]\)</span> through Monte Carlo runs. Given the availability of gradients, it is possible to follow a gradient-based optimization to optimize the policy, generally, Adam or Gradient Descent is used. More information can be found of Chapter 13 on <a class="reference external" href="http://incompleteideas.net/book/the-book.html">Reinforcement Learning: An Introduction</a>.</p>
+<p>In this tutorial notebook we outline the simplest algorithm of this kind, <strong>Reinforce</strong>. For a more in dept introduction to the topic see <a class="reference external" href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html">Intro to Policy Optimization</a>.</p>
+<p>In the case of stochastic policies, the policy function returns the defining parameters of a probability distribution (such as the mean and variance) over possible actions, from which the actions are sampled:
+$<span class="math notranslate nohighlight">\(\textbf{u} \sim \pi_\theta(\textbf{u} | \textbf{x}) = \pi(\textbf{u} | \textbf{x}, \theta) = p(\textbf{u} | \textbf{x}, \theta)\)</span>$</p>
+<p>Note*: this is the same as the stochastic policy introduced earlier, following the ‘probability notation’.</p>
+<p>To learn the optimal policy, we seek to maximize our performance metric, and hence we can follow a gradient ascent strategy:
+$<span class="math notranslate nohighlight">\(\theta_{m+1} = \theta_m + \alpha_m \nabla_\theta \mathbb{E}_{\pi_\theta}[f(\pi_\theta)] \)</span>$</p>
+<p>where <span class="math notranslate nohighlight">\(m\)</span> is the current iteration that the parameters are updated (epoch), <span class="math notranslate nohighlight">\(\nabla_\theta \mathbb{E}_{\pi_\theta}[f(\pi_\theta)]\)</span> is the expectation of <span class="math notranslate nohighlight">\(f\)</span> over <span class="math notranslate nohighlight">\(\pi_\theta\)</span> and <span class="math notranslate nohighlight">\(\alpha_m\)</span> is the step size (also termed learning rate in the RL community) for the <span class="math notranslate nohighlight">\(m^{th}\)</span> iteration.</p>
+<p>Computing <span class="math notranslate nohighlight">\( \nabla_\theta \hat{f}(\theta) = \nabla_\theta\mathbb{E}_{\pi_\theta}[J(\pi_\theta)]\)</span> directly is difficult, therefore we use the Policy Gradient Theorem, which shows the following:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \begin{alignat}{3}
+\nabla_\theta\hat{f}(\theta) = \nabla_\theta \mathbb{E}_{\pi_\theta}[f(\pi_\theta)] &amp;~=~\nabla_\theta \int  p(\pi_\theta|\theta)~ f(\pi_\theta)\text{d}\pi_\theta\\
+&amp;~=~\int \nabla_\theta p(\pi_\theta|\theta)~ f(\pi_\theta) \text{d}\pi_\theta\\
+&amp;~=~\int p(\pi_\theta|\theta) ~ \frac{\nabla_\theta p(\pi_\theta|\theta)}{p(\pi_\theta|\theta)~} ~ f(\pi_\theta) \text{d}\pi_\theta\\
+&amp;~=~\int p(\pi_\theta|\theta) ~ \nabla_\theta \text{log}\left( p(\pi_\theta|\theta)\right) f(\pi_\theta)\text{d}\pi_\theta\\
+&amp;~=~\mathbb{E}_{\pi_\theta} \left[ f(\pi_\theta) \nabla_\theta \text{log}\left( p(\pi_\theta|\theta)\right) \right]
+\end{alignat} \end{split}\]</div>
+<p>Notice from the first expression, that, <span class="math notranslate nohighlight">\(p(\pi_\theta|\theta)~ f(\pi_\theta)\)</span> is an objective function value multiplied by its probability density, therefore, integrating this over all possible values of <span class="math notranslate nohighlight">\(\pi_\theta\)</span> we obtain the expected value. From there, using simple algebra, logarithms and the chain rule, we arrive at the final equations, which shows an expected value, where, dropping the explicit distribution of <span class="math notranslate nohighlight">\(\pi_\theta\)</span>, gives us an unbiased gradient estimator, our steepest ascent update now becomes:</p>
+<div class="math notranslate nohighlight">
+\[ \theta_{m+1} = \theta_m + \alpha_m \mathbb{E}_{\pi_\theta}\left[ f(\pi_\theta) \nabla_\theta \text{log}\left( p(\pi_\theta|\theta)\right) \right] 
+\]</div>
+<p>Using the expression for <span class="math notranslate nohighlight">\(p(\pi_\theta|\theta) = \hat{\mu}(\textbf{x}_0) \prod_{t=0}^{T-1} \left[\pi(\textbf{u}_t|\textbf{x}_t,\theta) p(\textbf{x}_{t+1}|\textbf{x}_t,\textbf{u}_t) \right]\)</span> and taking its logarithm, we obtain:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \text{log}\left( p(\pi_\theta|\theta)\right) = \nabla_\theta \sum_{t=0}^{T-1} \text{log}\left( \pi(\textbf{u}_t|\textbf{x}_t,\theta)\right)\]</div>
+<p>Note that since <span class="math notranslate nohighlight">\(p(\textbf{x}_{t+1}|\textbf{x}_t,\textbf{u}_t)\)</span> and <span class="math notranslate nohighlight">\(\hat{\mu}(\textbf{x}_0)\)</span> are independent of <span class="math notranslate nohighlight">\(\theta\)</span> they disappear from the above expression. Then we can rewrite for a trajectory as:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathbb{E}_{\pi_\theta}[f(\pi_\theta)] = \mathbb{E}_{\pi_\theta} \left[ f(\pi_\theta) \nabla_\theta \sum_{t=0}^{T-1} \text{log}\left( \pi(\textbf{u}_t|\textbf{x}_t,\theta)\right)\right]\]</div>
+<p>The above expression does not require the knowledge of the dynamics of the physical system. Monte-Carlo method is utilized to approximate the expectation.</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathbb{E}_{\pi_\theta}[f(\pi_\theta)] \approx \frac{1}{K} \sum_{k=1}^{K} \left( f(\pi_\theta) \nabla_\theta \sum_{t=0}^{T-1} \text{log}\left( \pi(\textbf{u}_t|\textbf{x}_t,\theta)\right)\right)\]</div>
+<p><strong>Reinforce algorithm</strong></p>
+<p><span class="math notranslate nohighlight">\({\bf Input:}\)</span> Initialize policy parameter <span class="math notranslate nohighlight">\(\theta = \theta_0\)</span>, with <span class="math notranslate nohighlight">\(\theta_0\in\Theta_0\)</span>, learning rate <span class="math notranslate nohighlight">\(\alpha\)</span>, set number of episodes <span class="math notranslate nohighlight">\(K\)</span> and number of epochs <span class="math notranslate nohighlight">\(N\)</span>.</p>
+<p><span class="math notranslate nohighlight">\({\bf Output:}\)</span> policy <span class="math notranslate nohighlight">\(\pi(\cdot | \cdot ,\theta)\)</span> and <span class="math notranslate nohighlight">\(\Theta\)</span>
+\smallskip</p>
+<p><span class="math notranslate nohighlight">\({\bf for}\)</span> <span class="math notranslate nohighlight">\(m = 1,\dots, N\)</span> <span class="math notranslate nohighlight">\({\bf do}\)</span></p>
+<ol class="arabic simple">
+<li><p>Collect <span class="math notranslate nohighlight">\(\textbf{u}_t^k , \textbf{x}_t^k,f(\pi_\theta^k)\)</span> for <span class="math notranslate nohighlight">\(K\)</span> trajectories of <span class="math notranslate nohighlight">\(T\)</span> time steps.</p></li>
+<li><p>Estimate the gradient <span class="math notranslate nohighlight">\( \hat{g}_m := \frac{1}{K} \sum_{k=1}^{K}  \left[ f(\pi_\theta^k) \nabla_\theta \sum_{t=0}^{T-1} \text{log}\left( \pi(\textbf{u}_t^k|\hat{\textbf{x}}_t^k,\theta)\right)\right]\)</span></p></li>
+<li><p>Update the policy using a policy gradient estimate <span class="math notranslate nohighlight">\(\theta_{m+1} = \theta_m + \alpha_m \hat{g}_m\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m:=m+1\)</span></p></li>
+</ol>
+<p><span class="math notranslate nohighlight">\({\bf Remark}\)</span>: The above algorithm is the base version for many further developments that have been made since it was first proposed.</p>
+<p>The steps of the algorithm are explained below:</p>
+<p><span class="math notranslate nohighlight">\({\bf Initialization:}\)</span> The policy network and its weights <span class="math notranslate nohighlight">\(\theta\)</span> are initialized along with the algorithm’s hyperparameters such as learning rate, number of episodes and number of epochs.</p>
+<p><span class="math notranslate nohighlight">\({\bf Training ~~ loop:}\)</span> The weights of the policy network are updated by a policy gradient scheme for a total of <span class="math notranslate nohighlight">\(N\)</span> epochs.</p>
+<p>In <span class="math notranslate nohighlight">\({\bf Step 1}\)</span> <span class="math notranslate nohighlight">\(K\)</span> trajectories are computed, each trajectory consists of <span class="math notranslate nohighlight">\(T\)</span> time steps, and states and control actions are collected.</p>
+<p>In <span class="math notranslate nohighlight">\({\bf Step 2}\)</span> the gradient of the objective function with respect to the weights for the policy network is computed.</p>
+<p>In <span class="math notranslate nohighlight">\({\bf Step 3}\)</span> the weights of the policy network are updated by a gradient ascent scheme. Note that here we show a steepest ascent-like update, but other first order (i.e. Adam) or trust region methods can be used (i.e. PPO, TRPO).</p>
+<p>In <span class="math notranslate nohighlight">\({\bf Step 4}\)</span>, either the algorithm terminates or returns to Step 1.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">MultivariateNormal</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order to implement and apply the Reinforce algorithm, we are going to perform the following steps in the following subsections:</p>
+<ul class="simple">
+<li><p>Create a <span class="xref myst">policy network</span> that uses transfer learning</p></li>
+<li><p>Create an auxiliary function that selects <span class="xref myst">control actions</span> out of the distribution</p></li>
+<li><p>Create an auxilary function that runs <span class="xref myst">multiple episodes</span> per epoch</p></li>
+<li><p>Finally, put all the pieces together into a function that computes the <span class="xref myst">Reinforce algorithm</span></p></li>
+</ul>
+<p><a name="policy_net"></a></p>
+<section id="id1">
+<h3>Policy network<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p>In the next section of this tutorial notebook we show an implementation from scratch of a policy optimization algorithm using policy gradients.</p>
+<p>Given that we have already optimized the policy via stochastic search in the previous section, we use those parameters as a starting point for policy gradients. This is a form of <a class="reference external" href="https://en.wikipedia.org/wiki/Transfer_learning#:~:text=Transfer%20learning%20(TL)%20is%20a,when%20trying%20to%20recognize%20trucks.">transfer learning</a>, which refers to applying knowledge that was previously gained while solving one task to a related task.</p>
+<p>Related to this transfer learning process, we will create a second neural network with the exact same configuration as before, but we will add an extra node to each output of the original neural network to account for the variance term. This is because previously our neural network policy had the structure:</p>
+<div class="math notranslate nohighlight">
+\[{\bf u}:=\pi({\bf x};\boldsymbol{\theta})\]</div>
+<p>and by a Stochastic search algorithm we manipulated the weights <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span> to optimize performance. In policy gradients we output a distribution, rathen than a single value, in this case we output the mean and the variance of a normal distribution (each output now has two values, the mean and the variance), and therefore we must add an extra node to each output such that we have:</p>
+<div class="math notranslate nohighlight">
+\[ \boldsymbol{ \mu }, \boldsymbol{ \Sigma } := \pi({\bf x};\boldsymbol{\theta})\]</div>
+<div class="math notranslate nohighlight">
+\[{\bf u} \sim \mathcal{N}(\boldsymbol{ \mu }, \boldsymbol{ \Sigma })\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#########################################</span>
+<span class="c1"># Policy Network with transfer learning #</span>
+<span class="c1">#########################################</span>
+
+<span class="k">class</span> <span class="nc">Net_TL</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="c1"># in current form this is a linear function (wouldn&#39;t expect great performance here)</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">Net_TL</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span>    <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float</span>
+
+    <span class="c1"># Unpack the dictionary </span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">args</span>     <span class="o">=</span> <span class="n">kwargs</span>
+
+    <span class="c1"># Get info of machine</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">use_cuda</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> 
+    <span class="bp">self</span><span class="o">.</span><span class="n">device</span>   <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Define ANN topology </span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;input_size&#39;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output_sz</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;output_size&#39;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hs1</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="o">*</span><span class="mi">2</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hs2</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_sz</span><span class="o">*</span><span class="mi">2</span> 
+
+    <span class="c1"># Define layers </span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hs1</span> <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hs1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hs2</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hs2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_sz</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1">#x = torch.tensor(x.view(1,1,-1)).float() # re-shape tensor</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Ffunctional</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Ffunctional</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden2</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Ffunctional</span><span class="o">.</span><span class="n">relu6</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>   <span class="c1"># range (0,6)</span>
+
+    <span class="k">return</span> <span class="n">y</span>
+
+  <span class="k">def</span> <span class="nf">increaseClassifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+    <span class="n">w</span>         <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">weight</span>
+    <span class="n">b</span>         <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">bias</span>
+    <span class="n">old_shape</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">m2</span>        <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span> <span class="n">old_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">old_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">m2</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">m2</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">])</span> <span class="p">),</span> 
+                                       <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+    <span class="n">m2</span><span class="o">.</span><span class="n">bias</span>   <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="n">m2</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">])</span> <span class="p">),</span> 
+                                       <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">m2</span>
+  
+  <span class="k">def</span> <span class="nf">incrHere</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+    <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">increaseClassifier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that just as before, we ad a +2 to the input, as thisrefers to the current set-point value.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span>            <span class="o">=</span> <span class="mi">2</span>
+<span class="n">nu</span>            <span class="o">=</span> <span class="mi">1</span>
+<span class="n">hyparams</span>      <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;input_size&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;output_size&#39;</span><span class="p">:</span> <span class="n">nu</span><span class="p">}</span> <span class="c1"># include setpoints +2</span>
+
+<span class="n">policy_net_pg</span> <span class="o">=</span> <span class="n">Net_TL</span><span class="p">(</span><span class="o">**</span><span class="n">hyparams</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">policy_net_pg</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">best_policy</span><span class="p">)</span> <span class="c1"># Transfer learning</span>
+<span class="n">policy_net_pg</span><span class="o">.</span><span class="n">incrHere</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><a name="control_actions"></a></p>
+</section>
+<section id="control-action-selection">
+<h3>Control action selection<a class="headerlink" href="#control-action-selection" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">################################</span>
+<span class="c1"># action selection from Normal #</span>
+<span class="c1">################################</span>
+
+<span class="k">def</span> <span class="nf">select_action</span><span class="p">(</span><span class="n">control_mean</span><span class="p">,</span> <span class="n">control_sigma</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample control actions from the distribution their distribution</span>
+<span class="sd">    input: Mean, Variance</span>
+<span class="sd">    Output: Controls, log_probability, entropy</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s_cov</span>          <span class="o">=</span> <span class="n">control_sigma</span><span class="o">.</span><span class="n">diag</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">dist</span>           <span class="o">=</span> <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">control_mean</span><span class="p">,</span> <span class="n">s_cov</span><span class="p">)</span>
+    <span class="n">control_choice</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>                 <span class="c1"># sample control from N(mu,std)</span>
+    <span class="n">log_prob</span>       <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">control_choice</span><span class="p">)</span> <span class="c1"># compute log prob of this action (how likely or unlikely)</span>
+    <span class="n">entropy</span>        <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">entropy</span><span class="p">()</span>                <span class="c1"># compute the entropy of the distribution N(mu, std)</span>
+    
+    <span class="k">return</span> <span class="n">control_choice</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">,</span> <span class="n">entropy</span>
+
+<span class="c1">#########################</span>
+<span class="c1"># un-normalizing action #</span>
+<span class="c1">#########################</span>
+
+<span class="k">def</span> <span class="nf">mean_std</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mean_range</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">mean_lb</span><span class="o">=</span><span class="p">[</span><span class="mi">295</span><span class="p">],</span> <span class="n">std_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">]):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Problem specific restrictions on predicted mean and standard deviation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">mean_range</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="o">/</span><span class="mi">6</span> <span class="o">+</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">mean_lb</span><span class="p">)</span> <span class="c1"># ReLU6</span>
+    <span class="n">std</span>  <span class="o">=</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">std_range</span><span class="p">)</span>  <span class="o">*</span> <span class="n">s</span><span class="o">/</span><span class="mi">6</span>
+    
+    <span class="k">return</span> <span class="n">mean</span><span class="p">,</span> <span class="n">std</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><a name="multi_episodes"></a></p>
+</section>
+<section id="multiple-episodes-one-epoc-training-step">
+<h3>Multiple episodes - one epoc/training step<a class="headerlink" href="#multiple-episodes-one-epoc-training-step" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">################</span>
+<span class="c1"># one epoc run #</span>
+<span class="c1">################</span>
+
+<span class="k">def</span> <span class="nf">epoc_run</span><span class="p">(</span><span class="n">NNpolicy</span><span class="p">,</span> <span class="n">episodes_n</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;This function runs episodes_n episodes and collected the data. This data</span>
+<span class="sd">    is then used for one gradient descent step.</span>
+
+<span class="sd">    INPUTS</span>
+<span class="sd">    NNpolicy:   the NN policy</span>
+<span class="sd">    episodes_n: number of episodes per epoc (gradient descent steps)</span>
+<span class="sd">    data_train: dictionary of data collected</span>
+
+<span class="sd">    OUTPUTS</span>
+<span class="sd">    data_train: collected data to be passed to the main training loop</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># run episodes</span>
+    <span class="n">logprobs_list</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># log probabilities is the policies itself p(a|s)</span>
+    <span class="n">reward_list</span>   <span class="o">=</span> <span class="p">[]</span> <span class="c1"># reward</span>
+    <span class="k">for</span> <span class="n">epi_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">episodes_n</span><span class="p">):</span>
+        <span class="n">reward_</span><span class="p">,</span> <span class="n">sum_logprob</span> <span class="o">=</span> <span class="n">J_PolicyCSTR</span><span class="p">(</span><span class="n">NNpolicy</span><span class="p">,</span> <span class="n">policy_alg</span><span class="o">=</span><span class="s1">&#39;PG_RL&#39;</span><span class="p">,</span> 
+                                            <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">episode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">logprobs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sum_logprob</span><span class="p">)</span>
+        <span class="n">reward_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward_</span><span class="p">)</span>
+
+    <span class="c1"># compute mean and expectation of rewards</span>
+    <span class="n">reward_m</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">reward_list</span><span class="p">)</span>
+    <span class="n">reward_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">reward_list</span><span class="p">)</span>
+    
+
+    <span class="c1"># compute the baseline (reverse sum)</span>
+    <span class="n">log_prob_R</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">epi_i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">episodes_n</span><span class="p">)):</span>
+        <span class="n">baselined_reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward_list</span><span class="p">[</span><span class="n">epi_i</span><span class="p">]</span> <span class="o">-</span> <span class="n">reward_m</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">reward_std</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">log_prob_R</span>       <span class="o">=</span> <span class="n">log_prob_R</span> <span class="o">-</span> <span class="n">logprobs_list</span><span class="p">[</span><span class="n">epi_i</span><span class="p">]</span> <span class="o">*</span> <span class="n">baselined_reward</span>
+
+    <span class="c1"># mean log probability</span>
+    <span class="n">mean_logprob</span> <span class="o">=</span> <span class="n">log_prob_R</span><span class="o">/</span><span class="n">episodes_n</span>
+    <span class="n">reward_std</span>   <span class="o">=</span> <span class="n">reward_std</span>
+    <span class="n">reward_m</span>     <span class="o">=</span> <span class="n">reward_m</span>
+
+    <span class="k">return</span> <span class="n">mean_logprob</span><span class="p">,</span> <span class="n">reward_std</span><span class="p">,</span> <span class="n">reward_m</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p><a name="r_alg"></a></p>
+</section>
+<section id="reinforce-algorithm">
+<h3>Reinforce algorithm<a class="headerlink" href="#reinforce-algorithm" title="Permalink to this headline">#</a></h3>
+<p>Now, let’s create a function that put all pieces together and implements the Reinforce algorithm explained above</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">Reinforce</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_episodes</span><span class="p">):</span>
+
+    <span class="c1"># lists for plots</span>
+    <span class="n">rewards_m_record</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">rewards_std_record</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">epoch_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+
+        <span class="c1"># collect data</span>
+        <span class="n">mean_logprob</span><span class="p">,</span> <span class="n">reward_std</span><span class="p">,</span> <span class="n">reward_m</span> <span class="o">=</span> <span class="n">epoc_run</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">n_episodes</span><span class="p">)</span>
+
+        <span class="c1"># Expected log reward </span>
+        <span class="n">E_log_R</span> <span class="o">=</span> <span class="n">mean_logprob</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">E_log_R</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="c1"># save data for analysis</span>
+        <span class="n">rewards_m_record</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward_m</span><span class="p">)</span>
+        <span class="n">rewards_std_record</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward_std</span><span class="p">)</span>
+
+        <span class="c1"># schedule to reduce lr</span>
+        <span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">E_log_R</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">epoch_i</span><span class="o">%</span><span class="k">int</span>(n_epochs/10)==0:
+            <span class="n">mean_r</span> <span class="o">=</span> <span class="n">reward_m</span>
+            <span class="n">std_r</span>  <span class="o">=</span> <span class="n">reward_std</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;epoch:&#39;</span><span class="p">,</span> <span class="n">epoch_i</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mean reward: </span><span class="si">{</span><span class="n">mean_r</span><span class="si">:</span><span class="s1">.3</span><span class="si">}</span><span class="s1"> +- </span><span class="si">{</span><span class="n">std_r</span><span class="si">:</span><span class="s1">.2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rewards_m_record</span><span class="p">,</span> <span class="n">rewards_std_record</span><span class="p">,</span> <span class="n">policy</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="apply-the-reinforce-algorithm">
+<h3>Apply the Reinforce algorithm<a class="headerlink" href="#apply-the-reinforce-algorithm" title="Permalink to this headline">#</a></h3>
+<p>Now that we have the algorithm, let’s apply it to the problem.</p>
+<p>Let’s choose some problem parameters and initialize storing lists</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># problem parameters</span>
+<span class="n">lr</span>         <span class="o">=</span> <span class="mf">0.0001</span>
+<span class="n">total_it</span>   <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">n_episodes</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">n_epochs</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_it</span><span class="o">/</span><span class="n">n_episodes</span><span class="p">)</span>
+
+<span class="c1"># data for plots</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_train&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="p">[]</span> 
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_train&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;err_train&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_mag_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;u_cha_train&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>define the policy and the optimizer to be used</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define policy and optimizer</span>
+<span class="n">control_policy</span> <span class="o">=</span> <span class="n">policy_net_pg</span>
+<span class="n">optimizer_pol</span>  <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">control_policy</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>define the learning rate scheduler</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define Scheduler</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">ReduceLROnPlateau</span><span class="p">(</span>
+    <span class="n">optimizer_pol</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_lr</span><span class="o">=</span><span class="mf">0.000001</span><span class="p">,</span>
+    <span class="n">cooldown</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and apply the algorithm</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Runing the algorithm will last for a few minutes</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rewards_m_record</span><span class="p">,</span> <span class="n">rewards_std_record</span><span class="p">,</span> <span class="n">optimal_Reinforce</span> <span class="o">=</span> \
+<span class="n">Reinforce</span><span class="p">(</span><span class="n">control_policy</span><span class="p">,</span> <span class="n">optimizer_pol</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_episodes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 0
+mean reward: -18.1 +- 1.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 4
+mean reward: -18.3 +- 1.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 8
+mean reward: -18.0 +- 1.1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 12
+mean reward: -18.3 +- 1.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 16
+mean reward: -18.5 +- 1.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 20
+mean reward: -18.4 +- 1.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 00022: reducing learning rate of group 0 to 5.0000e-05.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 24
+mean reward: -18.3 +- 0.9
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 28
+mean reward: -18.2 +- 1.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 32
+mean reward: -18.1 +- 1.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 36
+mean reward: -18.2 +- 0.97
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s visualize now</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot the samples of posteriors</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rewards_m_record</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># plot GP confidence intervals</span>
+<span class="n">iterations</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rewards_m_record</span><span class="p">))]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">iterations</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rewards_m_record</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rewards_std_record</span><span class="p">),</span> 
+                       <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rewards_m_record</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rewards_std_record</span><span class="p">),</span> 
+                       <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;RL Reward&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;conf interval&#39;</span><span class="p">),</span>
+           <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/58e59da2ceb766df30f55e29ab477e44c0683e1639f22210a718dd166762c27c.png" src="_images/58e59da2ceb766df30f55e29ab477e44c0683e1639f22210a718dd166762c27c.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_training</span><span class="p">(</span><span class="n">data_res</span><span class="p">,</span> <span class="n">e_tot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3626de8c576475ddc539ed8e6707cc05f1dcbe24237b0e68c805bfe37661b80d.png" src="_images/3626de8c576475ddc539ed8e6707cc05f1dcbe24237b0e68c805bfe37661b80d.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reps</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">Ca_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Ca_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">T_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;T_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+<span class="n">Tc_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_res</span><span class="p">[</span><span class="s1">&#39;Tc_dat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reps</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">):</span>
+  <span class="n">Ca_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">T_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">],</span> <span class="n">Tc_eval</span><span class="p">[:,</span><span class="n">r_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">J_PolicyCSTR</span><span class="p">(</span><span class="n">policy_net_pg</span><span class="p">,</span>
+                                                               <span class="n">policy_alg</span><span class="o">=</span><span class="s1">&#39;PG_RL&#39;</span><span class="p">,</span> 
+                                                                <span class="n">collect_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                                                <span class="n">traj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Plot the results</span>
+<span class="n">plot_simulation</span><span class="p">(</span><span class="n">Ca_eval</span><span class="p">,</span> <span class="n">T_eval</span><span class="p">,</span> <span class="n">Tc_eval</span><span class="p">,</span> <span class="n">data_res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/adb672bcd142ceb9acfa09c765ea7ab1d686c2142dc5b2fde8f91387eb2873f7.png" src="_images/adb672bcd142ceb9acfa09c765ea7ab1d686c2142dc5b2fde8f91387eb2873f7.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="extra-material-on-rl-for-chemeng">
+<h2>Extra material on RL for ChemEng 🤓<a class="headerlink" href="#extra-material-on-rl-for-chemeng" title="Permalink to this headline">#</a></h2>
+<p>If you would like to read more about the use of reinforcement learning in chemical engineering systems:</p>
+<p><strong>Applications</strong></p>
+<ul class="simple">
+<li><p>Reinforcement learning offers potential for bringing significant improvements to <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S136757882100081X">industrial batch process control practice</a> even in <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0098135419304168">discontinous and nonlinear systems</a>.</p></li>
+<li><p>RL has also been used to address <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0098135420301599">chemical production scheduling</a> and <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S2772508122000643">multi-echelon supply chains</a></p></li>
+<li><p>Other applications include <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0967066121002963">PID tuning</a>, <a class="reference external" href="https://www.mdpi.com/2227-9717/11/1/123">real-time optimization</a>, <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0098135420303999">searching for optimal process routes</a>, <a class="reference external" href="https://aiche.onlinelibrary.wiley.com/doi/full/10.1002/aic.17938">flowsheet generation</a>, <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0098135419304168">bioreactors</a> and <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1002/bit.28346">biotherapeutics</a>, amongst many others.</p></li>
+</ul>
+<p><strong>Methodologies</strong></p>
+<ul class="simple">
+<li><p>Constraints to address <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0098135421004087">plant-model mismatch</a>, <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0098135421002404">constrained Q-learning</a>, <a class="reference external" href="https://www.researchgate.net/publication/368302457_Safe_deployment_of_reinforcement_learning_using_deterministic_optimization_of_trained_neural_networks">safe reinforcement learning</a>, satisfaction of constraints with <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0959152422000038">high probability</a>, and <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0959152422000816">dynamic penalties</a> for better convergence.</p></li>
+<li><p><a class="reference external" href="https://www.mdpi.com/2227-9717/10/11/2311">Process control</a>, <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0959152422001445">meta-reinforcement learning</a>, <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0098135420307912">general economic process control</a>, amongst many many others.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="06_PID_tuning.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">6. PID tuning via data-driven optimization 🔩</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="08_PCA.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">8. Process monitoring using PCA 📐</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-policy-search">Stochastic Policy Search 🎲</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#policy-network">Policy network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remarks-on-stochastic-policy-search">Remarks on stochastic policy search</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#policy-gradients">Policy Gradients 🗻</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Policy network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-action-selection">Control action selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-episodes-one-epoc-training-step">Multiple episodes - one epoc/training step</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reinforce-algorithm">Reinforce algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-the-reinforce-algorithm">Apply the Reinforce algorithm</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extra-material-on-rl-for-chemeng">Extra material on RL for ChemEng 🤓</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Edgar Ivan Sanchez Medina, Antonio del Rio Chanona and Caroline Ganzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
