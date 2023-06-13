@@ -21,7 +21,7 @@ parts:
     - file: 06_PID_tuning
   - caption: Reinforcement learning
     chapters:
-    - file: 07_RL_PID
+    - file: 07_RL_Control
   - caption: Unsupervised learning
     chapters:
     - file: 08_PCA
