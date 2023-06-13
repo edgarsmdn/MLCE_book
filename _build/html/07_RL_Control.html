@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>7. Reinforcement learning for PID tuning 🐶 &#8212; Machine Learning in Chemical Engineering</title>
+    <title>7. Reinforcement learning for Control 🐶 &#8212; Machine Learning in Chemical Engineering</title>
   
   
   
@@ -62,7 +62,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '07_RL_PID';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '07_RL_Control';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="8. Process monitoring using PCA 📐" href="08_PCA.html" />
@@ -178,7 +178,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Reinforcement learning for PID tuning 🐶</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Reinforcement learning for Control 🐶</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
 <ul class="nav bd-sidenav">
@@ -258,7 +258,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F07_RL_PID.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F07_RL_Control.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -288,7 +288,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/07_RL_PID.ipynb" target="_blank"
+      <li><a href="_sources/07_RL_Control.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -370,7 +370,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>7. Reinforcement learning for PID tuning 🐶</h1>
+    <h1>7. Reinforcement learning for Control 🐶</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -407,9 +407,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="reinforcement-learning-for-pid-tuning">
-<h1>7. Reinforcement learning for PID tuning 🐶<a class="headerlink" href="#reinforcement-learning-for-pid-tuning" title="Permalink to this headline">#</a></h1>
-<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/07_RL_PID.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+  <section class="tex2jax_ignore mathjax_ignore" id="reinforcement-learning-for-control">
+<h1>7. Reinforcement learning for Control 🐶<a class="headerlink" href="#reinforcement-learning-for-control" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/07_RL_Control.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <p>In this tutorial we are going to use the same CSTR example as in <a class="reference external" href="https://edgarsmdn.github.io/MLCE_book/06_PID_tuning.html">tutorial notebook 6</a>. Therefore, it is a great idea to first look at tutorial 6 to have the complete context.</p>
@@ -417,7 +417,7 @@ document.write(`
 <section id="goals-of-this-exercise">
 <h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
-<li><p>Perform PID tuning using reinforcement learning</p></li>
+<li><p>Perform reactor control using reinforcement learning</p></li>
 <li><p>Revise the concept of transfer learning</p></li>
 <li><p>Revise the concept of policy gradients</p></li>
 </ul>
@@ -460,7 +460,6 @@ document.write(`
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="n">grid</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">os</span>
 </pre></div>
 </div>
 </div>
@@ -1092,8 +1091,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>final reward =  15.47116813471445
-radius =  0.010941898913151246
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>final reward =  19.926245639520317
+radius =  0.009847709021836121
 </pre></div>
 </div>
 </div>
@@ -1105,7 +1104,7 @@ radius =  0.010941898913151246
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6bd00fabe5f46fb8f05bba7d6c84cf334696d6253d7a424f61bb2ab149af682e.png" src="_images/6bd00fabe5f46fb8f05bba7d6c84cf334696d6253d7a424f61bb2ab149af682e.png" />
+<img alt="_images/b008af2fb7ee68bcee35fd8ca09563ad84606b7e3e3b4984afb98bba23a4755c.png" src="_images/b008af2fb7ee68bcee35fd8ca09563ad84606b7e3e3b4984afb98bba23a4755c.png" />
 </div>
 </div>
 <p>Notice that the ‘input size’ below has an extra +2. This is because we must pass the information to the policy network about the setpoint (given that our setpoint will change). Therefore, we give 2 extra inputs to our policy network, one for each setpoint.</p>
@@ -1134,7 +1133,7 @@ radius =  0.010941898913151246
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/df28edef4bb53ae15ef14b8f2aa32fb11b5ad40e36ade7c505b1784520ae9c73.png" src="_images/df28edef4bb53ae15ef14b8f2aa32fb11b5ad40e36ade7c505b1784520ae9c73.png" />
+<img alt="_images/61d68bfcd376f6cd20523dc9ab6390e4afd18d7ddc652d4aecbbe85e2008f7c0.png" src="_images/61d68bfcd376f6cd20523dc9ab6390e4afd18d7ddc652d4aecbbe85e2008f7c0.png" />
 </div>
 </div>
 </section>
@@ -1486,46 +1485,47 @@ $<span class="math notranslate nohighlight">\(\theta_{m+1} = \theta_m + \alpha_m
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 0
-mean reward: -18.1 +- 1.0
+mean reward: -22.0 +- 0.85
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 4
-mean reward: -18.3 +- 1.0
+mean reward: -21.7 +- 0.79
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 8
-mean reward: -18.0 +- 1.1
+mean reward: -22.0 +- 0.76
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 12
-mean reward: -18.3 +- 1.0
+mean reward: -21.7 +- 0.94
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 16
-mean reward: -18.5 +- 1.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 00017: reducing learning rate of group 0 to 5.0000e-05.
+epoch: 16
+mean reward: -21.9 +- 0.85
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 20
-mean reward: -18.4 +- 1.0
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 00022: reducing learning rate of group 0 to 5.0000e-05.
+mean reward: -22.0 +- 1.0
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 24
-mean reward: -18.3 +- 0.9
+mean reward: -21.8 +- 0.77
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 28
-mean reward: -18.2 +- 1.0
+mean reward: -21.8 +- 0.81
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 32
-mean reward: -18.1 +- 1.0
+mean reward: -21.8 +- 0.91
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch: 36
-mean reward: -18.2 +- 0.97
+mean reward: -21.6 +- 0.82
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 00038: reducing learning rate of group 0 to 2.5000e-05.
 </pre></div>
 </div>
 </div>
@@ -1548,7 +1548,7 @@ mean reward: -18.2 +- 0.97
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/58e59da2ceb766df30f55e29ab477e44c0683e1639f22210a718dd166762c27c.png" src="_images/58e59da2ceb766df30f55e29ab477e44c0683e1639f22210a718dd166762c27c.png" />
+<img alt="_images/1192170b06166ae122793f45009fe58d4cc182abcec666528dd65d774d4635c1.png" src="_images/1192170b06166ae122793f45009fe58d4cc182abcec666528dd65d774d4635c1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1558,7 +1558,7 @@ mean reward: -18.2 +- 0.97
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/3626de8c576475ddc539ed8e6707cc05f1dcbe24237b0e68c805bfe37661b80d.png" src="_images/3626de8c576475ddc539ed8e6707cc05f1dcbe24237b0e68c805bfe37661b80d.png" />
+<img alt="_images/65a2c8899e330e0540fd3b96a4cae135e0d743d5d829e6498d0f570e9735a79c.png" src="_images/65a2c8899e330e0540fd3b96a4cae135e0d743d5d829e6498d0f570e9735a79c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1580,7 +1580,7 @@ mean reward: -18.2 +- 0.97
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/adb672bcd142ceb9acfa09c765ea7ab1d686c2142dc5b2fde8f91387eb2873f7.png" src="_images/adb672bcd142ceb9acfa09c765ea7ab1d686c2142dc5b2fde8f91387eb2873f7.png" />
+<img alt="_images/e85283f36dcc9ed2e03b5f5b9d6e7ba60ebc9d39cc0102a506ee40ec898fb0b1.png" src="_images/e85283f36dcc9ed2e03b5f5b9d6e7ba60ebc9d39cc0102a506ee40ec898fb0b1.png" />
 </div>
 </div>
 </section>
