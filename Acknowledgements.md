@@ -7,3 +7,4 @@ thank all of you!
 * [Damien van de Berg](https://dv516.github.io/)
 * [Mathieu Blondel](https://mblondel.org/)
 * [Marcus Wenzel](https://www.linkedin.com/in/marcus-wenzel-356a34184/?originalSubdomain=de)
+* [Henry Susilo](https://www.linkedin.com/in/henrysusilo/?originalSubdomain=id)
