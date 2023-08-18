@@ -25,6 +25,7 @@ parts:
   - caption: Unsupervised learning
     chapters:
     - file: 08_PCA
+    - file: 09_Clustering
   - caption: Acknowledgments
     chapters:
     - file: Acknowledgements
