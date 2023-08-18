@@ -20,7 +20,7 @@ If you have nice tutorials in the areas mentioned above reflecting case-studies 
 
 ## Did you notice an error/typo?
 
-Let us know! Submit your issue here and we will fix it.
+Let us know! Submit your issue here and we will fix it. We encourage you to contribute to this resource!
 
 ## Citation
 

@@ -183,6 +183,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Clustering.html">9. Clustering for energy systems modelling 📥</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
 <ul class="nav bd-sidenav">
@@ -430,10 +431,10 @@ $<span class="math notranslate nohighlight">\(
 A + B \rightleftarrows X
 \)</span>$</p>
 <p>The reactor is fed by a feed of flowrate <span class="math notranslate nohighlight">\(F_{in}\)</span> and concentrations <span class="math notranslate nohighlight">\(C_{i, in}\)</span> with <span class="math notranslate nohighlight">\(i\)</span> denoting species <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(X\)</span>. The reactor has constant volume <span class="math notranslate nohighlight">\(V\)</span> and is assumed to be perfectly mixed, with an average residence time <span class="math notranslate nohighlight">\(\tau\)</span>. The concentrations in the reactor are denoted by <span class="math notranslate nohighlight">\(C_{i}\)</span>. A stream with constant flowrate <span class="math notranslate nohighlight">\(F=F_{in}\)</span> exits the reactor:</p>
-<figure class="align-center" id="id16">
+<figure class="align-center" id="id19">
 <a class="reference internal image-reference" href="_images/CSTR_vars_2.png"><img alt="cstr" src="_images/CSTR_vars_2.png" style="width: 40%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Schematic representation of the CSTR considered here</span><a class="headerlink" href="#id16" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Schematic representation of the CSTR considered here</span><a class="headerlink" href="#id19" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Let’s say we use the following reactor model:</p>
@@ -480,10 +481,10 @@ C_{B,0} = 0.5\,\mathrm{kmol/m^3}
 C_{X,0} = 0\,\mathrm{kmol/m^3}
 \]</div>
 <p>Time-dependent experimental measurements for all concentrations are available:</p>
-<figure class="align-center" id="id17">
+<figure class="align-center" id="id20">
 <a class="reference internal image-reference" href="_images/CSTR_experimental.png"><img alt="cstr_measurements" src="_images/CSTR_experimental.png" style="width: 60%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7 </span><span class="caption-text">CSTR measurements of the concentrations.</span><a class="headerlink" href="#id17" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">CSTR measurements of the concentrations.</span><a class="headerlink" href="#id20" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The task is to construct a <strong>serial hybrid model</strong>, in which the reaction rate <span class="math notranslate nohighlight">\(r\)</span> is described by a data-driven model. In this particular example, a <strong>neural network</strong> will be used.</p>

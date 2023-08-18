@@ -1,0 +1,2477 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>9. Clustering for energy systems modelling 📥 &#8212; Machine Learning in Chemical Engineering</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '09_Clustering';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Acknowledgements 🙏" href="Acknowledgements.html" />
+    <link rel="prev" title="8. Process monitoring using PCA 📐" href="08_PCA.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to Machine Learning in Chemical Engineering! 👋
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_Overview.html">An overview of the course 🔭</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_Introduction_Python.html">1. Introduction to Python 🐍</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02_kNN_QSPR.html">2. kNN for (Q)SPR modeling ⚛️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_GLM_thermophysical.html">3. GLM for thermophysical property prediction ⚗️</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_DNN_VLE.html">4. Deep Neural Networks for VLE prediction 🌐</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid modelling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_Hybrid_CSTR.html">5. Hybrid model for CSTR 🔆</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data-driven optimization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="06_PID_tuning.html">6. PID tuning via data-driven optimization 🔩</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reinforcement learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="07_RL_Control.html">7. Reinforcement learning for Control 🐶</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unsupervised learning</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="08_PCA.html">8. Process monitoring using PCA 📐</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">9. Clustering for energy systems modelling 📥</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Acknowledgments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements 🙏</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edgarsmdn/MLCE_book/issues/new?title=Issue%20on%20page%20%2F09_Clustering.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/09_Clustering.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>9. Clustering for energy systems modelling 📥</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-clustering">What is clustering?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-clustering">Why clustering?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#k-means-clustering">K-means clustering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbscan">DBSCAN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-model">Gaussian mixture model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-clustering-algorithms">Comparing clustering algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#k-means">k-means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">DBSCAN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Gaussian mixture model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-of-time-series-data-for-energy-systems-models">Clustering of time series data for energy systems models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-and-cleaning-the-data">Obtaining and cleaning the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-on-time-series-data">Clustering on time series data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">Exercise ❗❗</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="clustering-for-energy-systems-modelling">
+<h1>9. Clustering for energy systems modelling 📥<a class="headerlink" href="#clustering-for-energy-systems-modelling" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/09_Clustering.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
+<p>This chapter is partly inspired by <span id="id1">[<a class="reference internal" href="#id21" title="Ankur Kumar and Jesus Flores-Cerrillo. Machine Learning in Python for Process Systems Engineering. MLforPSE, 2022. https://mlforpse.com/books/.">KFC22</a>]</span> and <span id="id2">[<a class="reference internal" href="#id22" title="Clara F Heuberger, Edward S Rubin, Iain Staffell, Nilay Shah, and Niall Mac Dowell. Power capacity expansion planning considering endogenous technology cost learning. Applied Energy, 204:831–845, 2017.">HRS+17</a>]</span>.</p>
+<section id="goals-of-this-exercise">
+<h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>We will learn about different types of clustering</p></li>
+<li><p>We will apply clustering algorithms to small examples</p></li>
+<li><p>We will use clustering to determine representative days for input data for an energy systems model</p></li>
+</ul>
+</section>
+<section id="a-quick-reminder">
+<h2>A quick reminder ✅<a class="headerlink" href="#a-quick-reminder" title="Permalink to this headline">#</a></h2>
+<section id="what-is-clustering">
+<h3>What is clustering?<a class="headerlink" href="#what-is-clustering" title="Permalink to this headline">#</a></h3>
+<p>Clustering is an unsupervised learning technique. This means there is no output or target variable, we only have the input data. Instead of prediction, we are trying to make sense of the data, detect unknown groups, and reveal hidden structures.</p>
+<p>There are three categories of clustering techniques:</p>
+<ul class="simple">
+<li><p><strong>Centroid-based</strong> algorithms: Clusters are determined by their distance to the centroids of the clusters. E.g., k-means clustering</p></li>
+<li><p><strong>Density-based</strong> algorithms: The density of the points in the multivariate input space is the basis for the clustering. E.g., DBSCAN</p></li>
+<li><p><strong>Probabilistic</strong> (distribution-based) clustering: The algorithm uses the probability of belonging to the same cluster by assuming an underlying distribution. E.g., Gaussian mixture model</p></li>
+</ul>
+</section>
+<section id="why-clustering">
+<h3>Why clustering?<a class="headerlink" href="#why-clustering" title="Permalink to this headline">#</a></h3>
+<p>The a chemical engineering context, many process characteristics can cause groups to appear in the data. They include multiple operating modes (start-up, normal operation, shut-down), varying demand, production levels, or feedstock compositions. Incorporating specific cluster knowledge into the models is beneficial; sometimes one can build cluster-wise models for more accurate performance.</p>
+<p>A second reason is computational burden. Training machine learning models – or any other models – can be slow when using large data sets. Clustering can be used to reduce the data set to a few clusters. This reduces the computational time needed for the models.</p>
+</section>
+<section id="k-means-clustering">
+<h3>K-means clustering<a class="headerlink" href="#k-means-clustering" title="Permalink to this headline">#</a></h3>
+<p>For k-means clustering, the user specifies the number of clusters k. Then k points are randomly selected as centroids. Next, the distance of all the data points to the centroids is calculated, and they are assigned to the centroid which is closest to them. Then the mean of each cluster is calculated and defined as the new centroid. This is repeated until a stopping criteria is met.</p>
+<p>This is equivalent to the following optimization:</p>
+<div class="math notranslate nohighlight">
+\[
+min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2 
+\]</div>
+<p>with number of clusters <span class="math notranslate nohighlight">\(K\)</span>, centroids <span class="math notranslate nohighlight">\(c_k\)</span>, and data points <span class="math notranslate nohighlight">\(X_k\)</span> in cluster <span class="math notranslate nohighlight">\(k\)</span>.</p>
+</section>
+<section id="dbscan">
+<h3>DBSCAN<a class="headerlink" href="#dbscan" title="Permalink to this headline">#</a></h3>
+<p>Density-based spatial clustering for applications with noise, DBSCAN, is a density-based clustering algorithm, meaning it groups points together if there are a lot of them in a certain area. The user specifies a minimum number of neighbors <span class="math notranslate nohighlight">\(N\)</span> and a distance <span class="math notranslate nohighlight">\(\epsilon\)</span>. Then, if there are more than <span class="math notranslate nohighlight">\(N\)</span> points within <span class="math notranslate nohighlight">\(\epsilon\)</span> of a point, this point is labelled core point. If there are less than <span class="math notranslate nohighlight">\(N\)</span> points within <span class="math notranslate nohighlight">\(\epsilon\)</span> of a point, but it is within <span class="math notranslate nohighlight">\(\epsilon\)</span> of a core point, it is labelled border point. Otherwise, the point is classified as noise. The algorithm can deal with arbitrarily shaped data, and the number of clusters is determined as part of the procedure. However, <span class="math notranslate nohighlight">\(N\)</span> and <span class="math notranslate nohighlight">\(\epsilon\)</span> are hyperparameters which have to be carefully selected.</p>
+</section>
+<section id="gaussian-mixture-model">
+<h3>Gaussian mixture model<a class="headerlink" href="#gaussian-mixture-model" title="Permalink to this headline">#</a></h3>
+<p>A Gaussian mixture model assumes that the overall probability density is a combination of local Gaussian densities. Every cluster has a mean (analogous to the centroid in k-means), and a covariance. For every point, these can be used to calculate the probability of belonging to this cluster. When a GMM is fitted, the expectation maximation (EM) algorithm is carried out. First, the membership association of the data points to the clusters is calculated as posterior probability using the mean and convariance. Then, using the points in every cluster, the mean and covariance are updated to reflect the distributions. This is repeated until convergence. It is advantageous that the result is not just the assigment to a cluster but the <em>probabilities</em> of belonging to each cluster for all the data points. This is referred to as soft-clustering.</p>
+</section>
+</section>
+<section id="comparing-clustering-algorithms">
+<h2>Comparing clustering algorithms<a class="headerlink" href="#comparing-clustering-algorithms" title="Permalink to this headline">#</a></h2>
+<p>Let’s try the different clustering techniques on some simple examples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>First, we generate a data set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span><span class="p">,</span> <span class="n">make_moons</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">W</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">make_moons</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.07</span><span class="p">)</span>
+<span class="n">w1</span> <span class="o">=</span> <span class="n">W</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">w2</span> <span class="o">=</span> <span class="n">W</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">P</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">transformation</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.80</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.00</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]]</span>
+<span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">transformation</span><span class="p">)</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">P</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">P</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="n">clustering_colors</span> <span class="o">=</span> <span class="p">{</span>  <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="mf">0.7</span><span class="p">)</span> <span class="p">,</span> <span class="c1"># ; # noise </span>
+                        <span class="mi">0</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;plasma&quot;</span><span class="p">)(</span><span class="mi">0</span><span class="p">)</span> <span class="p">,</span>
+                        <span class="mi">1</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;plasma&quot;</span><span class="p">)(</span><span class="mf">0.4</span><span class="p">)</span> <span class="p">,</span>
+                        <span class="mi">2</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;plasma&quot;</span><span class="p">)(</span><span class="mf">0.8</span><span class="p">)</span> <span class="p">,</span>
+                        <span class="mi">3</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;plasma&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">)</span> <span class="p">}</span>
+        
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">30</span><span class="p">):</span>
+    <span class="n">clustering_colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;plasma&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    
+<span class="k">def</span> <span class="nf">get_colors</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">):</span>
+    <span class="n">color_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cluster_list</span><span class="p">:</span>
+        <span class="n">color_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clustering_colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">color_list</span>    
+    
+    
+<span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/91c5bb927ab8e6f9dbb4557923a83617a8f117736696c5cc9268addaef1b3da4.png" src="_images/91c5bb927ab8e6f9dbb4557923a83617a8f117736696c5cc9268addaef1b3da4.png" />
+</div>
+</div>
+<section id="k-means">
+<h3>k-means<a class="headerlink" href="#k-means" title="Permalink to this headline">#</a></h3>
+<p>Now let’s try k-means clustering on this data set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">X_clusters</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+<span class="n">W_labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">W_clusters</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="n">P_labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">P_clusters</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">X_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_clusters</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_clusters</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">W_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">W_clusters</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">W_clusters</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">P_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">P_clusters</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">P_clusters</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e17cb17772a4c322d7040501fb4e418f5708d234f1735ccc45c8a9af985cb051.png" src="_images/e17cb17772a4c322d7040501fb4e418f5708d234f1735ccc45c8a9af985cb051.png" />
+</div>
+</div>
+<p>The black triangles are the centroids of the clusters. K-means clustering does fine with the first example. It cannot correctly identify the clusters in the non-linear data or the elliptical data. Further, it requries the specification of the number of clusters a priori! Edit the number of clusters in the code and see what happens.</p>
+<p>How can we know the right number of clusters if the data is not easily visualized and high-dimensional? We can use the average distance of the cluster data points to their centroids, provided by the k-means instance as inertia:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_k</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">num_k</span><span class="p">:</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_k</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span> <span class="n">get_colors</span><span class="p">([</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;number of clusters k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;total distance&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;total distance&#39;)
+</pre></div>
+</div>
+<img alt="_images/67bcf758b8061e59fa3e3aaf51c29796508f12b015cb0878c7ad3be89d41f53f.png" src="_images/67bcf758b8061e59fa3e3aaf51c29796508f12b015cb0878c7ad3be89d41f53f.png" />
+</div>
+</div>
+<p>You can see the error hardly decreasing beyond 3 clusters; this can indicate that 3 is the right number of clusters. This graph is known as an <strong>elbow plot</strong>.</p>
+</section>
+<section id="id3">
+<h3>DBSCAN<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<p>Let’s try the same with DBSCAN!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_labels</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+<span class="n">W_labels</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="n">P_labels</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">X_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">W_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">P_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/dbd5302ba3579db00b314acaeff93158ab332de8dd607b25b75a5a3563ba8500.png" src="_images/dbd5302ba3579db00b314acaeff93158ab332de8dd607b25b75a5a3563ba8500.png" />
+</div>
+</div>
+<p>The grey colored points on the edges are categorized as noise by the algorithm. You can see that DBSCAN can deal with the non-linear data in the center plot. Plus, the algorithm itself determins the numeber of clusters. However, we need to specify the hyperparameters <code class="docutils literal notranslate"><span class="pre">eps</span></code> and <code class="docutils literal notranslate"><span class="pre">min_samples</span></code> in advance. Let’s see the impact this has:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cases</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eps&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;min_samples&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+         <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eps&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;min_samples&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+         <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;min_samples&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+         <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eps&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span> <span class="s2">&quot;min_samples&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="p">}</span>
+
+<span class="n">labels_X</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">labels_W</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">labels_P</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">cases</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="n">cases</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s2">&quot;eps&quot;</span><span class="p">],</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">cases</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s2">&quot;min_samples&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">labels_X</span><span class="p">[</span><span class="n">case</span><span class="p">]</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+    
+    <span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="n">cases</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s2">&quot;eps&quot;</span><span class="p">],</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">cases</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s2">&quot;min_samples&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+    <span class="n">labels_W</span><span class="p">[</span><span class="n">case</span><span class="p">]</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+    
+    <span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="n">cases</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s2">&quot;eps&quot;</span><span class="p">],</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">cases</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s2">&quot;min_samples&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="n">labels_P</span><span class="p">[</span><span class="n">case</span><span class="p">]</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+
+    
+<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="o">*</span><span class="mi">3</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">labels_X</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="o">*</span><span class="mi">3</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">labels_W</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">cases</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">labels_P</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+        
+   
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/482fef238f581281b558bdaca482fa1de630b3b7592f3a56837d71c2bda96ed6.png" src="_images/482fef238f581281b558bdaca482fa1de630b3b7592f3a56837d71c2bda96ed6.png" />
+</div>
+</div>
+<p>Clearly, the neighborhood size and minimum number of neighbors have to be selected carefully, otherwise the algorithm will not perform adequately. This is a disadvantage of DBSCAN.</p>
+</section>
+<section id="id4">
+<h3>Gaussian mixture model<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
+<p>Now, let’s try clustering using a GMM.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="kn">import</span> <span class="n">GaussianMixture</span>
+
+<span class="n">gm</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_labels</span> <span class="o">=</span> <span class="n">gm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_clusters</span> <span class="o">=</span> <span class="n">gm</span><span class="o">.</span><span class="n">means_</span>
+
+<span class="n">gm</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+<span class="n">W_labels</span> <span class="o">=</span> <span class="n">gm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+<span class="n">W_clusters</span> <span class="o">=</span> <span class="n">gm</span><span class="o">.</span><span class="n">means_</span>
+
+<span class="n">gm</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="n">P_labels</span> <span class="o">=</span> <span class="n">gm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="n">P_clusters</span> <span class="o">=</span> <span class="n">gm</span><span class="o">.</span><span class="n">means_</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">X_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_clusters</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_clusters</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">W_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">W_clusters</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">W_clusters</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">(</span><span class="n">P_labels</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">P_clusters</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">P_clusters</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/9e53fa40fdb834cd471901a747002fe8cb434a91e2973d90a30f78579b1e72dc.png" src="_images/9e53fa40fdb834cd471901a747002fe8cb434a91e2973d90a30f78579b1e72dc.png" />
+</div>
+</div>
+<p>The GMM does fine with the circular and elliptical data sets. But the number of clusters has to be specified in advance. GMM assumes that the underlying distributions are Gaussian, so it will perform well on data which is inherently Gaussian distributed. K-means clustering is a specific case of GMM.</p>
+</section>
+</section>
+<section id="clustering-of-time-series-data-for-energy-systems-models">
+<h2>Clustering of time series data for energy systems models<a class="headerlink" href="#clustering-of-time-series-data-for-energy-systems-models" title="Permalink to this headline">#</a></h2>
+<p>Energy system models are key tools in designing the energy systems of the future. They optimize the design and operation of a power system, i.e., the set of technologies which produce, store, and transmit electricity. An energy systems model typically uses as inputs the technology CAPEXs, fuel prices (coal, natural gas, biomass, hydrogen), power demand, and capacity factors of renewable energy. The latter are time-dependent, they vary throughout the day and the year. Typically, the model is run for a set of days with historical or projected future data to simulate the requirements of the system. However, using a whole year of data (8760 h) is often impractical, as the computational time rises. Therefore, it can be preferential to select representative days from the entire year which capture the variation in the data set. Here, we use k-means clustering to determine these represenative days (similar to <span id="id5">[<a class="reference internal" href="#id22" title="Clara F Heuberger, Edward S Rubin, Iain Staffell, Nilay Shah, and Niall Mac Dowell. Power capacity expansion planning considering endogenous technology cost learning. Applied Energy, 204:831–845, 2017.">HRS+17</a>]</span>).</p>
+<section id="obtaining-and-cleaning-the-data">
+<h3>Obtaining and cleaning the data<a class="headerlink" href="#obtaining-and-cleaning-the-data" title="Permalink to this headline">#</a></h3>
+<p>The capacity factors for solar and wind and the power demand data were retrieved from the Open Power System Data (OPSD) database <span id="id6">[<a class="reference internal" href="#id23" title="Open Power System Data. Data package time series. version 2020-10-06. 2020. https://doi.org/10.25832/time_series/2020-10-06 (primary data from various sources, for a complete list see URL).">Dat20</a>]</span>.</p>
+<p>Let’s have a look what the data looks like:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+  <span class="n">raw_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/Power_system_data_DE.xlsx&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">raw_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;references/Power_system_data_DE.xlsx&quot;</span><span class="p">)</span>
+
+<span class="n">raw_data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Unnamed: 1</th>
+      <th>DE</th>
+      <th>DE.1</th>
+      <th>DE.2</th>
+      <th>DE.3</th>
+      <th>DE.4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>load</td>
+      <td>wind</td>
+      <td>wind_offshore</td>
+      <td>wind_onshore</td>
+      <td>solar</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>actual_entsoe_transparency</td>
+      <td>profile</td>
+      <td>profile</td>
+      <td>profile</td>
+      <td>profile</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>ENTSO-E Transparency</td>
+      <td>own calculation based on ENTSO-E Transparency ...</td>
+      <td>own calculation based on ENTSO-E Transparency ...</td>
+      <td>own calculation based on ENTSO-E Transparency ...</td>
+      <td>own calculation based on ENTSO-E Transparency ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>https://transparency.entsoe.eu/load-domain/r2/...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>MW</td>
+      <td>fraction</td>
+      <td>fraction</td>
+      <td>fraction</td>
+      <td>fraction</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>utc_timestamp</td>
+      <td>cet_cest_timestamp</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2014-12-31 23:00:00</td>
+      <td>2015-01-01 00:00:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2014-12-31 23:15:00</td>
+      <td>2015-01-01 00:15:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>2014-12-31 23:30:00</td>
+      <td>2015-01-01 00:30:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>2014-12-31 23:45:00</td>
+      <td>2015-01-01 00:45:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>2015-01-01 00:00:00</td>
+      <td>2015-01-01 01:00:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>2015-01-01 00:15:00</td>
+      <td>2015-01-01 01:15:00</td>
+      <td>41517.72</td>
+      <td>0.3159</td>
+      <td>0.7754</td>
+      <td>0.3047</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>2015-01-01 00:30:00</td>
+      <td>2015-01-01 01:30:00</td>
+      <td>41179.17</td>
+      <td>0.3158</td>
+      <td>0.7746</td>
+      <td>0.3045</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>2015-01-01 00:45:00</td>
+      <td>2015-01-01 01:45:00</td>
+      <td>40756.4</td>
+      <td>0.3197</td>
+      <td>0.7732</td>
+      <td>0.3086</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>2015-01-01 01:00:00</td>
+      <td>2015-01-01 02:00:00</td>
+      <td>40617.76</td>
+      <td>0.3244</td>
+      <td>0.7739</td>
+      <td>0.3134</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2015-01-01 01:15:00</td>
+      <td>2015-01-01 02:15:00</td>
+      <td>40312.25</td>
+      <td>0.3243</td>
+      <td>0.7743</td>
+      <td>0.3132</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>2015-01-01 01:30:00</td>
+      <td>2015-01-01 02:30:00</td>
+      <td>39984.39</td>
+      <td>0.3235</td>
+      <td>0.7697</td>
+      <td>0.3125</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>2015-01-01 01:45:00</td>
+      <td>2015-01-01 02:45:00</td>
+      <td>39626.17</td>
+      <td>0.3254</td>
+      <td>0.7662</td>
+      <td>0.3146</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>2015-01-01 02:00:00</td>
+      <td>2015-01-01 03:00:00</td>
+      <td>39472.35</td>
+      <td>0.3264</td>
+      <td>0.7702</td>
+      <td>0.3156</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>2015-01-01 02:15:00</td>
+      <td>2015-01-01 03:15:00</td>
+      <td>39217.12</td>
+      <td>0.3232</td>
+      <td>0.7786</td>
+      <td>0.312</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The data comprises the time series of the power demand in the German grid, called the load, and the capacity factors for wind and solar energy. The capacity factors are the ratio of power produced to power capacity installed, i.e., the fraction of the wind turbines and solar PV panels which produce power at any given point in time. They are a way to estimate how much renewable power is available to the system. Based on the timestamp, you can see that the data is reported in 15 min intervals for multiple years.</p>
+<p>Now we bring the data into a format that is easier to manipulate and extract the data for the year 2018:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">raw_data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;utc_timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;cet_timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;demand&quot;</span><span class="p">,</span> <span class="s2">&quot;wind&quot;</span><span class="p">,</span> <span class="s2">&quot;offshore&quot;</span><span class="p">,</span> <span class="s2">&quot;onshore&quot;</span><span class="p">,</span> <span class="s2">&quot;solar&quot;</span><span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;utc_timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">year</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;utc_timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">month</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;utc_timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">day</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;utc_timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;utc_timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>utc_timestamp</th>
+      <th>cet_timestamp</th>
+      <th>demand</th>
+      <th>wind</th>
+      <th>offshore</th>
+      <th>onshore</th>
+      <th>solar</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>date</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>6</th>
+      <td>2014-12-31 23:00:00</td>
+      <td>2015-01-01 00:00:00</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2014.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2014-12-31</td>
+      <td>23:00:00</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2014-12-31 23:15:00</td>
+      <td>2015-01-01 00:15:00</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2014.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2014-12-31</td>
+      <td>23:15:00</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>2014-12-31 23:30:00</td>
+      <td>2015-01-01 00:30:00</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2014.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2014-12-31</td>
+      <td>23:30:00</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>2014-12-31 23:45:00</td>
+      <td>2015-01-01 00:45:00</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2014.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2014-12-31</td>
+      <td>23:45:00</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>2015-01-01 00:00:00</td>
+      <td>2015-01-01 01:00:00</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2015.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2015-01-01</td>
+      <td>00:00:00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_2018</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">2018</span><span class="p">]</span>
+<span class="n">data_2018</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>utc_timestamp</th>
+      <th>cet_timestamp</th>
+      <th>demand</th>
+      <th>wind</th>
+      <th>offshore</th>
+      <th>onshore</th>
+      <th>solar</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>date</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>105226</th>
+      <td>2018-01-01 00:00:00</td>
+      <td>2018-01-01 01:00:00</td>
+      <td>41107.50</td>
+      <td>0.7591</td>
+      <td>0.8313</td>
+      <td>0.7528</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2018-01-01</td>
+      <td>00:00:00</td>
+    </tr>
+    <tr>
+      <th>105227</th>
+      <td>2018-01-01 00:15:00</td>
+      <td>2018-01-01 01:15:00</td>
+      <td>40690.50</td>
+      <td>0.7657</td>
+      <td>0.8635</td>
+      <td>0.7571</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2018-01-01</td>
+      <td>00:15:00</td>
+    </tr>
+    <tr>
+      <th>105228</th>
+      <td>2018-01-01 00:30:00</td>
+      <td>2018-01-01 01:30:00</td>
+      <td>40215.44</td>
+      <td>0.7778</td>
+      <td>0.8710</td>
+      <td>0.7695</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2018-01-01</td>
+      <td>00:30:00</td>
+    </tr>
+    <tr>
+      <th>105229</th>
+      <td>2018-01-01 00:45:00</td>
+      <td>2018-01-01 01:45:00</td>
+      <td>40436.86</td>
+      <td>0.7868</td>
+      <td>0.8789</td>
+      <td>0.7786</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2018-01-01</td>
+      <td>00:45:00</td>
+    </tr>
+    <tr>
+      <th>105230</th>
+      <td>2018-01-01 01:00:00</td>
+      <td>2018-01-01 02:00:00</td>
+      <td>40553.70</td>
+      <td>0.7905</td>
+      <td>0.8874</td>
+      <td>0.7819</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2018-01-01</td>
+      <td>01:00:00</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>140261</th>
+      <td>2018-12-31 22:45:00</td>
+      <td>2018-12-31 23:45:00</td>
+      <td>44899.69</td>
+      <td>0.4469</td>
+      <td>0.6210</td>
+      <td>0.4269</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2018-12-31</td>
+      <td>22:45:00</td>
+    </tr>
+    <tr>
+      <th>140262</th>
+      <td>2018-12-31 23:00:00</td>
+      <td>2019-01-01 00:00:00</td>
+      <td>43168.15</td>
+      <td>0.4529</td>
+      <td>0.6293</td>
+      <td>0.4327</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2018-12-31</td>
+      <td>23:00:00</td>
+    </tr>
+    <tr>
+      <th>140263</th>
+      <td>2018-12-31 23:15:00</td>
+      <td>2019-01-01 00:15:00</td>
+      <td>43151.57</td>
+      <td>0.4681</td>
+      <td>0.6289</td>
+      <td>0.4496</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2018-12-31</td>
+      <td>23:15:00</td>
+    </tr>
+    <tr>
+      <th>140264</th>
+      <td>2018-12-31 23:30:00</td>
+      <td>2019-01-01 00:30:00</td>
+      <td>42827.22</td>
+      <td>0.4828</td>
+      <td>0.6274</td>
+      <td>0.4661</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2018-12-31</td>
+      <td>23:30:00</td>
+    </tr>
+    <tr>
+      <th>140265</th>
+      <td>2018-12-31 23:45:00</td>
+      <td>2019-01-01 00:45:00</td>
+      <td>42758.72</td>
+      <td>0.4855</td>
+      <td>0.5982</td>
+      <td>0.4725</td>
+      <td>0.0</td>
+      <td>2018.0</td>
+      <td>12.0</td>
+      <td>31.0</td>
+      <td>2018-12-31</td>
+      <td>23:45:00</td>
+    </tr>
+  </tbody>
+</table>
+<p>35040 rows × 12 columns</p>
+</div></div></div>
+</div>
+<p>Let’s plot the data!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_2018_pivot</span> <span class="o">=</span> <span class="n">data_2018</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">,</span><span class="s2">&quot;solar&quot;</span><span class="p">,</span><span class="s2">&quot;demand&quot;</span><span class="p">])</span>
+<span class="n">data_2018_pivot</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead tr th {
+        text-align: left;
+    }
+
+    .dataframe thead tr:last-of-type th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="10" halign="left">wind</th>
+      <th>...</th>
+      <th colspan="10" halign="left">demand</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th>00:00:00</th>
+      <th>00:15:00</th>
+      <th>00:30:00</th>
+      <th>00:45:00</th>
+      <th>01:00:00</th>
+      <th>01:15:00</th>
+      <th>01:30:00</th>
+      <th>01:45:00</th>
+      <th>02:00:00</th>
+      <th>02:15:00</th>
+      <th>...</th>
+      <th>21:30:00</th>
+      <th>21:45:00</th>
+      <th>22:00:00</th>
+      <th>22:15:00</th>
+      <th>22:30:00</th>
+      <th>22:45:00</th>
+      <th>23:00:00</th>
+      <th>23:15:00</th>
+      <th>23:30:00</th>
+      <th>23:45:00</th>
+    </tr>
+    <tr>
+      <th>date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2018-01-01</th>
+      <td>0.7591</td>
+      <td>0.7657</td>
+      <td>0.7778</td>
+      <td>0.7868</td>
+      <td>0.7905</td>
+      <td>0.7944</td>
+      <td>0.7878</td>
+      <td>0.7879</td>
+      <td>0.8048</td>
+      <td>0.8140</td>
+      <td>...</td>
+      <td>46478.69</td>
+      <td>45942.63</td>
+      <td>44647.53</td>
+      <td>43989.39</td>
+      <td>43253.15</td>
+      <td>42349.21</td>
+      <td>41847.29</td>
+      <td>41035.76</td>
+      <td>40468.81</td>
+      <td>39888.47</td>
+    </tr>
+    <tr>
+      <th>2018-01-02</th>
+      <td>0.3944</td>
+      <td>0.3949</td>
+      <td>0.3934</td>
+      <td>0.3893</td>
+      <td>0.3860</td>
+      <td>0.3789</td>
+      <td>0.3787</td>
+      <td>0.3764</td>
+      <td>0.3746</td>
+      <td>0.3820</td>
+      <td>...</td>
+      <td>55288.77</td>
+      <td>54139.13</td>
+      <td>52994.37</td>
+      <td>52260.96</td>
+      <td>51553.50</td>
+      <td>50760.99</td>
+      <td>49669.29</td>
+      <td>48879.58</td>
+      <td>48385.56</td>
+      <td>48135.47</td>
+    </tr>
+    <tr>
+      <th>2018-01-03</th>
+      <td>0.7540</td>
+      <td>0.7664</td>
+      <td>0.7765</td>
+      <td>0.7828</td>
+      <td>0.7964</td>
+      <td>0.8093</td>
+      <td>0.8139</td>
+      <td>0.8196</td>
+      <td>0.8401</td>
+      <td>0.8575</td>
+      <td>...</td>
+      <td>58552.29</td>
+      <td>57078.40</td>
+      <td>56366.52</td>
+      <td>54982.17</td>
+      <td>53792.97</td>
+      <td>53022.56</td>
+      <td>51850.51</td>
+      <td>50745.77</td>
+      <td>50515.68</td>
+      <td>50007.18</td>
+    </tr>
+    <tr>
+      <th>2018-01-04</th>
+      <td>0.9271</td>
+      <td>0.9225</td>
+      <td>0.9151</td>
+      <td>0.9047</td>
+      <td>0.8946</td>
+      <td>0.8888</td>
+      <td>0.8858</td>
+      <td>0.8891</td>
+      <td>0.8750</td>
+      <td>0.8649</td>
+      <td>...</td>
+      <td>58703.71</td>
+      <td>57711.98</td>
+      <td>56356.32</td>
+      <td>54915.72</td>
+      <td>53810.35</td>
+      <td>52766.41</td>
+      <td>51180.27</td>
+      <td>50716.50</td>
+      <td>50414.69</td>
+      <td>49777.30</td>
+    </tr>
+    <tr>
+      <th>2018-01-05</th>
+      <td>0.8325</td>
+      <td>0.8460</td>
+      <td>0.8562</td>
+      <td>0.8583</td>
+      <td>0.8642</td>
+      <td>0.8757</td>
+      <td>0.8787</td>
+      <td>0.8756</td>
+      <td>0.8785</td>
+      <td>0.8688</td>
+      <td>...</td>
+      <td>54919.61</td>
+      <td>53992.10</td>
+      <td>53354.64</td>
+      <td>52324.00</td>
+      <td>51190.13</td>
+      <td>50188.70</td>
+      <td>49513.35</td>
+      <td>48611.48</td>
+      <td>47778.13</td>
+      <td>47068.07</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2018-12-27</th>
+      <td>0.2880</td>
+      <td>0.2895</td>
+      <td>0.2893</td>
+      <td>0.2851</td>
+      <td>0.2810</td>
+      <td>0.2832</td>
+      <td>0.2829</td>
+      <td>0.2811</td>
+      <td>0.2801</td>
+      <td>0.2830</td>
+      <td>...</td>
+      <td>51086.44</td>
+      <td>50447.16</td>
+      <td>49853.24</td>
+      <td>48937.93</td>
+      <td>48349.58</td>
+      <td>47566.12</td>
+      <td>46844.44</td>
+      <td>46551.30</td>
+      <td>45754.90</td>
+      <td>45444.12</td>
+    </tr>
+    <tr>
+      <th>2018-12-28</th>
+      <td>0.2167</td>
+      <td>0.2153</td>
+      <td>0.2140</td>
+      <td>0.2104</td>
+      <td>0.2054</td>
+      <td>0.1987</td>
+      <td>0.1929</td>
+      <td>0.1893</td>
+      <td>0.1884</td>
+      <td>0.1903</td>
+      <td>...</td>
+      <td>51858.28</td>
+      <td>51319.59</td>
+      <td>50177.74</td>
+      <td>49299.75</td>
+      <td>48571.00</td>
+      <td>48252.61</td>
+      <td>47561.57</td>
+      <td>46780.70</td>
+      <td>46148.57</td>
+      <td>45683.72</td>
+    </tr>
+    <tr>
+      <th>2018-12-29</th>
+      <td>0.2318</td>
+      <td>0.2360</td>
+      <td>0.2410</td>
+      <td>0.2493</td>
+      <td>0.2506</td>
+      <td>0.2501</td>
+      <td>0.2478</td>
+      <td>0.2458</td>
+      <td>0.2443</td>
+      <td>0.2473</td>
+      <td>...</td>
+      <td>50810.94</td>
+      <td>49663.63</td>
+      <td>48975.79</td>
+      <td>48488.65</td>
+      <td>47807.15</td>
+      <td>46856.65</td>
+      <td>45599.00</td>
+      <td>44935.01</td>
+      <td>44482.17</td>
+      <td>44129.05</td>
+    </tr>
+    <tr>
+      <th>2018-12-30</th>
+      <td>0.6881</td>
+      <td>0.6883</td>
+      <td>0.6911</td>
+      <td>0.6895</td>
+      <td>0.6868</td>
+      <td>0.6842</td>
+      <td>0.6794</td>
+      <td>0.6795</td>
+      <td>0.6768</td>
+      <td>0.6784</td>
+      <td>...</td>
+      <td>47754.48</td>
+      <td>47219.02</td>
+      <td>46749.31</td>
+      <td>45982.74</td>
+      <td>45051.08</td>
+      <td>44264.46</td>
+      <td>43705.56</td>
+      <td>43265.03</td>
+      <td>42591.12</td>
+      <td>42039.58</td>
+    </tr>
+    <tr>
+      <th>2018-12-31</th>
+      <td>0.1727</td>
+      <td>0.1682</td>
+      <td>0.1631</td>
+      <td>0.1577</td>
+      <td>0.1526</td>
+      <td>0.1487</td>
+      <td>0.1477</td>
+      <td>0.1475</td>
+      <td>0.1429</td>
+      <td>0.1371</td>
+      <td>...</td>
+      <td>47266.06</td>
+      <td>46876.10</td>
+      <td>46212.79</td>
+      <td>45931.44</td>
+      <td>45502.07</td>
+      <td>44899.69</td>
+      <td>43168.15</td>
+      <td>43151.57</td>
+      <td>42827.22</td>
+      <td>42758.72</td>
+    </tr>
+  </tbody>
+</table>
+<p>365 rows × 288 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>  
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;YlOrBr&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">))</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;demand&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+    
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">95</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0:00&quot;</span><span class="p">,</span> <span class="s2">&quot;6:00&quot;</span><span class="p">,</span> <span class="s2">&quot;12:00&quot;</span><span class="p">,</span> <span class="s2">&quot;18:00&quot;</span><span class="p">,</span> <span class="s2">&quot;24:00&quot;</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">95</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0:00&quot;</span><span class="p">,</span> <span class="s2">&quot;6:00&quot;</span><span class="p">,</span> <span class="s2">&quot;12:00&quot;</span><span class="p">,</span> <span class="s2">&quot;18:00&quot;</span><span class="p">,</span> <span class="s2">&quot;24:00&quot;</span><span class="p">])</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">95</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0:00&quot;</span><span class="p">,</span> <span class="s2">&quot;6:00&quot;</span><span class="p">,</span> <span class="s2">&quot;12:00&quot;</span><span class="p">,</span> <span class="s2">&quot;18:00&quot;</span><span class="p">,</span> <span class="s2">&quot;24:00&quot;</span><span class="p">])</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">95</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">95</span><span class="p">])</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">95</span><span class="p">])</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;wind capacity factor&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;solar capacity factor&quot;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;power demand / MW&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b004103c1505e3bf61bd90573c6ad6e72df635507d6b13187c3b6194d88f7793.png" src="_images/b004103c1505e3bf61bd90573c6ad6e72df635507d6b13187c3b6194d88f7793.png" />
+</div>
+</div>
+<p>Clearly, there is significant variation in the data. Further, the solar and demand profiles have their characteristic shapes. The variation needs to be represented in energy systems models. But how do we choose which days to use as representatives? Here, we use clustering to determine the representatives.</p>
+</section>
+<section id="clustering-on-time-series-data">
+<h3>Clustering on time series data<a class="headerlink" href="#clustering-on-time-series-data" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wind_data</span> <span class="o">=</span> <span class="n">data_2018</span><span class="p">[[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;utc_timestamp&quot;</span><span class="p">,</span><span class="s2">&quot;wind&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">value_vars</span><span class="o">=</span><span class="s2">&quot;wind&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">solar_data</span> <span class="o">=</span> <span class="n">data_2018</span><span class="p">[[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;utc_timestamp&quot;</span><span class="p">,</span><span class="s2">&quot;solar&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">value_vars</span><span class="o">=</span><span class="s2">&quot;solar&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">demand_data</span> <span class="o">=</span> <span class="n">data_2018</span><span class="p">[[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;utc_timestamp&quot;</span><span class="p">,</span><span class="s2">&quot;demand&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">value_vars</span><span class="o">=</span><span class="s2">&quot;demand&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">solar_data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2018-01-01</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2018-01-01</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-01-01</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-01-01</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2018-01-01</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>35035</th>
+      <td>2018-12-31</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>35036</th>
+      <td>2018-12-31</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>35037</th>
+      <td>2018-12-31</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>35038</th>
+      <td>2018-12-31</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>35039</th>
+      <td>2018-12-31</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>35040 rows × 2 columns</p>
+</div></div></div>
+</div>
+<p>Now we scale the data. Then, for each day we concatenate the three profiles together to one vector:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">wind_scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">wind_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+<span class="n">wind_scaled</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wind_data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span>
+<span class="n">wind_scaled</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wind_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wind_data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">solar_scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">solar_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+<span class="n">solar_scaled</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">solar_data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span>
+<span class="n">solar_scaled</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">solar_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">solar_data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">demand_scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">demand_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+<span class="n">demand_scaled</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">demand_data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span>
+<span class="n">demand_scaled</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">demand_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">demand_data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">input_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span> 
+
+<span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">wind_data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">():</span>
+    <span class="n">wind</span> <span class="o">=</span> <span class="n">wind_scaled</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wind_scaled</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">day</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">solar</span> <span class="o">=</span> <span class="n">solar_scaled</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">solar_scaled</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">day</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">demand</span> <span class="o">=</span> <span class="n">demand_scaled</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">demand_scaled</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">day</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    
+    <span class="n">day_series</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">wind</span><span class="p">,</span> <span class="n">solar</span><span class="p">,</span> <span class="n">demand</span><span class="p">])</span>
+    
+    <span class="n">input_data</span><span class="p">[</span><span class="n">day</span><span class="p">]</span> <span class="o">=</span> <span class="n">day_series</span> 
+
+<span class="n">input_data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>2018-01-01</th>
+      <th>2018-01-02</th>
+      <th>2018-01-03</th>
+      <th>2018-01-04</th>
+      <th>2018-01-05</th>
+      <th>2018-01-06</th>
+      <th>2018-01-07</th>
+      <th>2018-01-08</th>
+      <th>2018-01-09</th>
+      <th>2018-01-10</th>
+      <th>...</th>
+      <th>2018-12-22</th>
+      <th>2018-12-23</th>
+      <th>2018-12-24</th>
+      <th>2018-12-25</th>
+      <th>2018-12-26</th>
+      <th>2018-12-27</th>
+      <th>2018-12-28</th>
+      <th>2018-12-29</th>
+      <th>2018-12-30</th>
+      <th>2018-12-31</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2.460270</td>
+      <td>0.623795</td>
+      <td>2.434588</td>
+      <td>3.306246</td>
+      <td>2.829881</td>
+      <td>0.218935</td>
+      <td>0.306050</td>
+      <td>0.697315</td>
+      <td>2.146050</td>
+      <td>-0.136577</td>
+      <td>...</td>
+      <td>2.501058</td>
+      <td>0.691776</td>
+      <td>0.274830</td>
+      <td>0.636888</td>
+      <td>1.140949</td>
+      <td>0.088010</td>
+      <td>-0.271026</td>
+      <td>-0.194989</td>
+      <td>2.102744</td>
+      <td>-0.492592</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.493504</td>
+      <td>0.626313</td>
+      <td>2.497029</td>
+      <td>3.283083</td>
+      <td>2.897861</td>
+      <td>0.221453</td>
+      <td>0.335257</td>
+      <td>0.710407</td>
+      <td>2.127922</td>
+      <td>-0.141612</td>
+      <td>...</td>
+      <td>2.491490</td>
+      <td>0.686236</td>
+      <td>0.339789</td>
+      <td>0.633363</td>
+      <td>1.139438</td>
+      <td>0.095563</td>
+      <td>-0.278076</td>
+      <td>-0.173840</td>
+      <td>2.103751</td>
+      <td>-0.515252</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.554435</td>
+      <td>0.618760</td>
+      <td>2.547889</td>
+      <td>3.245819</td>
+      <td>2.949224</td>
+      <td>0.225985</td>
+      <td>0.358420</td>
+      <td>0.712421</td>
+      <td>2.122886</td>
+      <td>-0.170315</td>
+      <td>...</td>
+      <td>2.431567</td>
+      <td>0.618256</td>
+      <td>0.332235</td>
+      <td>0.646455</td>
+      <td>1.144977</td>
+      <td>0.094556</td>
+      <td>-0.284623</td>
+      <td>-0.148662</td>
+      <td>2.117851</td>
+      <td>-0.540933</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.599755</td>
+      <td>0.598114</td>
+      <td>2.579613</td>
+      <td>3.193449</td>
+      <td>2.959799</td>
+      <td>0.190232</td>
+      <td>0.405251</td>
+      <td>0.733067</td>
+      <td>2.122383</td>
+      <td>-0.184415</td>
+      <td>...</td>
+      <td>2.357544</td>
+      <td>0.574447</td>
+      <td>0.325689</td>
+      <td>0.661562</td>
+      <td>1.138935</td>
+      <td>0.073407</td>
+      <td>-0.302751</td>
+      <td>-0.106867</td>
+      <td>2.109794</td>
+      <td>-0.568125</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2.618387</td>
+      <td>0.581496</td>
+      <td>2.648097</td>
+      <td>3.142590</td>
+      <td>2.989509</td>
+      <td>0.203325</td>
+      <td>0.439493</td>
+      <td>0.749685</td>
+      <td>2.141014</td>
+      <td>-0.191968</td>
+      <td>...</td>
+      <td>2.272946</td>
+      <td>0.564879</td>
+      <td>0.337775</td>
+      <td>0.660051</td>
+      <td>1.123828</td>
+      <td>0.052761</td>
+      <td>-0.327928</td>
+      <td>-0.100320</td>
+      <td>2.096198</td>
+      <td>-0.593807</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>283</th>
+      <td>-1.475803</td>
+      <td>-0.625654</td>
+      <td>-0.397085</td>
+      <td>-0.422973</td>
+      <td>-0.683493</td>
+      <td>-1.121168</td>
+      <td>-0.848942</td>
+      <td>-0.265237</td>
+      <td>-0.258524</td>
+      <td>-0.357837</td>
+      <td>...</td>
+      <td>-1.148783</td>
+      <td>-1.411650</td>
+      <td>-1.322191</td>
+      <td>-1.322631</td>
+      <td>-1.187623</td>
+      <td>-0.948548</td>
+      <td>-0.879167</td>
+      <td>-1.020252</td>
+      <td>-1.282236</td>
+      <td>-1.218035</td>
+    </tr>
+    <tr>
+      <th>284</th>
+      <td>-1.526531</td>
+      <td>-0.735988</td>
+      <td>-0.515540</td>
+      <td>-0.583279</td>
+      <td>-0.751749</td>
+      <td>-1.216521</td>
+      <td>-0.938565</td>
+      <td>-0.348816</td>
+      <td>-0.341451</td>
+      <td>-0.469038</td>
+      <td>...</td>
+      <td>-1.242857</td>
+      <td>-1.516934</td>
+      <td>-1.408817</td>
+      <td>-1.348442</td>
+      <td>-1.202761</td>
+      <td>-1.021486</td>
+      <td>-0.949008</td>
+      <td>-1.147358</td>
+      <td>-1.338722</td>
+      <td>-1.393036</td>
+    </tr>
+    <tr>
+      <th>285</th>
+      <td>-1.608549</td>
+      <td>-0.815802</td>
+      <td>-0.627192</td>
+      <td>-0.630151</td>
+      <td>-0.842898</td>
+      <td>-1.316239</td>
+      <td>-0.989404</td>
+      <td>-0.434623</td>
+      <td>-0.429332</td>
+      <td>-0.539963</td>
+      <td>...</td>
+      <td>-1.328017</td>
+      <td>-1.597543</td>
+      <td>-1.452584</td>
+      <td>-1.380525</td>
+      <td>-1.243085</td>
+      <td>-1.051113</td>
+      <td>-1.027928</td>
+      <td>-1.214466</td>
+      <td>-1.383245</td>
+      <td>-1.394712</td>
+    </tr>
+    <tr>
+      <th>286</th>
+      <td>-1.665849</td>
+      <td>-0.865730</td>
+      <td>-0.650447</td>
+      <td>-0.660653</td>
+      <td>-0.927121</td>
+      <td>-1.382748</td>
+      <td>-1.034007</td>
+      <td>-0.494846</td>
+      <td>-0.527067</td>
+      <td>-0.600682</td>
+      <td>...</td>
+      <td>-1.379236</td>
+      <td>-1.652659</td>
+      <td>-1.478876</td>
+      <td>-1.426316</td>
+      <td>-1.306153</td>
+      <td>-1.131602</td>
+      <td>-1.091815</td>
+      <td>-1.260232</td>
+      <td>-1.451354</td>
+      <td>-1.427492</td>
+    </tr>
+    <tr>
+      <th>287</th>
+      <td>-1.724502</td>
+      <td>-0.891006</td>
+      <td>-0.701839</td>
+      <td>-0.725072</td>
+      <td>-0.998885</td>
+      <td>-1.429415</td>
+      <td>-1.058536</td>
+      <td>-0.518866</td>
+      <td>-0.572704</td>
+      <td>-0.671999</td>
+      <td>...</td>
+      <td>-1.439154</td>
+      <td>-1.702917</td>
+      <td>-1.527665</td>
+      <td>-1.469805</td>
+      <td>-1.352079</td>
+      <td>-1.163012</td>
+      <td>-1.138796</td>
+      <td>-1.295921</td>
+      <td>-1.507097</td>
+      <td>-1.434416</td>
+    </tr>
+  </tbody>
+</table>
+<p>288 rows × 365 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">input_array</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(365, 288)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we perform the actual clustering on the complete wind-solar-demand profiles:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">input_array</span><span class="p">)</span>
+<span class="n">profiles_labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">profiles_clusters</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s see what the clusters and the centroids look like:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clusters_plot</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="p">((</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">),(</span><span class="n">ax4</span><span class="p">,</span> <span class="n">ax5</span><span class="p">,</span> <span class="n">ax6</span><span class="p">),(</span><span class="n">ax7</span><span class="p">,</span> <span class="n">ax8</span><span class="p">,</span> <span class="n">ax9</span><span class="p">))</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">364</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">profiles_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">clusters_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>  
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wind_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">:</span><span class="mi">96</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">))</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;YlOrBr&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solar_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">96</span><span class="p">:</span><span class="mi">192</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;YlOrBr&quot;</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;demand&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>  
+        <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">demand_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">192</span><span class="p">:</span><span class="mi">288</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">profiles_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">clusters_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>  
+        <span class="n">ax4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wind_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">:</span><span class="mi">96</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">))</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;YlOrBr&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">ax5</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solar_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">96</span><span class="p">:</span><span class="mi">192</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;YlOrBr&quot;</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">ax6</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;demand&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>    
+        <span class="n">ax6</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">demand_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">192</span><span class="p">:</span><span class="mi">288</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">profiles_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">clusters_plot</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+        <span class="n">ax7</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;wind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>  
+        <span class="n">ax7</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wind_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">2</span><span class="p">]][</span><span class="mi">0</span><span class="p">:</span><span class="mi">96</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">))</span>
+        <span class="n">ax8</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;solar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;YlOrBr&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">ax8</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solar_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">2</span><span class="p">]][</span><span class="mi">96</span><span class="p">:</span><span class="mi">192</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;YlOrBr&quot;</span><span class="p">)(</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">ax9</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_2018_pivot</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;demand&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>    
+        <span class="n">ax9</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">demand_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">profiles_clusters</span><span class="p">[</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">2</span><span class="p">]][</span><span class="mi">192</span><span class="p">:</span><span class="mi">288</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Greys&quot;</span><span class="p">)(</span><span class="mf">0.9</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">,</span> <span class="n">ax4</span><span class="p">,</span> <span class="n">ax5</span><span class="p">,</span> <span class="n">ax6</span><span class="p">,</span> <span class="n">ax7</span><span class="p">,</span> <span class="n">ax8</span><span class="p">,</span> <span class="n">ax9</span><span class="p">]:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">95</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0:00&quot;</span><span class="p">,</span> <span class="s2">&quot;6:00&quot;</span><span class="p">,</span> <span class="s2">&quot;12:00&quot;</span><span class="p">,</span> <span class="s2">&quot;18:00&quot;</span><span class="p">,</span> <span class="s2">&quot;24:00&quot;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">95</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax4</span><span class="p">,</span> <span class="n">ax5</span><span class="p">,</span> <span class="n">ax7</span><span class="p">,</span> <span class="n">ax8</span><span class="p">]:</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax3</span><span class="p">,</span> <span class="n">ax6</span><span class="p">,</span> <span class="n">ax9</span><span class="p">]:</span>    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">data_2018_pivot</span><span class="p">[</span><span class="s2">&quot;demand&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">data_2018_pivot</span><span class="p">[</span><span class="s2">&quot;demand&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+
+<span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;wind capacity factor&quot;</span><span class="p">)</span>
+<span class="n">ax5</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;solar capacity factor&quot;</span><span class="p">)</span>
+<span class="n">ax6</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;power demand / MW&quot;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cluster &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">ax5</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cluster &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">ax8</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cluster &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">clusters_plot</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/74e77ba7d18dcb8e930d621cebc3586b6af68f873aacfaf6b37ed75b7d49f0bc.png" src="_images/74e77ba7d18dcb8e930d621cebc3586b6af68f873aacfaf6b37ed75b7d49f0bc.png" />
+</div>
+</div>
+<p>It seems like the clustering is doing a good job grouping similar data together!</p>
+<p>How good is the clustering performance as a function of the number of clusters and centroids? We determine this with an elbow plot:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_k</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">num_k</span><span class="p">:</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">input_array</span><span class="p">)</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_k</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">get_colors</span><span class="p">([</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;number of clusters k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;total distance&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;total distance&#39;)
+</pre></div>
+</div>
+<img alt="_images/abf9be53112d047c46d41fabeff3bffdca1c674a979d50ff8cfe69cbffee4a02.png" src="_images/abf9be53112d047c46d41fabeff3bffdca1c674a979d50ff8cfe69cbffee4a02.png" />
+</div>
+</div>
+<p>Now the modeler can use the representative days in the energy systems model and evaluate the model performance and computational time vs. the number of clusters. Then the number of clusters which delivers a compromise between accuracy and computational burden can be selected.</p>
+</section>
+<section id="exercise">
+<h3>Exercise ❗❗<a class="headerlink" href="#exercise" title="Permalink to this headline">#</a></h3>
+<ol class="arabic simple">
+<li><p>Take a closer look at the wind and demand centroids. Note that the profiles of the centroids are inherently smooth, less fluctuating than the individual profiles. This can constitute a problem for the energy system model, since it underestimates the variation of the wind energy or demand. Therefore, instead of using the centroids in the model, one can use the actual profile in the cluster which is closest to the centroid. Select these representative profiles from the clusters and plot them compared to the centroids.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Assume we want to determine representative days for the <em>onshore wind</em> and <em>offshore wind</em> capacity factors. Perform the data manipulation needed, then use a Gaussian mixture model to determine the clusters.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The point about the smoothness of the profiles illustrates that one always needs to keep in mind the purpose and context of the data set and the model. Always consider your knowledge about the application and the domain, and utilize them to improve your machine learning models.</p>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div class="docutils container" id="id7">
+<dl class="citation">
+<dt class="label" id="id23"><span class="brackets"><a class="fn-backref" href="#id6">Dat20</a></span></dt>
+<dd><p>Open Power System Data. Data package time series. version 2020-10-06. 2020. <a class="reference external" href="https://doi.org/10.25832/time_series/2020-10-06">https://doi.org/10.25832/time_series/2020-10-06</a> (primary data from various sources, for a complete list see URL).</p>
+</dd>
+<dt class="label" id="id22"><span class="brackets">HRS+17</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id5">2</a>)</span></dt>
+<dd><p>Clara F Heuberger, Edward S Rubin, Iain Staffell, Nilay Shah, and Niall Mac Dowell. Power capacity expansion planning considering endogenous technology cost learning. <em>Applied Energy</em>, 204:831–845, 2017.</p>
+</dd>
+<dt class="label" id="id21"><span class="brackets"><a class="fn-backref" href="#id1">KFC22</a></span></dt>
+<dd><p>Ankur Kumar and Jesus Flores-Cerrillo. <em>Machine Learning in Python for Process Systems Engineering</em>. MLforPSE, 2022. <a class="reference external" href="https://mlforpse.com/books/">https://mlforpse.com/books/</a>.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="08_PCA.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">8. Process monitoring using PCA 📐</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Acknowledgements.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Acknowledgements 🙏</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-of-this-exercise">Goals of this exercise 🌟</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-quick-reminder">A quick reminder ✅</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-clustering">What is clustering?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-clustering">Why clustering?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#k-means-clustering">K-means clustering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dbscan">DBSCAN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-model">Gaussian mixture model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-clustering-algorithms">Comparing clustering algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#k-means">k-means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">DBSCAN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Gaussian mixture model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-of-time-series-data-for-energy-systems-models">Clustering of time series data for energy systems models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-and-cleaning-the-data">Obtaining and cleaning the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-on-time-series-data">Clustering on time series data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">Exercise ❗❗</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Edgar Ivan Sanchez Medina, Antonio del Rio Chanona and Caroline Ganzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
