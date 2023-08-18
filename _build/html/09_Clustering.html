@@ -416,6 +416,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="clustering-for-energy-systems-modelling">
 <h1>9. Clustering for energy systems modelling 📥<a class="headerlink" href="#clustering-for-energy-systems-modelling" title="Permalink to this headline">#</a></h1>
+<p><a href="https://githubtocolab.com/edgarsmdn/MLCE_book/blob/main/09_Clustering.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a></p>
 <p>This chapter is partly inspired by <span id="id1">[<a class="reference internal" href="#id21" title="Ankur Kumar and Jesus Flores-Cerrillo. Machine Learning in Python for Process Systems Engineering. MLforPSE, 2022. https://mlforpse.com/books/.">KFC22</a>]</span> and <span id="id2">[<a class="reference internal" href="#id22" title="Clara F Heuberger, Edward S Rubin, Iain Staffell, Nilay Shah, and Niall Mac Dowell. Power capacity expansion planning considering endogenous technology cost learning. Applied Energy, 204:831–845, 2017.">HRS+17</a>]</span>.</p>
 <section id="goals-of-this-exercise">
 <h2>Goals of this exercise 🌟<a class="headerlink" href="#goals-of-this-exercise" title="Permalink to this headline">#</a></h2>
@@ -478,7 +479,6 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span><span class="p">,</span> <span class="n">make_moons</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">x1</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
@@ -530,7 +530,7 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b47a252c684b5ad369a7e4c8e4c3d561e15cb79867587fd1419b782f088ae526.png" src="_images/b47a252c684b5ad369a7e4c8e4c3d561e15cb79867587fd1419b782f088ae526.png" />
+<img alt="_images/91c5bb927ab8e6f9dbb4557923a83617a8f117736696c5cc9268addaef1b3da4.png" src="_images/91c5bb927ab8e6f9dbb4557923a83617a8f117736696c5cc9268addaef1b3da4.png" />
 </div>
 </div>
 <section id="k-means">
@@ -574,7 +574,7 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e939eafaf8f6e8bb582684892103d3948b9f7f91b3b081cf3c8d5a90246594e1.png" src="_images/e939eafaf8f6e8bb582684892103d3948b9f7f91b3b081cf3c8d5a90246594e1.png" />
+<img alt="_images/e17cb17772a4c322d7040501fb4e418f5708d234f1735ccc45c8a9af985cb051.png" src="_images/e17cb17772a4c322d7040501fb4e418f5708d234f1735ccc45c8a9af985cb051.png" />
 </div>
 </div>
 <p>The black triangles are the centroids of the clusters. K-means clustering does fine with the first example. It cannot correctly identify the clusters in the non-linear data or the elliptical data. Further, it requries the specification of the number of clusters a priori! Edit the number of clusters in the code and see what happens.</p>
@@ -644,7 +644,7 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2d0439dee12fb982b833c50bd4fb0190d3b1597a280ef71a9c4cc99ff601143e.png" src="_images/2d0439dee12fb982b833c50bd4fb0190d3b1597a280ef71a9c4cc99ff601143e.png" />
+<img alt="_images/dbd5302ba3579db00b314acaeff93158ab332de8dd607b25b75a5a3563ba8500.png" src="_images/dbd5302ba3579db00b314acaeff93158ab332de8dd607b25b75a5a3563ba8500.png" />
 </div>
 </div>
 <p>The grey colored points on the edges are categorized as noise by the algorithm. You can see that DBSCAN can deal with the non-linear data in the center plot. Plus, the algorithm itself determins the numeber of clusters. However, we need to specify the hyperparameters <code class="docutils literal notranslate"><span class="pre">eps</span></code> and <code class="docutils literal notranslate"><span class="pre">min_samples</span></code> in advance. Let’s see the impact this has:</p>
@@ -701,7 +701,7 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/48a6eaf6d8d3e3f88dd0506e506253d1393584d710c7a26b3415ec22dc8d7b18.png" src="_images/48a6eaf6d8d3e3f88dd0506e506253d1393584d710c7a26b3415ec22dc8d7b18.png" />
+<img alt="_images/482fef238f581281b558bdaca482fa1de630b3b7592f3a56837d71c2bda96ed6.png" src="_images/482fef238f581281b558bdaca482fa1de630b3b7592f3a56837d71c2bda96ed6.png" />
 </div>
 </div>
 <p>Clearly, the neighborhood size and minimum number of neighbors have to be selected carefully, otherwise the algorithm will not perform adequately. This is a disadvantage of DBSCAN.</p>
@@ -747,7 +747,7 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b2edea5fbac661ad74a25a536241f2db3f9fd2ef1af031f6fe9f1576cd337edb.png" src="_images/b2edea5fbac661ad74a25a536241f2db3f9fd2ef1af031f6fe9f1576cd337edb.png" />
+<img alt="_images/9e53fa40fdb834cd471901a747002fe8cb434a91e2973d90a30f78579b1e72dc.png" src="_images/9e53fa40fdb834cd471901a747002fe8cb434a91e2973d90a30f78579b1e72dc.png" />
 </div>
 </div>
 <p>The GMM does fine with the circular and elliptical data sets. But the number of clusters has to be specified in advance. GMM assumes that the underlying distributions are Gaussian, so it will perform well on data which is inherently Gaussian distributed. K-means clustering is a specific case of GMM.</p>
@@ -762,7 +762,9 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 <p>Let’s have a look what the data looks like:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
   <span class="n">raw_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/edgarsmdn/MLCE_book/main/references/Power_system_data_DE.xlsx&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
   <span class="n">raw_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;references/Power_system_data_DE.xlsx&quot;</span><span class="p">)</span>
@@ -1732,7 +1734,7 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/468d42da54aa8b3a476369b5d797e1fc28f9237a3461fed7e2550f41089dfc93.png" src="_images/468d42da54aa8b3a476369b5d797e1fc28f9237a3461fed7e2550f41089dfc93.png" />
+<img alt="_images/b004103c1505e3bf61bd90573c6ad6e72df635507d6b13187c3b6194d88f7793.png" src="_images/b004103c1505e3bf61bd90573c6ad6e72df635507d6b13187c3b6194d88f7793.png" />
 </div>
 </div>
 <p>Clearly, there is significant variation in the data. Further, the solar and demand profiles have their characteristic shapes. The variation needs to be represented in energy systems models. But how do we choose which days to use as representatives? Here, we use clustering to determine the representatives.</p>
@@ -2258,7 +2260,7 @@ min_{c_k} \sum_{k=1}^{K} \sum_{x \in X_k} ||x-c_k||^2_2
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/337f90c4c20daba14099f7baf27c1cdd2eac2f11d7555c1c13398d853cd3ed8c.png" src="_images/337f90c4c20daba14099f7baf27c1cdd2eac2f11d7555c1c13398d853cd3ed8c.png" />
+<img alt="_images/74e77ba7d18dcb8e930d621cebc3586b6af68f873aacfaf6b37ed75b7d49f0bc.png" src="_images/74e77ba7d18dcb8e930d621cebc3586b6af68f873aacfaf6b37ed75b7d49f0bc.png" />
 </div>
 </div>
 <p>It seems like the clustering is doing a good job grouping similar data together!</p>
